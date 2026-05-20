@@ -70,3 +70,93 @@ export interface FisiDockerService {
   created_at: string;
   updated_at: string;
 }
+
+export interface FisiUserLab {
+  id: string;
+  user_id: string;
+  title: string;
+  topic: string | null;
+  environment: string | null;
+  goal: string | null;
+  description: string | null;
+  status: string | null;
+  started_at: string | null;
+  completed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FisiUserSystem {
+  id: string;
+  user_id: string;
+  lab_id: string | null;
+  hostname: string;
+  os: string | null;
+  role: string | null;
+  ip_address: string | null;
+  gateway: string | null;
+  dns: string | null;
+  domain_name: string | null;
+  services: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FisiUserCommand {
+  id: string;
+  user_id: string;
+  command: string;
+  platform: string | null;
+  category: string | null;
+  purpose: string | null;
+  example: string | null;
+  typical_use_case: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FisiUserTroubleshootingCase {
+  id: string;
+  user_id: string;
+  title: string;
+  category: string | null;
+  difficulty: string | null;
+  symptoms: string | null;
+  checks: string | null;
+  root_cause: string | null;
+  solution: string | null;
+  result: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FisiUserDockerService {
+  id: string;
+  user_id: string;
+  name: string;
+  image: string | null;
+  port: string | null;
+  service_type: string | null;
+  status: string | null;
+  purpose: string | null;
+  compose_snippet: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FisiUserNote {
+  id: string;
+  user_id: string;
+  title: string;
+  content: string | null;
+  category: string | null;
+  priority: string | null;
+  status: string | null;
+  tags: string[];
+  related_area: string | null;
+  created_at: string;
+  updated_at: string;
+}
