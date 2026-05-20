@@ -20,14 +20,14 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
-  { href: "/dashboard", label: "Übersicht", icon: LayoutDashboard },
-  { href: "/labore", label: "Labore", icon: FlaskConical },
-  { href: "/systeme", label: "Systeme", icon: Server },
-  { href: "/befehle", label: "Befehle", icon: Terminal },
-  { href: "/fehleranalyse", label: "Fehleranalyse", icon: Bug },
-  { href: "/docker-dienste", label: "Docker-Dienste", icon: Container },
-  { href: "/praxisnotizen", label: "Praxisnotizen", icon: StickyNote },
-  { href: "/portfolio", label: "Portfolio", icon: FolderKanban },
+  { href: "/dashboard",     label: "Übersicht",      icon: LayoutDashboard },
+  { href: "/labore",        label: "Labore",          icon: FlaskConical    },
+  { href: "/systeme",       label: "Systeme",         icon: Server          },
+  { href: "/befehle",       label: "Befehle",         icon: Terminal        },
+  { href: "/fehleranalyse", label: "Fehleranalyse",   icon: Bug             },
+  { href: "/docker-dienste",label: "Docker-Dienste",  icon: Container       },
+  { href: "/praxisnotizen", label: "Praxisnotizen",   icon: StickyNote      },
+  { href: "/portfolio",     label: "Portfolio",       icon: FolderKanban    },
 ];
 
 function AuthSection({ onAction }: { onAction?: () => void }) {
@@ -77,18 +77,12 @@ function AuthSection({ onAction }: { onAction?: () => void }) {
   return (
     <div className="px-5 py-4 border-t border-white/5 space-y-2">
       <p className="text-[10px] text-slate-600 mb-2">OrikOS-Konto</p>
-      <Link
-        href="/registrieren"
-        onClick={onAction}
-        className="block text-xs text-blue-400 hover:text-blue-300 transition-colors"
-      >
+      <Link href="/registrieren" onClick={onAction}
+        className="block text-xs text-blue-400 hover:text-blue-300 transition-colors">
         Kostenlos registrieren →
       </Link>
-      <Link
-        href="/login"
-        onClick={onAction}
-        className="block text-xs text-slate-500 hover:text-slate-300 transition-colors"
-      >
+      <Link href="/login" onClick={onAction}
+        className="block text-xs text-slate-500 hover:text-slate-300 transition-colors">
         Einloggen
       </Link>
     </div>
@@ -101,8 +95,8 @@ export default function Navigation() {
 
   return (
     <>
-      {/* Sidebar – desktop */}
-      <aside className="hidden lg:flex flex-col w-64 min-h-screen bg-[#0f1117] border-r border-white/5 shrink-0">
+      {/* ── Desktop sidebar: md and up ─────────────────────────────── */}
+      <aside className="hidden md:flex flex-col w-64 min-h-screen bg-[#0f1117] border-r border-white/5 shrink-0">
         <div className="px-5 py-5 border-b border-white/5">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-[#161b27] border border-white/10 shadow-lg shadow-black/40 flex items-center justify-center shrink-0">
@@ -123,19 +117,14 @@ export default function Navigation() {
           {navItems.map(({ href, label, icon: Icon }) => {
             const active = pathname === href;
             return (
-              <Link
-                key={href}
-                href={href}
+              <Link key={href} href={href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group ${
                   active
                     ? "bg-blue-500/15 text-blue-400 border border-blue-500/20"
                     : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
                 }`}
               >
-                <Icon
-                  size={16}
-                  className={active ? "text-blue-400" : "text-slate-500 group-hover:text-slate-300"}
-                />
+                <Icon size={16} className={active ? "text-blue-400" : "text-slate-500 group-hover:text-slate-300"} />
                 {label}
               </Link>
             );
@@ -145,9 +134,9 @@ export default function Navigation() {
         <AuthSection />
       </aside>
 
-      {/* Top bar – mobile */}
-      <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-[#0f1117] border-b border-white/5 sticky top-0 z-50">
-        <div className="flex items-center gap-2">
+      {/* ── Mobile top bar: below md ───────────────────────────────── */}
+      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-[#0f1117] border-b border-white/5 sticky top-0 z-50">
+        <div className="flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-lg bg-[#161b27] border border-white/10 flex items-center justify-center shrink-0">
             <span className="text-[11px] font-black tracking-tight bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent leading-none select-none">
               FL
@@ -157,29 +146,30 @@ export default function Navigation() {
         </div>
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? "Menü schließen" : "Menü öffnen"}
           className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
-          aria-label="Menü"
         >
           {mobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </header>
 
-      {/* Mobile menu */}
+      {/* ── Mobile drawer ──────────────────────────────────────────── */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-black/60" onClick={() => setMobileOpen(false)}>
+        <div
+          className="md:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+          onClick={() => setMobileOpen(false)}
+        >
           <nav
-            className="absolute left-0 top-0 bottom-0 w-64 bg-[#0f1117] border-r border-white/5 flex flex-col pt-16"
+            className="absolute left-0 top-0 bottom-0 w-72 max-w-[85vw] bg-[#0f1117] border-r border-white/5 flex flex-col pt-[57px] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex-1 px-3 py-4 space-y-0.5">
               {navItems.map(({ href, label, icon: Icon }) => {
                 const active = pathname === href;
                 return (
-                  <Link
-                    key={href}
-                    href={href}
+                  <Link key={href} href={href}
                     onClick={() => setMobileOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
+                    className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-150 ${
                       active
                         ? "bg-blue-500/15 text-blue-400 border border-blue-500/20"
                         : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
