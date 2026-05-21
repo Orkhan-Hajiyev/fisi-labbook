@@ -2,6 +2,7 @@
 
 import { AuthProvider } from "@/contexts/AuthContext";
 import Navigation from "@/components/Navigation";
+import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
 import DemoBanner from "@/components/DemoBanner";
 
@@ -12,6 +13,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <div className="flex flex-col md:flex-row min-h-screen">
         <Navigation />
         <main className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
+          <TopBar />
           <DemoBanner />
           <div className="flex-1 px-4 sm:px-6 py-6 sm:py-8 max-w-7xl w-full mx-auto min-w-0">
             {children}

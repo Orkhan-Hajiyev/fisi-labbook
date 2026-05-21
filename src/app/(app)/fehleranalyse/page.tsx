@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import {
   Bug, AlertCircle, Search as SearchIcon, Lightbulb, Target, Tag,
-  Plus, Pencil, Trash2, CheckCircle,
+  Plus, Pencil, Trash2, CheckCircle, Copy, Lock,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import LoadingState from "@/components/LoadingState";
@@ -135,8 +135,33 @@ function UserTroubleshootingCard({
   );
 }
 
-function DemoCaseCard({ c }: { c: FisiTroubleshootingCase }) {
+function DemoCaseCard({ c, user, onCopied }: {
+  c: FisiTroubleshootingCase;
+  user: import("@supabase/supabase-js").User | null;
+  onCopied: (msg: string) => void;
+}) {
   const diff = getDifficultyConfig(c.difficulty);
+  const [copying, setCopying] = useState(false);
+
+  async function handleCopy() {
+    if (!user || !supabase) return;
+    setCopying(true);
+    const { error: err } = await supabase.from("fisi_user_troubleshooting_cases").insert({
+      user_id: user.id,
+      title: c.title,
+      category: c.category,
+      difficulty: c.difficulty,
+      symptoms: c.symptoms,
+      checks: c.checks,
+      root_cause: c.root_cause,
+      solution: c.solution,
+      result: c.result,
+    });
+    setCopying(false);
+    if (err) { onCopied("Fehler beim Übernehmen."); return; }
+    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+  }
+
   return (
     <div className="rounded-xl border border-white/5 bg-white/[0.02] hover:border-white/10 transition-all duration-150 p-5 space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -148,11 +173,13 @@ function DemoCaseCard({ c }: { c: FisiTroubleshootingCase }) {
             </span>
           )}
         </div>
-        {c.difficulty && (
-          <span className={`shrink-0 text-[11px] font-medium px-2.5 py-1 rounded-full border ${diff.className}`}>
-            {diff.label}
-          </span>
-        )}
+        <div className="flex items-center gap-2 shrink-0">
+          {c.difficulty && (
+            <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full border ${diff.className}`}>
+              {diff.label}
+            </span>
+          )}
+        </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Step icon={AlertCircle} label="Symptome" value={c.symptoms} accent="amber" />
@@ -164,6 +191,199 @@ function DemoCaseCard({ c }: { c: FisiTroubleshootingCase }) {
         <div className="rounded-lg bg-emerald-500/5 border border-emerald-500/15 px-4 py-3">
           <p className="text-[11px] font-semibold text-emerald-500 uppercase tracking-wider mb-1">Ergebnis</p>
           <p className="text-xs text-emerald-300 leading-relaxed">{c.result}</p>
+        </div>
+      )}
+      <div className="flex items-center justify-between pt-3 border-t border-white/5">
+        <span className="text-[10px] text-slate-700 uppercase tracking-wider font-medium">Demo</span>
+        {user ? (
+          <button onClick={handleCopy} disabled={copying}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-400 hover:text-blue-300 transition-all disabled:opacity-50">
+            <Copy size={11} />
+            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+          </button>
+        ) : (
+          <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 text-[11px] text-slate-600 cursor-not-allowed">
+            <Lock size={11} />
+            Anmeldung erforderlich
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── ChecklistHelper ────────────────────────────────────────────────────────
+
+const CHECKLISTS: Record<string, string[]> = {
+  "DNS-Problem": [
+    "1. IP-Konfiguration mit ipconfig /all prüfen",
+    "2. DNS-Server kontrollieren (auf DC zeigen?)",
+    "3. Domänencontroller anpingen",
+    "4. nslookup für Domänennamen ausführen",
+    "5. DNS-Zonen und Einträge prüfen",
+    "6. Event Viewer auf DNS-Fehler prüfen (DNS Server, System)",
+    "7. DNS-Dienst neu starten: net stop dns && net start dns",
+    "8. DNS-Cache leeren: ipconfig /flushdns",
+  ],
+  "Domänenbeitritt": [
+    "1. Netzwerkverbindung prüfen (ping zu DC)",
+    "2. DNS-Server auf Domänencontroller zeigen lassen",
+    "3. Zeit/Datum zwischen Client und DC prüfen (max. 5 Min. Abweichung)",
+    "4. Domänennamen mit nslookup testen",
+    "5. Erreichbarkeit des DC prüfen: nltest /dsgetdc:<domäne>",
+    "6. Firewall-Ports prüfen (TCP 88, 135, 389, 445)",
+    "7. Computerkonto im AD prüfen (ggf. zurücksetzen)",
+    "8. Domänenbeitritt erneut versuchen und Ereignisprotokoll prüfen",
+  ],
+  "DHCP-Problem": [
+    "1. IP-Konfiguration mit ipconfig /all prüfen (APIPA-Adresse 169.254.x.x?)",
+    "2. DHCP-Dienst auf dem Server prüfen (sc query dhcpserver)",
+    "3. DHCP-Leases und Bereichsgrenzen kontrollieren",
+    "4. Netzwerkkabel und Switchport prüfen",
+    "5. Firewall-Regeln für DHCP prüfen (UDP 67/68)",
+    "6. ipconfig /release && ipconfig /renew ausführen",
+    "7. DHCP-Konflikt prüfen (doppelte IP?)",
+    "8. DHCP-Ereignislog prüfen: Ereignisanzeige → System",
+  ],
+  "Active Directory Replikation": [
+    "1. Replikationsstatus prüfen: repadmin /replsummary",
+    "2. Replikationsfehler anzeigen: repadmin /showrepl",
+    "3. DC-Konnektivität prüfen: dcdiag /test:connectivity",
+    "4. Netlogon-Dienst prüfen: sc query netlogon",
+    "5. DNS-Konfiguration auf allen DCs prüfen",
+    "6. Zeitsynchronisation prüfen: w32tm /query /status",
+    "7. Firewall zwischen DCs prüfen (TCP/UDP 389, 636, 3268, 49152–65535)",
+    "8. AD-Replikation erzwingen: repadmin /syncall /AdeP",
+  ],
+  "Gruppenrichtlinie / GPO": [
+    "1. GPO-Anwendung prüfen: gpresult /r",
+    "2. Detailliertes HTML-Ergebnis: gpresult /h C:\\gp.html",
+    "3. GPO-Aktualisierung erzwingen: gpupdate /force",
+    "4. Netzwerkverbindung zum DC prüfen",
+    "5. Computerrichtlinien und Benutzerrichtlinien getrennt prüfen",
+    "6. Sicherheitsfilterung der GPO prüfen (Benutzer/Computer in Gruppe?)",
+    "7. WMI-Filter der GPO prüfen",
+    "8. Ereignisprotokoll: Anwendung → Gruppenrichtlinie-Ereignisse",
+  ],
+  "Windows-Dienst startet nicht": [
+    "1. Dienststatus prüfen: sc query <dienstname>",
+    "2. Ereignisprotokoll prüfen: Ereignisanzeige → System → Fehler",
+    "3. Dienstabhängigkeiten prüfen: sc qc <dienstname>",
+    "4. Abhängige Dienste starten und erneut versuchen",
+    "5. Anmeldekonto des Dienstes prüfen (Kennwort abgelaufen?)",
+    "6. Berechtigungen auf Programmverzeichnis prüfen",
+    "7. Dienst manuell starten: net start <dienstname>",
+    "8. Systemdateiintegrität prüfen: sfc /scannow",
+  ],
+  "Linux-Dienst startet nicht": [
+    "1. Dienststatus prüfen: systemctl status <dienst>",
+    "2. Logs lesen: journalctl -u <dienst> -n 50 --no-pager",
+    "3. Konfigurationsdatei auf Syntaxfehler prüfen",
+    "4. Portkonflikt prüfen: ss -tulpen | grep <port>",
+    "5. Berechtigungen auf Konfig- und Log-Dateien prüfen",
+    "6. Abhängige Dienste prüfen (z. B. Datenbank, Netzwerk)",
+    "7. Dienst manuell mit Ausgabe starten: <dienstpfad> --debug",
+    "8. SELinux/AppArmor-Logs prüfen: ausearch -m avc -ts today",
+  ],
+  "Webserver nicht erreichbar": [
+    "1. Dienststatus prüfen: systemctl status nginx / apache2",
+    "2. Ports prüfen: ss -tulpen | grep -E '80|443'",
+    "3. Firewall-Regeln prüfen: ufw status / iptables -L",
+    "4. Logs prüfen: /var/log/nginx/error.log oder /var/log/apache2/error.log",
+    "5. Konfiguration validieren: nginx -t / apachectl configtest",
+    "6. TLS-Zertifikat auf Ablauf prüfen: openssl s_client -connect host:443",
+    "7. DNS-Auflösung des Domänennamens prüfen: nslookup <domain>",
+    "8. Upstream/Backend-Verbindung prüfen (Proxy, App-Server)",
+  ],
+  "Docker-Problem": [
+    "1. docker ps -a – Containerstatus prüfen",
+    "2. docker logs <container> – Fehlerausgabe lesen",
+    "3. docker inspect <container> – Netzwerk und Mounts prüfen",
+    "4. Portbelegung mit netstat / ss prüfen",
+    "5. docker compose config – Compose-Datei validieren",
+    "6. Docker-Daemon-Status prüfen: systemctl status docker",
+    "7. Volumes und Berechtigungen prüfen",
+    "8. Image neu bauen und Container neu starten",
+  ],
+  "SSH-Problem": [
+    "1. SSH-Dienst auf dem Server prüfen: systemctl status ssh",
+    "2. Firewall-Regeln für Port 22 prüfen",
+    "3. Verbindung mit Verbose-Ausgabe testen: ssh -vvv user@host",
+    "4. authorized_keys und Dateiberechtigungen prüfen (chmod 600)",
+    "5. /var/log/auth.log auf Fehlermeldungen prüfen",
+    "6. SSH-Daemon-Konfiguration prüfen: sshd -T",
+    "7. Netzwerkverbindung zum Server prüfen",
+    "8. SSH-Schlüsselpaar neu generieren falls beschädigt",
+  ],
+  "Netzwerk allgemein": [
+    "1. Physische Verbindung prüfen (Kabel, Switch, WLAN)",
+    "2. IP-Konfiguration prüfen: ipconfig /all oder ip a",
+    "3. Standard-Gateway anpingen",
+    "4. DNS-Auflösung testen: nslookup <domain> / Resolve-DnsName <domain>",
+    "5. Routing-Pfad verfolgen: tracert / traceroute",
+    "6. Firewall-Regeln auf Client und Server prüfen",
+    "7. ARP-Cache prüfen: arp -a",
+    "8. NIC-Fehler prüfen: ifconfig / ip -s link",
+  ],
+};
+
+function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const types = Object.keys(CHECKLISTS);
+  const activeCL = selected ? CHECKLISTS[selected] : null;
+
+  return (
+    <div className="mb-5">
+      {!open ? (
+        <button
+          onClick={() => setOpen(true)}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 text-xs font-medium text-amber-400 hover:text-amber-300 transition-all"
+        >
+          <SearchIcon size={13} />
+          Checkliste verwenden
+        </button>
+      ) : (
+        <div className="rounded-xl border border-amber-500/15 bg-[#141008] p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-semibold text-amber-400 uppercase tracking-wider">Troubleshooting-Checkliste</h3>
+            <button onClick={() => { setOpen(false); setSelected(null); }} className="text-slate-500 hover:text-slate-300 transition-colors">
+              <Plus size={14} className="rotate-45" />
+            </button>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] text-slate-500 uppercase tracking-wider">Problemtyp auswählen</label>
+            <div className="flex flex-wrap gap-1.5">
+              {types.map((t) => (
+                <button key={t} onClick={() => setSelected(t)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                    selected === t
+                      ? "bg-amber-600/80 text-white"
+                      : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200"
+                  }`}>
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {activeCL && (
+            <div className="space-y-2">
+              <div className="rounded-lg bg-white/[0.02] border border-white/5 p-4 space-y-1.5">
+                {activeCL.map((step, i) => (
+                  <p key={i} className="text-xs text-slate-300">{step}</p>
+                ))}
+              </div>
+              <button
+                onClick={() => { onInsert(activeCL.join("\n")); setOpen(false); setSelected(null); }}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-600/80 hover:bg-amber-500/80 text-xs font-semibold text-white transition-colors"
+              >
+                In Prüfschritte einfügen
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -183,6 +403,7 @@ export default function FehleranalysePage() {
 
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editItem, setEditItem] = useState<FisiUserTroubleshootingCase | null>(null);
+  const [checklistPrefill, setChecklistPrefill] = useState<string | undefined>(undefined);
   const [userQuery, setUserQuery] = useState("");
   const [notif, setNotif] = useState<NotifType | null>(null);
 
@@ -303,7 +524,12 @@ export default function FehleranalysePage() {
 
           {showCreateForm && (
             <div className="mb-5">
-              <TroubleshootingForm onSave={handleCreate} onCancel={() => setShowCreateForm(false)} />
+              <TroubleshootingForm
+                prefill={checklistPrefill ? { checks: checklistPrefill } : undefined}
+                key={checklistPrefill ?? "new"}
+                onSave={handleCreate}
+                onCancel={() => { setShowCreateForm(false); setChecklistPrefill(undefined); }}
+              />
             </div>
           )}
 
@@ -346,6 +572,18 @@ export default function FehleranalysePage() {
         </div>
       )}
 
+      {/* Hilfen & Vorlagen */}
+      {user && (
+        <div className="mb-10">
+          <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Hilfen &amp; Vorlagen</h2>
+          <ChecklistHelper onInsert={(cl) => {
+            setChecklistPrefill(cl);
+            setShowCreateForm(true);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }} />
+        </div>
+      )}
+
       {/* Reference section */}
       <ReferenceSection title="Referenz-Fehleranalysen">
         {demoLoading && <LoadingState />}
@@ -355,7 +593,10 @@ export default function FehleranalysePage() {
         )}
         {!demoLoading && !demoError && cases.length > 0 && (
           <div className="space-y-5">
-            {cases.map((c) => <DemoCaseCard key={c.id} c={c} />)}
+            {cases.map((c) => (
+              <DemoCaseCard key={c.id} c={c} user={user}
+                onCopied={(msg) => toast("success", msg)} />
+            ))}
           </div>
         )}
       </ReferenceSection>

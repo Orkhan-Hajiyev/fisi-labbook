@@ -49,10 +49,17 @@ Kein eigener Backend-Server. Alle Datenbankzugriffe erfolgen clientseitig über 
 | Supabase Auth (Register / Login) | ✓ |
 | Öffentliche Demo-Daten | ✓ |
 | Persönliche CRUD-Arbeitsbereiche | ✓ |
-| Mobile Layout (responsiv) | ✓ gefixt |
-| PWA Manifest + Icons | ✓ vorhanden |
+| Mobile Layout (responsiv) | ✓ |
+| PWA Manifest + Icons | ✓ |
+| Account-Bereich oben rechts (Desktop) | ✓ neu |
+| Workspace-Übersichtsseite `/workspace` | ✓ neu |
+| „Als Vorlage übernehmen" für Demo-Inhalte | ✓ neu |
+| Markdown / PDF-Export | ✓ neu |
+| Globale Suche `/suche` | ✓ neu |
+| Troubleshooting-Checklisten | ✓ neu |
+| Befehls-Vorschlag-Assistent | ✓ neu |
 | npm run lint | ✓ keine Fehler |
-| npm run build | ✓ 14 Routen, alle statisch |
+| npm run build | ✓ 16 Routen, alle statisch |
 
 ---
 
@@ -104,21 +111,63 @@ Diese Dateien müssen **manuell** im Supabase SQL Editor ausgeführt werden.
 
 ### App-Seiten (sidebar-Navigation)
 - [x] `/dashboard` — Übersicht mit Demo-Statistiken + persönlichen Statistiken (eingeloggt)
-- [x] `/labore` — Meine Labore (CRUD) + Referenz-Labore
-- [x] `/systeme` — Meine Systeme (CRUD) + Referenz-Systeme
-- [x] `/befehle` — Meine Befehle (CRUD) + Referenz-Befehle
-- [x] `/fehleranalyse` — Meine Fehleranalysen (CRUD) + Referenz-Fälle
-- [x] `/docker-dienste` — Meine Docker-Dienste (CRUD) + Referenz-Dienste
+- [x] `/workspace` — **NEU** Persönliche Gesamtübersicht mit Lab-Hierarchie + Export
+- [x] `/labore` — Meine Labore (CRUD) + Referenz-Labore + „Als Vorlage übernehmen"
+- [x] `/systeme` — Meine Systeme (CRUD) + Referenz-Systeme + „Als Vorlage übernehmen"
+- [x] `/befehle` — Meine Befehle (CRUD) + Referenz-Befehle + „Als Vorlage" + Befehl-Assistent
+- [x] `/fehleranalyse` — Meine Fehleranalysen (CRUD) + Referenz-Fälle + „Als Vorlage" + Checklisten
+- [x] `/docker-dienste` — Meine Docker-Dienste (CRUD) + Referenz-Dienste + „Als Vorlage übernehmen"
 - [x] `/praxisnotizen` — Eigene Notizen (CRUD, Tags, Filter, Status, Priorität)
+- [x] `/suche` — **NEU** Globale Suche über alle persönlichen Inhalte
 - [x] `/portfolio` — Statische Projektübersicht
 
 ### Auth & UX
 - [x] AuthProvider / useAuth() Hook (zentral, kein lokales State-Management pro Seite)
+- [x] **NEU** TopBar — Benutzer-Bereich oben rechts auf Desktop (Name/E-Mail + Abmelden)
 - [x] DemoBanner für nicht eingeloggte Besucher
-- [x] Navigation auth-aware (Nutzername + Abmelden / oder Einloggen-Links)
+- [x] Navigation auth-aware (Mobile: Nutzername + Abmelden im Drawer)
 - [x] Toast-Benachrichtigungen bei CRUD-Aktionen
 - [x] Inline-Formulare + Modal-Formulare für alle CRUD-Operationen
 - [x] Onboarding-Karte im Dashboard wenn Workspace noch leer
+
+### Neue Features (Mai 2026)
+
+#### Workspace-Übersicht (`/workspace`)
+- Zeigt alle persönlichen Inhalte strukturiert (Labs mit verknüpften Systemen, Befehlen etc.)
+- Statistik-Karten für alle 6 Module
+- Hierarchische Lab-Gruppenansicht mit aufklappbaren Sektionen
+- „Nicht zugeordnet"-Bereich für Systeme ohne Labor-Verknüpfung
+- Export-Buttons: Markdown-Download und PDF-Druck
+
+#### „Als Vorlage übernehmen"
+- Jede Demo/Referenz-Karte hat einen „Als Vorlage übernehmen"-Button (nur für eingeloggte Nutzer)
+- Nicht eingeloggte Benutzer sehen einen deaktivierten Button mit „Anmeldung erforderlich"
+- Kopiert Inhalte in die entsprechende `fisi_user_*`-Tabelle mit `user_id` des aktuellen Nutzers
+- Verfügbar auf: Labore, Systeme, Befehle, Fehleranalyse, Docker-Dienste
+
+#### Export-Funktionen
+- **Markdown-Export:** Generiert vollständige `.md`-Datei mit allen Workspace-Inhalten clientseitig (kein Server benötigt)
+- **PDF-Druck:** Nutzt `window.print()` mit druckoptimiertem CSS
+- Dateiname: `fisi-labbook-workspace.md`
+
+#### Globale Suche (`/suche`)
+- Suche über alle 6 persönlichen Datenmodule gleichzeitig
+- Sucht in Titeln, Beschreibungen, IP-Adressen, Befehlen, Tags usw.
+- Ergebnisse gruppiert nach Modultyp mit Trefferanzahl
+- Suchbegriff-Highlighting in Ergebnissen
+- Nur für eingeloggte Nutzer (öffentliche Besucher sehen Hinweis)
+
+#### Troubleshooting-Checklisten
+- Button „Checkliste verwenden" auf der Fehleranalyse-Seite
+- Vordefinierte Checklisten für: DNS-Problem, Domänenbeitritt, DHCP-Problem, Docker-Problem, SSH-Problem, Netzwerk allgemein
+- Einfügen der Checkliste in das Prüfschritte-Feld des Formulars
+- Statische Templates — kein KI-API erforderlich
+
+#### Befehls-Vorschlag-Assistent
+- Button „Befehl vorschlagen" auf der Befehle-Seite
+- Filterung nach Plattform (Windows, PowerShell, Linux, Docker, Git) und Kategorie
+- Klick auf Vorschlag füllt Befehlsformular vor (Befehl, Plattform, Kategorie, Zweck, Beispiel)
+- Statische Befehlsdatenbank — kein API erforderlich
 
 ### Mobile & PWA
 - [x] Responsives App-Layout (md-Breakpoint: Sidebar auf Desktop, Top-Bar + Drawer auf Mobil)
@@ -163,15 +212,15 @@ Diese Dateien müssen **manuell** im Supabase SQL Editor ausgeführt werden.
 
 ### Mittelfristig
 
-- [ ] Workspace-Übersichtsseite oder Schema-Ansicht (zeigt alle eigenen Einträge über Module hinweg)
-- [ ] „Als Vorlage übernehmen"-Feature: Demo-Referenzdaten als Startpunkt in den eigenen Workspace kopieren
+- [ ] Service Worker für Offline-Zugriff auf gecachte Inhalte
+- [ ] KI-gestützte Zusammenfassungen von Notizen / Fehleranalysen
+- [ ] Topologie-Diagramme für Systemdokumentation
+- [ ] Export-Button auf Einzel-Labor-Seite
 
 ### Langfristig / Optional
 
-- [ ] Service Worker für Offline-Zugriff auf gecachte Inhalte
-- [ ] Export-Funktionen (PDF, Markdown)
-- [ ] KI-gestützte Zusammenfassungen von Notizen / Fehleranalysen
-- [ ] Topologie-Diagramme für Systemdokumentation
+- [ ] Echte relationale Verknüpfung zwischen Befehlen/Fehleranalysen und Laboren (foreign key in DB)
+- [ ] Offline-Modus mit Service Worker
 
 ---
 

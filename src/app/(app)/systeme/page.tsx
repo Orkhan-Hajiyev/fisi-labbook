@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { Server, Network, Globe, Cpu, Plus, Search, X, Edit2, Trash2, AlertCircle, CheckCircle } from "lucide-react";
+import { Server, Network, Globe, Cpu, Plus, Search, X, Edit2, Trash2, AlertCircle, CheckCircle, Copy, Lock } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";
@@ -32,6 +32,84 @@ function NetRow({ icon: Icon, label, value }: { icon: React.ElementType; label: 
       <Icon size={12} className="text-slate-600 shrink-0" />
       <span className="text-[11px] text-slate-500 w-20 shrink-0">{label}</span>
       <code className="text-xs text-cyan-300 font-mono bg-cyan-500/5 border border-cyan-500/10 px-2 py-0.5 rounded">{value}</code>
+    </div>
+  );
+}
+
+// ── DemoSystemCard ────────────────────────────────────────────────────────
+
+function DemoSystemCard({ sys, services, user, onCopied }: {
+  sys: FisiSystem;
+  services: string[];
+  user: import("@supabase/supabase-js").User | null;
+  onCopied: (msg: string) => void;
+}) {
+  const [copying, setCopying] = useState(false);
+
+  async function handleCopy() {
+    if (!user || !supabase) return;
+    setCopying(true);
+    const { error: err } = await supabase.from("fisi_user_systems").insert({
+      user_id: user.id,
+      hostname: sys.hostname,
+      os: sys.os,
+      role: sys.role,
+      ip_address: sys.ip_address,
+      gateway: sys.gateway,
+      dns: sys.dns,
+      domain_name: sys.domain_name,
+      services: Array.isArray(sys.services) ? sys.services.join(", ") : sys.services,
+      notes: sys.notes,
+    });
+    setCopying(false);
+    if (err) { onCopied("Fehler beim Übernehmen."); return; }
+    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+  }
+
+  return (
+    <div className="rounded-xl border border-white/5 bg-white/[0.015] p-5 space-y-3 opacity-80">
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-lg bg-cyan-500/10 border border-cyan-500/15 flex items-center justify-center shrink-0">
+          <Server size={16} className="text-cyan-400" />
+        </div>
+        <div>
+          <h3 className="text-sm font-bold text-slate-300 font-mono">{sys.hostname}</h3>
+          {sys.role && <p className="text-xs text-slate-500">{sys.role}</p>}
+        </div>
+        {sys.os && (
+          <span className="ml-auto text-[11px] bg-white/5 border border-white/10 text-slate-500 px-2 py-0.5 rounded-md flex items-center gap-1.5">
+            <Cpu size={10} />{sys.os}
+          </span>
+        )}
+      </div>
+      <div className="rounded-lg bg-[#0a0c10] border border-white/5 px-4 py-2 divide-y divide-white/5">
+        <NetRow icon={Network} label="IP-Adresse" value={sys.ip_address} />
+        <NetRow icon={Globe} label="Gateway" value={sys.gateway} />
+        <NetRow icon={Globe} label="DNS" value={sys.dns} />
+        <NetRow icon={Globe} label="Domäne" value={sys.domain_name} />
+      </div>
+      {services.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {services.map((s, i) => (
+            <span key={i} className="text-[11px] bg-blue-500/10 text-blue-300 border border-blue-500/15 px-2 py-0.5 rounded">{s}</span>
+          ))}
+        </div>
+      )}
+      <div className="flex items-center justify-between pt-3 border-t border-white/5">
+        <span className="text-[10px] text-slate-700 uppercase tracking-wider font-medium">Demo</span>
+        {user ? (
+          <button onClick={handleCopy} disabled={copying}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-400 hover:text-blue-300 transition-all disabled:opacity-50">
+            <Copy size={11} />
+            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+          </button>
+        ) : (
+          <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 text-[11px] text-slate-600 cursor-not-allowed">
+            <Lock size={11} />
+            Anmeldung erforderlich
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -290,35 +368,8 @@ export default function SystemePage() {
             {systems.map((sys) => {
               const services = normalizeServices(sys.services);
               return (
-                <div key={sys.id} className="rounded-xl border border-white/5 bg-white/[0.015] p-5 space-y-3 opacity-80">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-cyan-500/10 border border-cyan-500/15 flex items-center justify-center shrink-0">
-                      <Server size={16} className="text-cyan-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-slate-300 font-mono">{sys.hostname}</h3>
-                      {sys.role && <p className="text-xs text-slate-500">{sys.role}</p>}
-                    </div>
-                    {sys.os && (
-                      <span className="ml-auto text-[11px] bg-white/5 border border-white/10 text-slate-500 px-2 py-0.5 rounded-md flex items-center gap-1.5">
-                        <Cpu size={10} />{sys.os}
-                      </span>
-                    )}
-                  </div>
-                  <div className="rounded-lg bg-[#0a0c10] border border-white/5 px-4 py-2 divide-y divide-white/5">
-                    <NetRow icon={Network} label="IP-Adresse" value={sys.ip_address} />
-                    <NetRow icon={Globe} label="Gateway" value={sys.gateway} />
-                    <NetRow icon={Globe} label="DNS" value={sys.dns} />
-                    <NetRow icon={Globe} label="Domäne" value={sys.domain_name} />
-                  </div>
-                  {services.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5">
-                      {services.map((s, i) => (
-                        <span key={i} className="text-[11px] bg-blue-500/10 text-blue-300 border border-blue-500/15 px-2 py-0.5 rounded">{s}</span>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <DemoSystemCard key={sys.id} sys={sys} services={services} user={user}
+                  onCopied={(msg) => showNotif("success", msg)} />
               );
             })}
           </div>

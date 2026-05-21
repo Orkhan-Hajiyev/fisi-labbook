@@ -38,15 +38,17 @@ Das Projekt nutzt Next.js Route Groups für getrennte Layouts.
 | Route | Beschreibung |
 |---|---|
 | `/dashboard` | Übersicht – Statistik-Karten und Schnellzugriff |
-| `/labore` | Dokumentierte IT-Laborumgebungen |
-| `/systeme` | Infrastruktur- und Systemdokumentation |
-| `/befehle` | Admin-Befehlsreferenz mit Suche |
-| `/fehleranalyse` | Strukturierte Troubleshooting-Fälle |
-| `/docker-dienste` | Container-Dienste und Compose-Snippets |
-| `/praxisnotizen` | Persönlicher Notiz-/Aufgabenbereich (Placeholder) |
+| `/workspace` | Persönliche Gesamtübersicht mit Lab-Hierarchie und Export |
+| `/labore` | Dokumentierte IT-Laborumgebungen + Vorlage-Kopie |
+| `/systeme` | Infrastruktur- und Systemdokumentation + Vorlage-Kopie |
+| `/befehle` | Admin-Befehlsreferenz + Vorlage-Kopie + Befehls-Assistent |
+| `/fehleranalyse` | Troubleshooting-Fälle + Vorlage-Kopie + Checklisten |
+| `/docker-dienste` | Container-Dienste und Compose-Snippets + Vorlage-Kopie |
+| `/praxisnotizen` | Persönlicher Notiz-/Aufgabenbereich (CRUD, Tags, Filter) |
+| `/suche` | Globale Suche über alle persönlichen Workspace-Inhalte |
 | `/portfolio` | Projektzusammenfassung und Technologieübersicht |
 
-App-Seiten haben eine gemeinsame Sidebar-Navigation.
+App-Seiten haben eine gemeinsame Sidebar-Navigation mit TopBar (Desktop) / Drawer (Mobil).
 
 ---
 
@@ -233,15 +235,59 @@ Nach der Installation erscheint die App als eigenständiges Icon auf dem Startbi
 
 ---
 
-## Geplante Module und Features
+## Features im Überblick
 
 | Modul / Feature | Status |
 |---|---|
-| Praxisnotizen (CRUD) | Implementiert |
-| Session-Guard für App-Seiten | Geplant |
-| Export (PDF, Markdown) | Geplant |
+| Praxisnotizen (CRUD) | ✓ Implementiert |
+| Workspace-Übersichtsseite | ✓ Implementiert |
+| „Als Vorlage übernehmen" | ✓ Implementiert |
+| Markdown / PDF-Export | ✓ Implementiert |
+| Globale Suche (`/suche`) | ✓ Implementiert |
+| Troubleshooting-Checklisten | ✓ Implementiert |
+| Befehls-Vorschlag-Assistent | ✓ Implementiert |
+| TopBar mit Account-Bereich | ✓ Implementiert |
 | KI-Zusammenfassungen | Geplant |
 | Topologie-Diagramme | Geplant |
+| Service Worker (Offline) | Geplant |
+
+## Features testen
+
+### Account-Bereich (Task 0)
+- Desktop: Oben rechts sichtbar — „Angemeldet als [Name/E-Mail]" + Abmelden-Button
+- Mobil: Im Hamburger-Menü/Drawer am unteren Ende
+
+### Workspace (`/workspace`) — Task 1
+- Einloggen → „Workspace" in der Navigation klicken
+- Statistik-Karten für alle Module + hierarchische Lab-Ansicht
+- Leer-Zustand mit Schnellstart-Buttons wenn kein Inhalt vorhanden
+
+### Als Vorlage übernehmen — Task 2
+- Auf eine Seite mit Demo-Inhalten gehen (z. B. `/labore`)
+- Eingeloggt: „Als Vorlage übernehmen"-Button sichtbar an jedem Demo-Eintrag
+- Nicht eingeloggt: Button deaktiviert mit „Anmeldung erforderlich"
+
+### Export — Task 3
+- Auf `/workspace` gehen (eingeloggt, Inhalte vorhanden)
+- „Als Markdown exportieren" → Download als `.md`-Datei
+- „Als PDF drucken" → Browser-Druckdialog
+
+### Globale Suche (`/suche`) — Task 4
+- Einloggen → „Suche" in der Navigation
+- Suchbegriff eingeben + Enter drücken
+- Ergebnisse erscheinen gruppiert nach Modultyp
+
+### Troubleshooting-Checkliste — Task 5
+- `/fehleranalyse` öffnen
+- „Checkliste verwenden"-Button klicken
+- Problemtyp wählen (z. B. „DNS-Problem")
+- „In Prüfschritte einfügen" → befüllt das Formularfeld
+
+### Befehls-Assistent — Task 6
+- `/befehle` öffnen
+- „Befehl vorschlagen"-Button klicken
+- Plattform und Kategorie wählen
+- Auf einen Vorschlag klicken → befüllt das Erstellungsformular
 
 ---
 

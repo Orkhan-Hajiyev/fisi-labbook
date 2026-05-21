@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import {
   FlaskConical, Calendar, CheckCircle2, Clock, Archive, Circle,
-  Plus, Search, X, Edit2, Trash2, AlertCircle, CheckCircle,
+  Plus, Search, X, Edit2, Trash2, AlertCircle, CheckCircle, Copy, Lock,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import LoadingState from "@/components/LoadingState";
@@ -121,8 +121,29 @@ function UserLabCard({
 
 // ── DemoLabCard ───────────────────────────────────────────────────────────
 
-function DemoLabCard({ lab }: { lab: FisiLab }) {
+function DemoLabCard({ lab, user, onCopied }: { lab: FisiLab; user: ReturnType<typeof useAuth>["user"]; onCopied: (msg: string) => void }) {
   const status = getStatusCfg(lab.status);
+  const [copying, setCopying] = useState(false);
+
+  async function handleCopy() {
+    if (!user || !supabase) return;
+    setCopying(true);
+    const { error: err } = await supabase.from("fisi_user_labs").insert({
+      user_id: user.id,
+      title: lab.title,
+      topic: lab.topic,
+      environment: lab.environment,
+      goal: lab.goal,
+      description: lab.description,
+      status: lab.status,
+      started_at: lab.started_at,
+      completed_at: lab.completed_at,
+    });
+    setCopying(false);
+    if (err) { onCopied("Fehler beim Übernehmen."); return; }
+    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+  }
+
   return (
     <div className="rounded-xl border border-white/5 bg-white/[0.015] p-5 space-y-3 opacity-80">
       <div className="flex items-start justify-between gap-3">
@@ -138,6 +159,21 @@ function DemoLabCard({ lab }: { lab: FisiLab }) {
         </div>
       )}
       {lab.goal && <p className="text-xs text-slate-500 leading-relaxed">{lab.goal}</p>}
+      <div className="flex items-center justify-between pt-3 border-t border-white/5">
+        <span className="text-[10px] text-slate-700 uppercase tracking-wider font-medium">Demo</span>
+        {user ? (
+          <button onClick={handleCopy} disabled={copying}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-400 hover:text-blue-300 transition-all disabled:opacity-50">
+            <Copy size={11} />
+            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+          </button>
+        ) : (
+          <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 text-[11px] text-slate-600 cursor-not-allowed">
+            <Lock size={11} />
+            Anmeldung erforderlich
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -326,7 +362,10 @@ export default function LaborePage() {
         )}
         {!loading && !error && labs.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {labs.map((lab) => <DemoLabCard key={lab.id} lab={lab} />)}
+            {labs.map((lab) => (
+              <DemoLabCard key={lab.id} lab={lab} user={user}
+                onCopied={(msg) => showNotif("success", msg)} />
+            ))}
           </div>
         )}
       </ReferenceSection>

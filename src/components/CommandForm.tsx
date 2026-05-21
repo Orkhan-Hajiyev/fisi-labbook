@@ -16,6 +16,7 @@ export interface CommandFormData {
 
 interface Props {
   command?: FisiUserCommand;
+  prefill?: Partial<CommandFormData>;
   onSave: (data: CommandFormData) => Promise<void>;
   onCancel: () => void;
 }
@@ -26,14 +27,14 @@ const labelCls = "block text-xs font-medium text-slate-400 mb-1.5";
 const PLATFORMS = ["Windows", "Linux", "PowerShell", "CMD", "Bash", "Python", "Docker", "Sonstiges"];
 const CATEGORIES = ["Netzwerk", "System", "Active Directory", "DNS", "DHCP", "Firewall", "Docker", "Dateisystem", "Benutzer", "Sonstiges"];
 
-export default function CommandForm({ command, onSave, onCancel }: Props) {
-  const [cmd,           setCmd]          = useState(command?.command          ?? "");
-  const [platform,      setPlatform]     = useState(command?.platform         ?? "");
-  const [category,      setCategory]     = useState(command?.category         ?? "");
-  const [purpose,       setPurpose]      = useState(command?.purpose          ?? "");
-  const [example,       setExample]      = useState(command?.example          ?? "");
-  const [typicalUse,    setTypicalUse]   = useState(command?.typical_use_case ?? "");
-  const [notes,         setNotes]        = useState(command?.notes            ?? "");
+export default function CommandForm({ command, prefill, onSave, onCancel }: Props) {
+  const [cmd,           setCmd]          = useState(command?.command          ?? prefill?.command          ?? "");
+  const [platform,      setPlatform]     = useState(command?.platform         ?? prefill?.platform         ?? "");
+  const [category,      setCategory]     = useState(command?.category         ?? prefill?.category         ?? "");
+  const [purpose,       setPurpose]      = useState(command?.purpose          ?? prefill?.purpose          ?? "");
+  const [example,       setExample]      = useState(command?.example          ?? prefill?.example          ?? "");
+  const [typicalUse,    setTypicalUse]   = useState(command?.typical_use_case ?? prefill?.typical_use_case ?? "");
+  const [notes,         setNotes]        = useState(command?.notes            ?? prefill?.notes            ?? "");
   const [loading,       setLoading]      = useState(false);
   const [error,         setError]        = useState<string | null>(null);
 

@@ -17,6 +17,7 @@ export interface TroubleshootingFormData {
 
 interface Props {
   item?: FisiUserTroubleshootingCase;
+  prefill?: Partial<TroubleshootingFormData>;
   onSave: (data: TroubleshootingFormData) => Promise<void>;
   onCancel: () => void;
 }
@@ -36,15 +37,15 @@ const CATEGORIES = [
   "Linux", "Docker", "Firewall", "Hardware", "Sonstiges",
 ];
 
-export default function TroubleshootingForm({ item, onSave, onCancel }: Props) {
-  const [title,     setTitle]     = useState(item?.title      ?? "");
-  const [category,  setCategory]  = useState(item?.category   ?? "");
-  const [difficulty, setDifficulty] = useState(item?.difficulty ?? "mittel");
-  const [symptoms,  setSymptoms]  = useState(item?.symptoms   ?? "");
-  const [checks,    setChecks]    = useState(item?.checks     ?? "");
-  const [rootCause, setRootCause] = useState(item?.root_cause ?? "");
-  const [solution,  setSolution]  = useState(item?.solution   ?? "");
-  const [result,    setResult]    = useState(item?.result     ?? "");
+export default function TroubleshootingForm({ item, prefill, onSave, onCancel }: Props) {
+  const [title,      setTitle]      = useState(item?.title      ?? prefill?.title      ?? "");
+  const [category,   setCategory]   = useState(item?.category   ?? prefill?.category   ?? "");
+  const [difficulty, setDifficulty] = useState(item?.difficulty ?? prefill?.difficulty ?? "mittel");
+  const [symptoms,   setSymptoms]   = useState(item?.symptoms   ?? prefill?.symptoms   ?? "");
+  const [checks,     setChecks]     = useState(item?.checks     ?? prefill?.checks     ?? "");
+  const [rootCause,  setRootCause]  = useState(item?.root_cause ?? prefill?.root_cause ?? "");
+  const [solution,   setSolution]   = useState(item?.solution   ?? prefill?.solution   ?? "");
+  const [result,     setResult]     = useState(item?.result     ?? prefill?.result     ?? "");
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState<string | null>(null);
 

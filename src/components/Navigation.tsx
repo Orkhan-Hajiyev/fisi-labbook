@@ -15,18 +15,22 @@ import {
   X,
   LogOut,
   User,
+  LayoutGrid,
+  Search,
 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { href: "/dashboard",     label: "Übersicht",      icon: LayoutDashboard },
+  { href: "/workspace",     label: "Workspace",       icon: LayoutGrid      },
   { href: "/labore",        label: "Labore",          icon: FlaskConical    },
   { href: "/systeme",       label: "Systeme",         icon: Server          },
   { href: "/befehle",       label: "Befehle",         icon: Terminal        },
   { href: "/fehleranalyse", label: "Fehleranalyse",   icon: Bug             },
   { href: "/docker-dienste",label: "Docker-Dienste",  icon: Container       },
   { href: "/praxisnotizen", label: "Praxisnotizen",   icon: StickyNote      },
+  { href: "/suche",         label: "Suche",           icon: Search          },
   { href: "/portfolio",     label: "Portfolio",       icon: FolderKanban    },
 ];
 
@@ -113,7 +117,7 @@ export default function Navigation() {
           </div>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-0.5">
+        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           {navItems.map(({ href, label, icon: Icon }) => {
             const active = pathname === href;
             return (
@@ -131,7 +135,10 @@ export default function Navigation() {
           })}
         </nav>
 
-        <AuthSection />
+        {/* No AuthSection on desktop — shown in TopBar instead */}
+        <div className="px-5 py-3 border-t border-white/5">
+          <p className="text-[10px] text-slate-700">OrikOS-Ökosystemprojekt</p>
+        </div>
       </aside>
 
       {/* ── Mobile top bar: below md ───────────────────────────────── */}

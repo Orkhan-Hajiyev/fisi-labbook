@@ -36,3 +36,31 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #3a3d4a;
 }
+
+@media print {
+  body {
+    background: white;
+    color: black;
+    font-size: 12pt;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+  aside,
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  .rounded-xl,
+  .rounded-lg {
+    border-radius: 4px !important;
+  }
+  a {
+    color: black;
+    text-decoration: none;
+  }
+}

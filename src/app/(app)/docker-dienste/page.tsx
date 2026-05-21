@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import {
   Container, CheckCircle2, XCircle, Clock, ExternalLink, Search,
-  Plus, Pencil, Trash2, CheckCircle, AlertCircle,
+  Plus, Pencil, Trash2, CheckCircle, AlertCircle, Copy, Lock,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import LoadingState from "@/components/LoadingState";
@@ -151,7 +151,32 @@ function UserDockerCard({
   );
 }
 
-function DemoDockerCard({ svc }: { svc: FisiDockerService }) {
+function DemoDockerCard({ svc, user, onCopied }: {
+  svc: FisiDockerService;
+  user: import("@supabase/supabase-js").User | null;
+  onCopied: (msg: string) => void;
+}) {
+  const [copying, setCopying] = useState(false);
+
+  async function handleCopy() {
+    if (!user || !supabase) return;
+    setCopying(true);
+    const { error: err } = await supabase.from("fisi_user_docker_services").insert({
+      user_id: user.id,
+      name: svc.name,
+      image: svc.image,
+      port: svc.port,
+      service_type: svc.service_type,
+      status: svc.status,
+      purpose: svc.purpose,
+      compose_snippet: svc.compose_snippet,
+      notes: svc.notes,
+    });
+    setCopying(false);
+    if (err) { onCopied("Fehler beim Übernehmen."); return; }
+    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+  }
+
   return (
     <div className="rounded-xl border border-white/5 bg-white/[0.02] hover:border-white/10 transition-all duration-150 p-5 space-y-4">
       <div className="flex items-start justify-between gap-3">
@@ -164,7 +189,9 @@ function DemoDockerCard({ svc }: { svc: FisiDockerService }) {
             {svc.service_type && <p className="text-[11px] text-slate-500">{svc.service_type}</p>}
           </div>
         </div>
-        <StatusBadge status={svc.status} />
+        <div className="flex items-center gap-2 shrink-0">
+          <StatusBadge status={svc.status} />
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-2">
         {svc.image && (
@@ -184,6 +211,21 @@ function DemoDockerCard({ svc }: { svc: FisiDockerService }) {
       {svc.purpose && <p className="text-xs text-slate-400 leading-relaxed">{svc.purpose}</p>}
       {svc.compose_snippet && <ComposeBlock snippet={svc.compose_snippet} />}
       {svc.notes && <p className="text-xs text-slate-500 leading-relaxed border-t border-white/5 pt-3">{svc.notes}</p>}
+      <div className="flex items-center justify-between pt-3 border-t border-white/5">
+        <span className="text-[10px] text-slate-700 uppercase tracking-wider font-medium">Demo</span>
+        {user ? (
+          <button onClick={handleCopy} disabled={copying}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-400 hover:text-blue-300 transition-all disabled:opacity-50">
+            <Copy size={11} />
+            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+          </button>
+        ) : (
+          <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 text-[11px] text-slate-600 cursor-not-allowed">
+            <Lock size={11} />
+            Anmeldung erforderlich
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -375,7 +417,10 @@ export default function DockerDienstePage() {
         )}
         {!demoLoading && !demoError && services.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {services.map((svc) => <DemoDockerCard key={svc.id} svc={svc} />)}
+            {services.map((svc) => (
+              <DemoDockerCard key={svc.id} svc={svc} user={user}
+                onCopied={(msg) => toast("success", msg)} />
+            ))}
           </div>
         )}
       </ReferenceSection>
