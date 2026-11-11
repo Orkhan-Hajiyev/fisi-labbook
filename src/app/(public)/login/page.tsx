@@ -36,18 +36,18 @@ export default function LoginPage() {
     setError(null);
     setLoading(true);
 
-    const { error: authError } = await supabase!.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (authError) {
-      setError(mapLoginError(authError.message));
+    try {
+      const { error: authError } = await supabase!.auth.signInWithPassword({ email, password });
+      if (authError) {
+        setError(mapLoginError(authError.message));
+        return;
+      }
+      router.push("/dashboard");
+    } catch {
+      setError("Verbindung fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    router.push("/dashboard");
   }
 
   return (
@@ -70,18 +70,20 @@ export default function LoginPage() {
           </p>
 
           {error && (
-            <div className="mb-5 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
+            <div role="alert" className="mb-5 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
               <p className="text-sm text-red-400">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">
+              <label htmlFor="login-email" className="block text-xs font-medium text-slate-400 mb-1.5">
                 E-Mail
               </label>
               <input
+                id="login-email"
                 type="email"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -90,11 +92,13 @@ export default function LoginPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">
+              <label htmlFor="login-password" className="block text-xs font-medium text-slate-400 mb-1.5">
                 Passwort
               </label>
               <input
+                id="login-password"
                 type="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required

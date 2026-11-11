@@ -56,20 +56,22 @@ export default function RegistrierenPage() {
 
     setLoading(true);
 
-    const { error: authError } = await supabase!.auth.signUp({
-      email,
-      password,
-      options: { data: { name: name.trim() } },
-    });
-
-    if (authError) {
-      setError(mapSignUpError(authError.message));
+    try {
+      const { error: authError } = await supabase!.auth.signUp({
+        email,
+        password,
+        options: { data: { name: name.trim() } },
+      });
+      if (authError) {
+        setError(mapSignUpError(authError.message));
+        return;
+      }
+      setSuccess(true);
+    } catch {
+      setError("Verbindung fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    setSuccess(true);
-    setLoading(false);
   }
 
   if (success) {
@@ -120,16 +122,18 @@ export default function RegistrierenPage() {
           </p>
 
           {error && (
-            <div className="mb-5 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
+            <div role="alert" className="mb-5 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
               <p className="text-sm text-red-400">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Name</label>
+              <label htmlFor="register-name" className="block text-xs font-medium text-slate-400 mb-1.5">Name</label>
               <input
+                id="register-name"
                 type="text"
+                autoComplete="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -138,9 +142,11 @@ export default function RegistrierenPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">E-Mail</label>
+              <label htmlFor="register-email" className="block text-xs font-medium text-slate-400 mb-1.5">E-Mail</label>
               <input
+                id="register-email"
                 type="email"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -149,9 +155,11 @@ export default function RegistrierenPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Passwort</label>
+              <label htmlFor="register-password" className="block text-xs font-medium text-slate-400 mb-1.5">Passwort</label>
               <input
+                id="register-password"
                 type="password"
+                autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -160,11 +168,13 @@ export default function RegistrierenPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">
+              <label htmlFor="register-password-confirm" className="block text-xs font-medium text-slate-400 mb-1.5">
                 Passwort bestätigen
               </label>
               <input
+                id="register-password-confirm"
                 type="password"
+                autoComplete="new-password"
                 value={passwordConfirm}
                 onChange={(e) => setPasswordConfirm(e.target.value)}
                 required
