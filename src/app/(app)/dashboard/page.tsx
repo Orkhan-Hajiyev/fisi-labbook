@@ -32,13 +32,17 @@ interface PersonalStats {
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const userId = user?.id;
 
   const [demoStats, setDemoStats] = useState<DemoStats | null>(null);
   const [demoLoading, setDemoLoading] = useState(!supabaseConfigMissing);
   const [demoError, setDemoError] = useState(false);
 
-  const [personalStats, setPersonalStats] = useState<PersonalStats | null>(null);
-  const [personalStatsError, setPersonalStatsError] = useState(false);
+  const [personalStatsResult, setPersonalStatsResult] = useState<{ userId: string; data: PersonalStats } | null>(null);
+  const [personalStatsErrorFor, setPersonalStatsErrorFor] = useState<string | null>(null);
+  // Keep data scoped to the account that initiated the request.
+  const personalStats = personalStatsResult && personalStatsResult.userId === user?.id ? personalStatsResult.data : null;
+  const personalStatsError = !!user && personalStatsErrorFor === user.id;
   const personalStatsLoading = !!user && personalStats === null && !personalStatsError;
 
   useEffect(() => {
@@ -66,29 +70,32 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    if (!user || !supabase) return;
+    if (!userId || !supabase) return;
+    let cancelled = false;
     Promise.all([
-      supabase!.from("fisi_user_labs").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase!.from("fisi_user_systems").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase!.from("fisi_user_commands").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase!.from("fisi_user_troubleshooting_cases").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase!.from("fisi_user_docker_services").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase!.from("fisi_user_notes").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase!.from("fisi_user_labs").select("id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase!.from("fisi_user_systems").select("id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase!.from("fisi_user_commands").select("id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase!.from("fisi_user_troubleshooting_cases").select("id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase!.from("fisi_user_docker_services").select("id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase!.from("fisi_user_notes").select("id", { count: "exact", head: true }).eq("user_id", userId),
     ]).then(([labs, systems, commands, troubleshooting, docker, notes]) => {
+      if (cancelled) return;
       if (labs.error || systems.error || commands.error || troubleshooting.error || docker.error || notes.error) {
-        setPersonalStatsError(true);
+        setPersonalStatsErrorFor(userId);
       } else {
-        setPersonalStats({
+        setPersonalStatsResult({ userId, data: {
           labore: labs.count ?? 0,
           systeme: systems.count ?? 0,
           befehle: commands.count ?? 0,
           fehleranalysen: troubleshooting.count ?? 0,
           dockerDienste: docker.count ?? 0,
           notizen: notes.count ?? 0,
-        });
+        } });
       }
     });
-  }, [user]);
+    return () => { cancelled = true; };
+  }, [userId]);
 
   if (supabaseConfigMissing) return <SupabaseMissingBanner />;
 

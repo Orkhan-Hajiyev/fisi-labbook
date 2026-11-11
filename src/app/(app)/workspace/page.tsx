@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import LoadingState from "@/components/LoadingState";
+import ErrorState from "@/components/ErrorState";
 import SupabaseMissingBanner from "@/components/SupabaseMissingBanner";
 import { supabase, supabaseConfigMissing } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
@@ -382,6 +383,7 @@ export default function WorkspacePage() {
   const { user } = useAuth();
   const [data, setData] = useState<WorkspaceData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [notif, setNotif] = useState<Notif | null>(null);
 
   function toast(type: Notif["type"], message: string) {
@@ -392,24 +394,34 @@ export default function WorkspacePage() {
   const loadData = useCallback(async () => {
     if (!user || !supabase) return;
     setLoading(true);
+    setLoadError(false);
+    setData(null);
     const uid = user.id;
-    const [labs, systems, commands, troubleshooting, docker, notes] = await Promise.all([
-      supabase.from("fisi_user_labs").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
-      supabase.from("fisi_user_systems").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
-      supabase.from("fisi_user_commands").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
-      supabase.from("fisi_user_troubleshooting_cases").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
-      supabase.from("fisi_user_docker_services").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
-      supabase.from("fisi_user_notes").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
-    ]);
-    setData({
-      labs: (labs.data ?? []) as FisiUserLab[],
-      systems: (systems.data ?? []) as FisiUserSystem[],
-      commands: (commands.data ?? []) as FisiUserCommand[],
-      troubleshooting: (troubleshooting.data ?? []) as FisiUserTroubleshootingCase[],
-      docker: (docker.data ?? []) as FisiUserDockerService[],
-      notes: (notes.data ?? []) as FisiUserNote[],
-    });
-    setLoading(false);
+    try {
+      const [labs, systems, commands, troubleshooting, docker, notes] = await Promise.all([
+        supabase.from("fisi_user_labs").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
+        supabase.from("fisi_user_systems").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
+        supabase.from("fisi_user_commands").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
+        supabase.from("fisi_user_troubleshooting_cases").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
+        supabase.from("fisi_user_docker_services").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
+        supabase.from("fisi_user_notes").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
+      ]);
+      if ([labs, systems, commands, troubleshooting, docker, notes].some((response) => response.error)) {
+        throw new Error("Failed to load personal workspace");
+      }
+      setData({
+        labs: (labs.data ?? []) as FisiUserLab[],
+        systems: (systems.data ?? []) as FisiUserSystem[],
+        commands: (commands.data ?? []) as FisiUserCommand[],
+        troubleshooting: (troubleshooting.data ?? []) as FisiUserTroubleshootingCase[],
+        docker: (docker.data ?? []) as FisiUserDockerService[],
+        notes: (notes.data ?? []) as FisiUserNote[],
+      });
+    } catch {
+      setLoadError(true);
+    } finally {
+      setLoading(false);
+    }
   }, [user]);
 
   useEffect(() => {
@@ -517,6 +529,15 @@ export default function WorkspacePage() {
       )}
 
       {user && loading && <LoadingState text="Workspace wird geladen…" />}
+
+      {user && !loading && loadError && (
+        <div className="text-center">
+          <ErrorState message="Der Workspace konnte nicht vollständig geladen werden. Ein unvollständiger Export wurde verhindert." />
+          <button onClick={loadData} className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white">
+            Erneut versuchen
+          </button>
+        </div>
+      )}
 
       {user && !loading && isEmpty && (
         <div className="rounded-xl border border-white/5 bg-white/[0.02] p-10 text-center">
