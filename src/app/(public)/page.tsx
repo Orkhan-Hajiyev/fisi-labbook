@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Activity, ArrowRight, BookOpen, CheckCircle2, Container, FlaskConical, Layers3, LockKeyhole, Network, Play, Server, ShieldCheck, Terminal, Wrench } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle2, Container, FlaskConical, Layers3, Network, Play, Server, ShieldCheck, Terminal, Wrench } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const translations = {

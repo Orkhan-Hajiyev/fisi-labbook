@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BookOpen, CheckCircle2, Container, Database, FileText, FlaskConical, Layers3, LockKeyhole, Network, Server, Terminal, Wrench } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle2, Container, FlaskConical, Layers3, LockKeyhole, Server, Terminal, Wrench } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const copy = {
