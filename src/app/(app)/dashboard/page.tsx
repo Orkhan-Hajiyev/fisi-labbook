@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   FlaskConical, Server, Terminal, Bug, Container, BookOpen,
-  StickyNote, ArrowRight, Info, Plus, Network, Router, ShieldCheck, CircleCheck,
-} from "lucide-react";
+  StickyNote, ArrowRight, Info, Plus, } from "lucide-react";
 import Link from "next/link";
 import StatCard from "@/components/StatCard";
 import LoadingState from "@/components/LoadingState";
@@ -137,6 +136,7 @@ export default function DashboardPage() {
       )}
 
       {!user && (
+      <div>
       {/* Demo stats */}
       <div>
         <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">
@@ -154,7 +154,7 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
-
+      </div>
       )}
       {/* Personal workspace – logged-in only */}
       {user && (

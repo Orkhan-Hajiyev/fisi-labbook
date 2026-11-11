@@ -85,14 +85,14 @@ function AuthSection({ onAction }: { onAction?: () => void }) {
 
   return (
     <div className="px-5 py-4 border-t border-slate-200 space-y-2">
-      <p className="text-[10px] text-slate-500 mb-2">OrikOS-Konto</p>
+      <p className="text-[10px] text-slate-500 mb-2">{de ? "FISI-LabBook-Konto" : "FISI LabBook hesabı"}</p>
       <Link href="/registrieren" onClick={onAction}
         className="block text-xs text-blue-700 hover:text-blue-800 transition-colors">
-        Kostenlos registrieren →
+        {de ? "Kostenlos registrieren →" : "Pulsuz qeydiyyat →"}
       </Link>
       <Link href="/login" onClick={onAction}
         className="block text-xs text-slate-600 hover:text-slate-700 transition-colors">
-        Einloggen
+        {de ? "Einloggen" : "Daxil ol"}
       </Link>
     </div>
   );
@@ -216,7 +216,7 @@ export default function Navigation() {
                     }`}
                   >
                     <Icon size={16} className={active ? "text-blue-700" : "text-slate-600"} />
-                    {label}
+                    {localizedLabels[href] ?? label}
                   </Link>
                 );
               })}

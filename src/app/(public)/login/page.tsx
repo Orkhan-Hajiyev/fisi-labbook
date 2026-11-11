@@ -81,7 +81,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="login-email" className="block text-xs font-medium text-slate-600 mb-1.5">
-                E-Mail
+                {de ? "E-Mail" : "E-poçt"}
               </label>
               <input
                 id="login-email"
@@ -96,7 +96,7 @@ export default function LoginPage() {
             </div>
             <div>
               <label htmlFor="login-password" className="block text-xs font-medium text-slate-600 mb-1.5">
-                Passwort
+                {de ? "Passwort" : "Şifrə"}
               </label>
               <input
                 id="login-password"
@@ -119,12 +119,12 @@ export default function LoginPage() {
           </form>
 
           <p className="text-xs text-slate-600 text-center mt-6">
-            Noch kein Konto?{" "}
+            {de ? "Noch kein Konto?" : "Hələ hesabın yoxdur?"}{" "}
             <Link
               href="/registrieren"
               className="text-blue-700 hover:text-blue-800 transition-colors"
             >
-              Kostenlos registrieren
+              {de ? "Kostenlos registrieren" : "Pulsuz qeydiyyat"}
             </Link>
           </p>
         </div>

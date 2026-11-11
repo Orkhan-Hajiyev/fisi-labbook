@@ -45,15 +45,15 @@ export default function RegistrierenPage() {
     setError(null);
 
     if (!name.trim()) {
-      setError("Bitte geben Sie Ihren Namen ein.");
+      setError(de ? "Bitte gib deinen Namen ein." : "Adını daxil et.");
       return;
     }
     if (password.length < 6) {
-      setError("Das Passwort muss mindestens 6 Zeichen lang sein.");
+      setError(de ? "Das Passwort muss mindestens 6 Zeichen lang sein." : "Şifrə ən azı 6 simvoldan ibarət olmalıdır.");
       return;
     }
     if (password !== passwordConfirm) {
-      setError("Die Passwörter stimmen nicht überein.");
+      setError(de ? "Die Passwörter stimmen nicht überein." : "Şifrələr uyğun gəlmir.");
       return;
     }
 
@@ -96,7 +96,7 @@ export default function RegistrierenPage() {
               href="/login"
               className="inline-block px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors"
             >
-              Zum Login
+              {de ? "Zum Login" : "Girişə keç"}
             </Link>
           </div>
         </div>
@@ -139,7 +139,7 @@ export default function RegistrierenPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                placeholder="Max Mustermann"
+                placeholder={de ? "Max Mustermann" : "Ad Soyad"}
                 className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               />
             </div>
@@ -165,7 +165,7 @@ export default function RegistrierenPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                placeholder="Min. 6 Zeichen"
+                placeholder={de ? "Mind. 6 Zeichen" : "Ən azı 6 simvol"}
                 className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               />
             </div>
@@ -180,7 +180,7 @@ export default function RegistrierenPage() {
                 value={passwordConfirm}
                 onChange={(e) => setPasswordConfirm(e.target.value)}
                 required
-                placeholder="Passwort wiederholen"
+                placeholder={de ? "Passwort wiederholen" : "Şifrəni təkrar yaz"}
                 className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               />
             </div>
@@ -196,7 +196,7 @@ export default function RegistrierenPage() {
           <p className="text-xs text-slate-600 text-center mt-6">
             {de ? "Bereits registriert?" : "Artıq hesabın var?"}{" "}
             <Link href="/login" className="text-blue-700 hover:text-blue-800 transition-colors">
-              Einloggen
+              {de ? "Einloggen" : "Daxil ol"}
             </Link>
           </p>
         </div>
