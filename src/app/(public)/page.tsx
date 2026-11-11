@@ -1,269 +1,162 @@
+"use client";
+
 import Link from "next/link";
-import {
-  FlaskConical,
-  Server,
-  Terminal,
-  Bug,
-  Container,
-  StickyNote,
-  ArrowRight,
-  CheckCircle2,
-  Mail,
-  ShieldCheck,
-  Smartphone,
-  Network,
-  Activity,
-  Layers3,
-} from "lucide-react";
+import { Activity, ArrowRight, BookOpen, CheckCircle2, Container, FlaskConical, Layers3, LockKeyhole, Network, Play, Server, ShieldCheck, Terminal, Wrench } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const modules = [
-  {
-    icon: FlaskConical,
-    label: "Labore",
-    desc: "Dokumentierte IT-Laborumgebungen mit Status, Ziel und Beschreibung.",
-    accent: "blue",
+const translations = {
+  de: {
+    eyebrow: "FÜR FACHINFORMATIKER:INNEN · SYSTEMINTEGRATION",
+    title1: "Dein digitales IT-Labor.",
+    title2: "Lernen. Anwenden. Dokumentieren.",
+    lead: "FISI LabBook verbindet praxisnahe IT-Labore, Systemdokumentation, Admin-Befehle und strukturierte Fehleranalysen in einer übersichtlichen Plattform.",
+    trust: ["Praxisnah", "Übersichtlich", "Kostenlos"],
+    demo: "Demo eingeschränkt testen", examples: "Ausgefülltes Beispiel ansehen", signup: "Kostenlos registrieren", login: "Anmelden",
+    preview: "Interaktive Plattformvorschau", example: "Beispiel · keine echte Infrastruktur",
+    terminal: "Netzwerk prüfen · Ausgabe dokumentieren",
+    titleChoice: "Drei Wege, FISI LabBook kennenzulernen",
+    choiceLead: "Du entscheidest, wie du die Plattform entdecken möchtest.",
+    items: [
+      { title: "Eingeschränkte Demo", subtitle: "Ohne Registrierung", text: "Öffentliche IT-Beispiele und ausgewählte Funktionen ansehen. Eigene Einträge lassen sich hier nicht dauerhaft speichern.", cta: "Demo starten" },
+      { title: "Ausgefüllter Beispiel-Workspace", subtitle: "Geführter Rundgang", text: "Ein vollständig illustriertes Übungsprojekt mit Labor, System, Befehlen, Docker, Fehleranalyse und Notizen – mit Erklärungen zu jedem Bereich.", cta: "Beispiele entdecken" },
+      { title: "Dein persönlicher Workspace", subtitle: "Kostenlos nach Registrierung", text: "Eigene Labore und Systeme anlegen, Befehle und Praxisnotizen verwalten und verfügbare Exportfunktionen nutzen.", cta: "Kostenloses Konto erstellen" },
+    ],
+    modulesTitle: "Alles für deinen FISI-Alltag", modulesLead: "Von der Einrichtung eines Servers bis zur dokumentierten Fehlerbehebung.",
+    modules: [
+      ["IT-Labore", "Übungen, Ziele und Ergebnisse nachvollziehbar festhalten."],
+      ["Systeme & Dienste", "Server, IP-Adressen, Rollen und Dienste strukturieren."],
+      ["Befehle", "PowerShell, Linux und Netzwerkkommandos sammeln."],
+      ["Fehleranalyse", "Symptome, Ursachen und Lösungen dokumentieren."],
+      ["Docker", "Container, Ports und Compose-Beispiele im Blick behalten."],
+      ["Praxisnotizen", "Persönliches IT-Wissen dauerhaft festhalten."],
+    ],
+    sampleTitle: "So sieht eine vollständige Dokumentation aus",
+    sampleLead: "Im Beispielbereich siehst du nicht nur leere Formulare, sondern einen zusammenhängenden, ausgefüllten FISI-Fall – inklusive technischer Zusammenhänge.",
+    sampleRows: [["Labor", "Firmennetz mit Windows und Linux"], ["System", "srv-ad01 · DNS / Active Directory"], ["Netzwerk", "192.168.20.0/24 · VLAN 20"], ["Fehleranalyse", "DNS-Auflösung prüfen und beheben"]],
+    sampleLink: "Zum erklärten Beispiel-Workspace",
+    freeEyebrow: "100 % KOSTENLOS", freeTitle: "Alle Funktionen mit deinem eigenen Konto nutzen.",
+    freeText: "Nach der Registrierung und gegebenenfalls der E-Mail-Bestätigung kannst du deinen persönlichen Workspace verwenden. Für die derzeit angebotene App ist kein kostenpflichtiges Abo erforderlich.",
+    freeLink: "Jetzt kostenlos registrieren",
+    caveat: "Demo und Beispielbereich zeigen illustrative Daten. Sie sind keine Verbindung zu echten Servern oder produktiven IT-Systemen.",
   },
-  {
-    icon: Server,
-    label: "Systeme",
-    desc: "Infrastruktur-Dokumentation: Hostnames, IP-Adressen, Rollen, Dienste.",
-    accent: "cyan",
+  az: {
+    eyebrow: "SİSTEM İNTEQRASİYASI ÜZRƏ FACHINFORMATIKER ÜÇÜN",
+    title1: "Sənin rəqəmsal IT laboratoriyan.",
+    title2: "Öyrən. Tətbiq et. Sənədləşdir.",
+    lead: "FISI LabBook praktiki IT laboratoriyalarını, sistem sənədlərini, inzibati əmrləri və sistemli xəta təhlilini vahid, aydın platformada birləşdirir.",
+    trust: ["Praktik yönümlü", "Aydın quruluş", "Tam pulsuz"],
+    demo: "Məhdud demonu sına", examples: "Doldurulmuş nümunəyə bax", signup: "Pulsuz qeydiyyatdan keç", login: "Daxil ol",
+    preview: "İnteraktiv platforma təqdimatı", example: "Nümunə · real infrastruktur deyil",
+    terminal: "Şəbəkəni yoxla · nəticəni sənədləşdir",
+    titleChoice: "FISI LabBook ilə tanış olmağın üç yolu",
+    choiceLead: "Platformanı necə kəşf etmək istədiyini özün seç.",
+    items: [
+      { title: "Məhdud demo", subtitle: "Qeydiyyatsız", text: "Açıq IT nümunələrinə və seçilmiş funksiyalara bax. Burada şəxsi qeydləri daimi saxlamaq mümkün deyil.", cta: "Demonu aç" },
+      { title: "Tam doldurulmuş nümunə Workspace", subtitle: "İzahlı tanışlıq", text: "Laboratoriya, sistem, əmrlər, Docker, xəta təhlili və qeydləri əhatə edən, hər bölməsi izah olunmuş nümunə layihəni araşdır.", cta: "Nümunələri kəşf et" },
+      { title: "Şəxsi Workspace", subtitle: "Qeydiyyatdan sonra pulsuz", text: "Öz laboratoriyalarını və sistemlərini yarat, əmrlərini və praktiki qeydlərini idarə et, mövcud ixrac funksiyalarından istifadə et.", cta: "Pulsuz hesab yarat" },
+    ],
+    modulesTitle: "FISI gündəlik praktikası üçün hər şey", modulesLead: "Server quraşdırılmasından xətanın həllinin sənədləşdirilməsinə qədər.",
+    modules: [
+      ["IT laboratoriyaları", "Tapşırıqları, məqsədləri və nəticələri sistemli qeyd et."],
+      ["Sistemlər və xidmətlər", "Serverləri, IP ünvanlarını, rolları və xidmətləri sənədləşdir."],
+      ["Əmrlər", "PowerShell, Linux və şəbəkə əmrlərini topla."],
+      ["Xəta təhlili", "Əlamətləri, səbəbləri və həll yollarını qeyd et."],
+      ["Docker", "Konteynerləri, portları və Compose nümunələrini izləməyə kömək edir."],
+      ["Praktiki qeydlər", "Şəxsi IT biliklərini bir yerdə saxla."],
+    ],
+    sampleTitle: "Tam sənədləşdirilmiş layihə necə görünür?",
+    sampleLead: "Nümunə bölməsində boş formalar deyil, texniki əlaqələri ilə birlikdə hazırlanmış bütöv FISI praktik nümunəsini görəcəksən.",
+    sampleRows: [["Laboratoriya", "Windows və Linux ilə müəssisə şəbəkəsi"], ["Sistem", "srv-ad01 · DNS / Active Directory"], ["Şəbəkə", "192.168.20.0/24 · VLAN 20"], ["Xəta təhlili", "DNS ad həllini yoxla və düzəlt"]],
+    sampleLink: "İzahlı nümunə Workspace-ə keç",
+    freeEyebrow: "100% PULSUZ", freeTitle: "Şəxsi hesabınla bütün mövcud funksiyalardan istifadə et.",
+    freeText: "Qeydiyyatdan və tələb olunduqda e-poçt təsdiqindən sonra şəxsi Workspace-dən istifadə edə bilərsən. Tətbiqin hazırda təqdim olunan funksiyaları üçün ödənişli abunə tələb edilmir.",
+    freeLink: "İndi pulsuz qeydiyyatdan keç",
+    caveat: "Demo və nümunə bölmələrindəki məlumatlar illüstrativdir; real serverlərə və işlək IT infrastrukturuna qoşulmur.",
   },
-  {
-    icon: Terminal,
-    label: "Befehle",
-    desc: "Admin-Befehlsreferenz mit Plattform, Kategorie und Beispielen.",
-    accent: "violet",
-  },
-  {
-    icon: Bug,
-    label: "Fehleranalyse",
-    desc: "Strukturierte Troubleshooting-Fälle: Symptome, Ursache, Lösung.",
-    accent: "amber",
-  },
-  {
-    icon: Container,
-    label: "Docker-Dienste",
-    desc: "Container-Dienste mit Images, Ports und Compose-Snippets.",
-    accent: "emerald",
-  },
-  {
-    icon: StickyNote,
-    label: "Praxisnotizen",
-    desc: "Persönlicher Arbeitsbereich für technische Notizen und FISI-Dokumentation.",
-    accent: "slate",
-  },
-];
+} as const;
 
-const accentMap: Record<string, string> = {
-  blue: "bg-blue-500/10 border-blue-500/15 text-blue-700",
-  cyan: "bg-cyan-500/10 border-cyan-500/15 text-cyan-700",
-  violet: "bg-violet-500/10 border-violet-500/15 text-violet-700",
-  amber: "bg-amber-500/10 border-amber-500/15 text-amber-700",
-  emerald: "bg-emerald-500/10 border-emerald-500/15 text-emerald-700",
-  slate: "bg-slate-500/10 border-slate-500/15 text-slate-600",
-};
+const moduleIcons = [FlaskConical, Server, Terminal, Wrench, Container, BookOpen];
+const choiceIcons = [Play, Layers3, ShieldCheck];
+const choiceLinks = ["/dashboard", "/beispiele", "/registrieren"];
 
-const steps = [
-  {
-    icon: CheckCircle2,
-    step: "01",
-    title: "OrikOS-Konto erstellen",
-    desc: "Name, E-Mail und Passwort eingeben und kostenfrei registrieren.",
-  },
-  {
-    icon: Mail,
-    step: "02",
-    title: "E-Mail bestätigen",
-    desc: "Den Bestätigungslink in Ihrem Postfach öffnen und Konto aktivieren.",
-  },
-  {
-    icon: ShieldCheck,
-    step: "03",
-    title: "App nutzen",
-    desc: "Mit OrikOS-Konto einloggen und persönliche FISI-Dokumentation verwalten.",
-  },
-];
-
-export default function LandingPage() {
+function LabIllustration({ de }: { de: boolean }) {
   return (
-    <div className="flex flex-col">
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden border-b border-[#d9e8f7] bg-gradient-to-br from-[#f7fbff] via-[#f1f8ff] to-[#e5f2ff]">
-        <div className="absolute inset-0 fisi-tech-grid opacity-60 pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(59,130,246,0.08),transparent)] pointer-events-none" />
-
-        <div className="relative max-w-6xl mx-auto px-6 py-16 sm:py-20 lg:py-24 grid lg:grid-cols-[1.08fr_0.92fr] items-center gap-12">
-          <div>
-          {/* Badge */}
-          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold tracking-[0.1em] uppercase border border-[#c0e0f5] bg-white/85 text-blue-700 mb-6">
-            <Network size={14} /> OrikLab · FISI Education
-          </span>
-
-          {/* Title */}
-          <h1 className="text-5xl sm:text-6xl font-extrabold text-[#153a5c] tracking-[-0.05em] leading-[1.05] mb-5">
-            FISI <span className="text-[#1477c6]">LabBook.</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-xl sm:text-2xl font-semibold text-[#2a577b] mb-5 leading-snug">
-            Dein System. Dein Wissen.<br />Dein nächstes Level.
-          </p>
-
-          {/* Main description */}
-          <p className="text-[#56718a] leading-relaxed max-w-xl mb-6 text-sm sm:text-base">
-            Die Praxisplattform für angehende Fachinformatiker für Systemintegration:
-            IT-Labore planen, Netzwerke dokumentieren, Admin-Befehle sammeln und Fehler strukturiert lösen.
-          </p>
-
-          {/* Registration note */}
-          <p className="text-xs text-[#6d8aa2] mb-7 max-w-lg leading-relaxed">
-            Ein kostenloses Konto genügt – danach steht dir dein persönlicher IT-Workspace zur Verfügung.
-          </p>
-
-          {/* CTAs */}
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#176cba] hover:bg-[#105b9d] text-white text-sm font-bold shadow-lg shadow-blue-500/20 transition-colors"
-            >
-              LabBook entdecken
-              <ArrowRight size={14} />
-            </Link>
-            <Link
-              href="/registrieren"
-              className="px-5 py-3 rounded-xl bg-white border border-[#b8d7f1] hover:border-blue-400 text-sm font-semibold text-[#1e629a] shadow-sm transition-all"
-            >
-              Kostenlos starten
-            </Link>
-          </div>
-          <div className="flex flex-wrap gap-4 mt-8 text-[11px] font-semibold text-[#5d809f]">
-            <span className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#1491b8]" /> Praxisorientiert</span>
-            <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-[#1491b8]" /> Privater Workspace</span>
-            <span className="flex items-center gap-1.5"><Smartphone size={14} className="text-[#1491b8]" /> Mobil nutzbar</span>
-          </div>
-          </div>
-
-          <div className="fisi-card relative rounded-[24px] p-5 sm:p-6 border-[#c4def3] bg-white/95 shadow-[0_28px_65px_-35px_rgba(21,100,170,0.35)]">
-            <div className="flex items-center justify-between gap-3 pb-4 border-b border-[#e1eaf4]">
-              <div className="flex items-center gap-2.5"><div className="h-9 w-9 rounded-xl bg-[#e8f4ff] text-blue-700 flex items-center justify-center"><Layers3 size={19} /></div><div><p className="text-xs font-bold text-[#214b6e]">Systemintegration Cockpit</p><p className="text-[10px] text-slate-500">FISI LabBook · Vorschau</p></div></div>
-              <div className="flex gap-1.5"><span className="w-2 h-2 rounded-full bg-[#b9d9ec]"/><span className="w-2 h-2 rounded-full bg-[#b9d9ec]"/><span className="w-2 h-2 rounded-full bg-[#1d9fc3]"/></div>
-            </div>
-            <div className="grid grid-cols-3 gap-3 my-5">
-              <div className="rounded-xl bg-blue-50 border border-blue-100 p-3"><Server size={18} className="text-[#1f75b4] mb-3" /><p className="text-xs font-bold text-[#214b6e]">Systeme</p><p className="text-[10px] text-slate-500 mt-1">Infrastruktur</p></div>
-              <div className="rounded-xl bg-cyan-50 border border-cyan-100 p-3"><Network size={18} className="text-cyan-700 mb-3" /><p className="text-xs font-bold text-[#214b6e]">Netzwerk</p><p className="text-[10px] text-slate-500 mt-1">Topologie</p></div>
-              <div className="rounded-xl bg-sky-50 border border-sky-100 p-3"><Bug size={18} className="text-sky-700 mb-3" /><p className="text-xs font-bold text-[#214b6e]">Analyse</p><p className="text-[10px] text-slate-500 mt-1">Troubleshooting</p></div>
-            </div>
-            <div className="rounded-xl bg-[#143550] text-[#c8e9fc] p-4 font-mono text-[11px] sm:text-xs leading-6">
-              <div className="flex items-center gap-2 mb-2"><Terminal size={13} className="text-[#74d1ef]" /><span className="text-[#81d5f0]">PowerShell · Beispiel</span></div>
-              <p><span className="text-[#89dfbb]">PS C:\&gt;</span> Get-NetIPConfiguration</p>
-              <p className="text-[#9ac7e3]"># Prüfen · Verstehen · Dokumentieren</p>
-            </div>
-            <div className="flex items-center gap-2 pt-4 text-[11px] font-medium text-slate-500"><Activity size={14} className="text-[#1b9db8]" /> Ein Ort für deine gesamte IT-Praxis <ArrowRight size={13} className="ml-auto text-blue-500" /></div>
+    <div className="relative overflow-hidden rounded-[28px] border border-[#bfdbf6] bg-gradient-to-br from-[#dfeeff] via-[#f2f8ff] to-[#b8d9fb] shadow-[0_30px_70px_-42px_rgba(11,81,163,.4)] min-h-[300px] sm:min-h-[370px]" aria-label={de ? "Illustration einer IT-Laborumgebung" : "IT laboratoriyasının təsviri"} role="img">
+      <div className="absolute inset-0 fisi-tech-grid opacity-70" />
+      <div className="absolute -top-24 -right-20 w-80 h-80 bg-blue-300/40 rounded-full blur-3xl" />
+      <div className="absolute top-9 left-7 flex items-center gap-2 rounded-xl border border-blue-200 bg-white/90 px-3 py-2 shadow-sm text-xs font-bold text-[#225a9a]"><Network size={17} /> {de ? "Netzwerk" : "Şəbəkə"} <span className="w-2 h-2 rounded-full bg-blue-500 motion-safe:animate-pulse" /></div>
+      <div className="absolute top-10 right-8 rounded-xl bg-white/90 border border-blue-200 p-2.5 shadow-sm text-blue-700"><Container size={27} /></div>
+      <div className="absolute left-7 bottom-9 flex gap-3 items-end">
+        {[0, 1, 2].map((n) => <div key={n} className={`relative w-14 sm:w-[70px] ${n === 1 ? "h-44 sm:h-48" : "h-32 sm:h-40"} rounded-xl border border-[#81b4e9] bg-gradient-to-b from-[#1c609f] to-[#112e57] shadow-xl p-2.5 space-y-3`}>
+          {[0, 1, 2, 3].map((i) => <div key={i} className="rounded-md bg-[#1b80cf]/30 border border-[#71bfff]/40 h-4 flex items-center justify-end pr-1.5 gap-1"><span className="w-1 h-1 rounded-full bg-[#68dbff]"/><span className="w-1 h-1 rounded-full bg-[#b3e9ff]"/></div>)}
+        </div>)}
+      </div>
+      <div className="absolute bottom-7 right-6 w-[49%] min-w-[190px] shadow-2xl">
+        <div className="rounded-xl p-2 bg-[#193b6c] border-[5px] border-[#2d659f]">
+          <div className="rounded-md bg-[#0b1b35] text-[#8ce2ff] font-mono text-[10px] sm:text-xs space-y-2 px-3 py-4">
+            <p className="text-[#8febbb]">fisi@lab:~$</p>
+            <p>ip addr show</p><p>docker ps</p><p>nslookup srv-ad01</p>
+            <p className="text-white/50">_</p>
           </div>
         </div>
-      </section>
-
-      {/* ── How it works ── */}
-      <section className="border-b border-[#e0ebf5] py-16 bg-white/50">
-        <div className="max-w-5xl mx-auto px-6">
-          <p className="text-[11px] font-bold text-blue-700 uppercase tracking-[0.18em] text-center mb-2">SO FUNKTIONIERT&apos;S</p>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#193d5c] text-center mb-10">In drei Schritten startklar</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {steps.map(({ icon: Icon, step, title, desc }) => (
-              <div
-                key={step}
-                className="fisi-card relative rounded-2xl p-6"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-[10px] font-black text-slate-500 tabular-nums">{step}</span>
-                  <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center">
-                    <Icon size={13} className="text-blue-700" />
-                  </div>
-                </div>
-                <h3 className="text-sm font-bold text-[#214a6c] mb-1.5">{title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Modules ── */}
-      <section className="border-b border-[#e0ebf5] py-16">
-        <div className="max-w-5xl mx-auto px-6">
-          <p className="text-[11px] font-bold text-blue-700 uppercase tracking-[0.18em] text-center mb-2">DEINE IT-WERKZEUGE</p>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#193d5c] text-center mb-10">Alles für deine IT-Praxis</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {modules.map(({ icon: Icon, label, desc, accent }) => (
-              <div
-                key={label}
-                className="fisi-card rounded-2xl transition-all duration-200 hover:-translate-y-0.5 p-6"
-              >
-                <div
-                  className={`w-10 h-10 rounded-xl border flex items-center justify-center mb-4 ${accentMap[accent]}`}
-                >
-                  <Icon size={19} />
-                </div>
-                <h3 className="text-sm font-bold text-[#214a6c] mb-2">{label}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Mobile install ── */}
-      <section className="border-b border-slate-200 py-14">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="fisi-card flex flex-col sm:flex-row items-start gap-6 rounded-2xl p-6 sm:p-8">
-            <div className="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/15 flex items-center justify-center shrink-0 mt-0.5">
-              <Smartphone size={16} className="text-blue-700" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h2 className="text-sm font-semibold text-slate-900 mb-1.5">FISI LabBook mobil nutzen</h2>
-              <p className="text-xs text-slate-600 leading-relaxed mb-5">
-                FISI LabBook kann auf dem Smartphone wie eine App genutzt werden. Öffnen Sie die
-                Plattform im Browser und fügen Sie sie über &bdquo;Zum Startbildschirm
-                hinzufügen&ldquo; zu Ihrem Gerät hinzu.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="rounded-lg border border-slate-200 bg-blue-50 px-4 py-3">
-                  <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                    Android / Chrome
-                  </p>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Menü öffnen <span className="text-slate-500">→</span>{" "}
-                    <span className="text-slate-700">Zum Startbildschirm hinzufügen</span>
-                  </p>
-                </div>
-                <div className="rounded-lg border border-slate-200 bg-blue-50 px-4 py-3">
-                  <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                    iPhone / Safari
-                  </p>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Teilen öffnen <span className="text-slate-500">→</span>{" "}
-                    <span className="text-slate-700">Zum Home-Bildschirm</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── OrikOS brand block ── */}
-      <section className="py-14">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-cyan-500/15 bg-cyan-500/5 text-cyan-700/60 mb-4">
-            OrikOS-Ökosystemprojekt
-          </span>
-          <p className="text-sm text-slate-600 leading-relaxed max-w-xl mx-auto">
-            Ein OrikOS-Projekt innerhalb der OrikLab-Webplattform – entwickelt für praxisnahe
-            Systemintegration, technische Dokumentation und strukturierte Fehleranalyse.
-          </p>
-        </div>
-      </section>
+        <div className="mx-auto w-2/3 h-2 bg-[#74a8de] rounded-b-lg" />
+      </div>
+      <div className="absolute top-[34%] right-[28%] flex items-center gap-2 px-3 py-2 rounded-xl border border-blue-200 bg-white/90 shadow-lg text-blue-700"><Server size={19} /><span className="text-[11px] font-semibold">srv-ad01</span></div>
+      <div className="absolute top-[48%] right-[25%] h-11 border-l-2 border-dashed border-blue-400" />
+      <div className="absolute bottom-2 left-7 text-[10px] text-[#3a6994] font-semibold">{de ? "Nur illustrative Technik – keine Live-Verbindung" : "Yalnız nümunə təsviri — real bağlantı yoxdur"}</div>
     </div>
   );
+}
+
+export default function LandingPage() {
+  const { language } = useLanguage();
+  const t = translations[language];
+  const de = language === "de";
+
+  return <div className="pb-12">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#f5faff] to-white">
+      <div className="max-w-7xl mx-auto px-5 sm:px-7 py-12 sm:py-16 grid lg:grid-cols-[1fr_1.02fr] items-center gap-8 lg:gap-12">
+        <div>
+          <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-[#eaf5ff] px-3 py-1.5 text-[11px] font-bold tracking-wide text-[#1263ad]"><Network size={14} />{t.eyebrow}</span>
+          <h1 className="mt-6 text-[clamp(2.2rem,4vw,3.65rem)] font-extrabold tracking-tight leading-[1.12] text-[#102c54]">{t.title1}<span className="block mt-2 text-[#176ed3]">{t.title2}</span></h1>
+          <p className="mt-6 text-[#4d6987] text-base leading-relaxed max-w-xl">{t.lead}</p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link href="/dashboard" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 bg-[#116bc9] hover:bg-[#0959b0] text-white text-sm font-bold shadow-lg shadow-blue-500/20">{t.demo}<ArrowRight size={16}/></Link>
+            <Link href="/beispiele" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 border border-[#bdd7ef] bg-white hover:bg-blue-50 text-[#165a9a] text-sm font-bold">{t.examples}<Layers3 size={16}/></Link>
+          </div>
+          <div className="mt-6 flex flex-wrap gap-5 text-xs font-semibold text-[#4b759a]">{t.trust.map(s=><span key={s} className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-blue-600" />{s}</span>)}</div>
+        </div>
+        <LabIllustration de={de} />
+      </div>
+    </section>
+
+    <section className="max-w-7xl mx-auto px-5 sm:px-7 py-12" aria-labelledby="ways-title">
+      <div className="mb-7"><p className="text-xs font-extrabold tracking-[.16em] text-blue-700 uppercase">FISI LABBOOK</p><h2 id="ways-title" className="mt-2 text-2xl sm:text-3xl font-extrabold text-[#143960]">{t.titleChoice}</h2><p className="text-[#5c7791] mt-2 text-sm">{t.choiceLead}</p></div>
+      <div className="grid md:grid-cols-3 gap-4">
+        {t.items.map((item,i)=>{const Icon=choiceIcons[i]; return <article key={item.title} className={`fisi-card rounded-[22px] p-6 flex flex-col gap-4 ${i===1?"border-blue-300 bg-[#eff7ff]":""}`}>
+          <div className="flex items-center justify-between"><span className="w-12 h-12 grid place-items-center rounded-2xl bg-[#e5f1ff] text-blue-700"><Icon size={25}/></span><span className="rounded-full bg-[#eaf2fc] px-3 py-1 text-[10px] text-[#366f9d] font-bold">{item.subtitle}</span></div>
+          <h3 className="text-lg font-bold text-[#17385e]">{item.title}</h3><p className="text-sm leading-relaxed text-[#58728d] flex-1">{item.text}</p>
+          <Link href={choiceLinks[i]} className="flex items-center justify-between text-sm font-bold text-blue-700 hover:text-blue-900 pt-2 border-t border-blue-100">{item.cta}<ArrowRight size={17}/></Link>
+        </article>})}
+      </div>
+    </section>
+
+    <section className="bg-[#f1f7ff] border-y border-[#deebfa] py-12">
+      <div className="max-w-7xl mx-auto px-5 sm:px-7"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#153b64]">{t.modulesTitle}</h2><p className="mt-2 text-sm text-[#57758f]">{t.modulesLead}</p>
+        <div className="mt-7 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">{t.modules.map(([title,desc],i)=>{const Icon=moduleIcons[i];return <article key={title} className="rounded-2xl bg-white border border-blue-100 p-5 shadow-sm flex gap-4"><span className="w-11 h-11 shrink-0 rounded-xl bg-blue-50 grid place-items-center text-blue-700"><Icon size={22}/></span><div><h3 className="font-bold text-sm text-[#163e68]">{title}</h3><p className="text-xs leading-relaxed mt-2 text-[#637d96]">{desc}</p></div></article>})}</div>
+      </div>
+    </section>
+
+    <section className="max-w-7xl mx-auto px-5 sm:px-7 py-14 grid lg:grid-cols-[.86fr_1.14fr] items-center gap-8">
+      <div><p className="uppercase tracking-widest text-xs font-bold text-blue-700">{t.preview}</p><h2 className="mt-3 text-3xl font-extrabold text-[#14395c]">{t.sampleTitle}</h2><p className="mt-4 text-[#57718a] text-sm leading-7">{t.sampleLead}</p><Link href="/beispiele" className="mt-6 inline-flex items-center gap-2 text-blue-700 font-bold text-sm hover:underline">{t.sampleLink}<ArrowRight size={16}/></Link></div>
+      <div className="fisi-card rounded-2xl p-4 sm:p-6">
+        <div className="flex justify-between border-b border-blue-100 pb-3 gap-2"><span className="text-sm font-bold text-[#21517f] flex items-center gap-2"><Layers3 size={18}/>{de?"Unternehmensnetz · Musterfall":"Müəssisə şəbəkəsi · nümunə"}</span><span className="text-[11px] text-blue-500">{t.example}</span></div>
+        <div className="mt-3">{t.sampleRows.map(([label,value])=><div key={label} className="grid grid-cols-[95px_1fr] sm:grid-cols-[125px_1fr] gap-3 py-3 border-b last:border-b-0 border-blue-50"><span className="text-xs font-bold text-[#4077a6]">{label}</span><span className="text-xs sm:text-sm font-medium text-[#234667]">{value}</span></div>)}</div>
+      </div>
+    </section>
+
+    <section className="max-w-7xl mx-auto px-5 sm:px-7"><div className="rounded-[24px] p-6 sm:p-9 bg-gradient-to-r from-[#e6f3ff] via-[#eff8ff] to-[#d7ebff] border border-[#bedcf6] grid lg:grid-cols-[1fr_auto] items-center gap-5">
+      <div><p className="text-xs tracking-widest font-black text-blue-700">{t.freeEyebrow}</p><h2 className="mt-2 text-2xl font-extrabold text-[#133c68]">{t.freeTitle}</h2><p className="text-sm text-[#50718e] mt-3 max-w-3xl leading-relaxed">{t.freeText}</p></div><Link href="/registrieren" className="inline-flex justify-center items-center gap-2 px-6 py-3 rounded-xl bg-[#106acb] text-white font-bold text-sm hover:bg-[#0759b2]">{t.freeLink}<ArrowRight size={16}/></Link>
+    </div><p className="mt-5 text-xs text-[#68829a] text-center">{t.caveat}</p></section>
+  </div>;
 }

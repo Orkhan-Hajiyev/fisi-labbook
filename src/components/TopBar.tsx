@@ -4,9 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { User, LogOut, CircuitBoard, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function TopBar() {
   const { user, loading, signOut } = useAuth();
+  const { language, setLanguage } = useLanguage();
+  const de = language === "de";
   const router = useRouter();
 
   async function handleSignOut() {
@@ -25,11 +28,12 @@ export default function TopBar() {
       <div className="flex items-center gap-2.5">
         <div className="p-2 rounded-lg bg-[#e9f4ff] text-blue-700"><CircuitBoard size={16} /></div>
         <div>
-          <p className="text-xs font-bold text-[#1c456c]">Systemintegration Workspace</p>
-          <p className="text-[11px] text-slate-500">IT-Praxis · Dokumentation · Troubleshooting</p>
+          <p className="text-xs font-bold text-[#1c456c]">{de ? "Systemintegration Workspace" : "Sistem inteqrasiyası iş sahəsi"}</p>
+          <p className="text-[11px] text-slate-500">{de ? "IT-Praxis · Dokumentation · Troubleshooting" : "IT praktikası · Sənədləşmə · Xəta təhlili"}</p>
         </div>
       </div>
       <div className="flex items-center gap-4">
+        <div className="inline-flex items-center p-0.5 rounded-lg border border-blue-200 bg-blue-50"><button type="button" aria-pressed={de} onClick={() => setLanguage("de")} className={`px-2 py-1 rounded-md text-xs font-bold ${de?"bg-blue-700 text-white":"text-blue-700"}`}>DE</button><button type="button" aria-pressed={!de} onClick={() => setLanguage("az")} className={`px-2 py-1 rounded-md text-xs font-bold ${!de?"bg-blue-700 text-white":"text-blue-700"}`}>AZ</button></div>
       {user ? (
         <>
           <div className="flex items-center gap-2.5">
@@ -37,7 +41,7 @@ export default function TopBar() {
               <User size={11} className="text-blue-700" />
             </div>
             <div className="text-right">
-              <p className="text-[10px] text-slate-500 leading-none mb-0.5">Angemeldet als</p>
+              <p className="text-[10px] text-slate-500 leading-none mb-0.5">{de ? "Angemeldet als" : "Hesaba daxil olub"}</p>
               <p className="text-xs font-medium text-slate-700 leading-none">
                 {(user.user_metadata?.name as string | undefined) || user.email}
               </p>
@@ -48,23 +52,23 @@ export default function TopBar() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] text-slate-600 hover:text-red-700 hover:bg-red-500/5 border border-slate-200 transition-all"
           >
             <LogOut size={11} />
-            Abmelden
+            {de ? "Abmelden" : "Çıxış"}
           </button>
         </>
       ) : (
         <>
-          <span className="flex items-center gap-1.5 text-[11px] text-slate-500"><ShieldCheck size={13} className="text-blue-600" />Kostenlos starten</span>
+          <span className="flex items-center gap-1.5 text-[11px] text-slate-500"><ShieldCheck size={13} className="text-blue-600" />{de ? "Kostenlos starten" : "Pulsuz başla"}</span>
           <Link
             href="/registrieren"
             className="text-[11px] text-blue-700 hover:text-blue-800 transition-colors"
           >
-            Kostenlos registrieren
+            {de ? "Kostenlos registrieren" : "Pulsuz qeydiyyat"}
           </Link>
           <Link
             href="/login"
             className="text-[11px] px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-slate-700 hover:text-slate-900 transition-all"
           >
-            Einloggen
+            {de ? "Einloggen" : "Daxil ol"}
           </Link>
         </>
       )}

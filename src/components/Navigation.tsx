@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const navItems = [
   { href: "/dashboard",     label: "Übersicht",      icon: LayoutDashboard },
@@ -39,6 +40,8 @@ const navItems = [
 function AuthSection({ onAction }: { onAction?: () => void }) {
   const router = useRouter();
   const { user, loading, signOut } = useAuth();
+  const { language } = useLanguage();
+  const de = language === "de";
 
   async function handleSignOut() {
     await signOut();
@@ -74,7 +77,7 @@ function AuthSection({ onAction }: { onAction?: () => void }) {
           className="flex items-center gap-2 w-full px-3 py-1.5 rounded-lg text-xs text-slate-600 hover:text-red-700 hover:bg-red-500/5 transition-all"
         >
           <LogOut size={12} />
-          Abmelden
+          {de ? "Abmelden" : "Çıxış"}
         </button>
       </div>
     );
@@ -97,6 +100,21 @@ function AuthSection({ onAction }: { onAction?: () => void }) {
 
 export default function Navigation() {
   const pathname = usePathname();
+  const { language, setLanguage } = useLanguage();
+  const de = language === "de";
+  const localizedLabels: Record<string, string> = {
+    "/dashboard": de ? "Übersicht" : "İcmal",
+    "/workspace": de ? "Workspace" : "İş sahəsi",
+    "/labore": de ? "Labore" : "Laboratoriyalar",
+    "/systeme": de ? "Systeme" : "Sistemlər",
+    "/befehle": de ? "Befehle" : "Əmrlər",
+    "/fehleranalyse": de ? "Fehleranalyse" : "Xəta təhlili",
+    "/docker-dienste": de ? "Docker-Dienste" : "Docker xidmətləri",
+    "/praxisnotizen": de ? "Praxisnotizen" : "Praktiki qeydlər",
+    "/suche": de ? "Suche" : "Axtarış",
+    "/portfolio": de ? "Portfolio" : "Portfolio",
+    "/beispiele": de ? "Beispiel-Workspace" : "Nümunə Workspace",
+  };
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -113,7 +131,7 @@ export default function Navigation() {
               <p className="text-base font-extrabold text-[#173958] leading-none">LabBook<span className="text-blue-600">.</span></p>
             </div>
           </div>
-          <p className="text-[11px] text-slate-500 mt-3">Dein Workspace für Systemintegration</p>
+          <p className="text-[11px] text-slate-500 mt-3">{de ? "Dein Workspace für Systemintegration" : "Sistem inteqrasiyası üçün iş sahən"}</p>
         </div>
 
         <nav aria-label="Hauptnavigation" className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
@@ -123,7 +141,7 @@ export default function Navigation() {
               <div key={href}>
                 {(index === 0 || index === 2 || index === 8) && (
                   <p className={`px-3 pb-2 text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase ${index > 0 ? "pt-5" : "pt-1"}`}>
-                    {index === 0 ? "Übersicht" : index === 2 ? "Praxis & Dokumentation" : "Organisation"}
+                    {index === 0 ? (de ? "Übersicht" : "İcmal") : index === 2 ? (de ? "Praxis & Dokumentation" : "Praktika və sənədləşmə") : (de ? "Organisation" : "İdarəetmə")}
                   </p>
                 )}
                 <Link href={href} aria-current={active ? "page" : undefined}
@@ -134,7 +152,7 @@ export default function Navigation() {
                   }`}
                 >
                   <Icon size={17} className={active ? "text-[#1474c4]" : "text-slate-500 group-hover:text-blue-600"} />
-                  <span className="flex-1">{label}</span>
+                  <span className="flex-1">{localizedLabels[href] ?? label}</span>
                   {active && <ChevronRight size={14} className="text-blue-500" />}
                 </Link>
               </div>
@@ -142,11 +160,18 @@ export default function Navigation() {
           })}
         </nav>
 
+        <div className="px-3 pt-2 pb-3 border-t border-blue-100">
+          <div className="grid grid-cols-2 gap-2 mb-2">
+            <button type="button" onClick={() => setLanguage("de")} aria-pressed={de} className={`px-3 py-2 rounded-lg text-xs font-bold ${de ? "bg-blue-700 text-white" : "bg-blue-50 text-blue-700"}`}>DE</button>
+            <button type="button" onClick={() => setLanguage("az")} aria-pressed={!de} className={`px-3 py-2 rounded-lg text-xs font-bold ${!de ? "bg-blue-700 text-white" : "bg-blue-50 text-blue-700"}`}>AZ</button>
+          </div>
+          <Link href="/beispiele" className="flex items-center gap-2 text-xs font-semibold text-blue-700 py-2"><LayoutGrid size={15} />{localizedLabels["/beispiele"]}</Link>
+        </div>
         {/* No AuthSection on desktop — shown in TopBar instead */}
         <div className="px-5 py-4 border-t border-slate-200 bg-[#f8fbff]">
           <div className="flex items-center gap-2 text-[11px] text-slate-500">
             <span className="h-2 w-2 bg-sky-500 rounded-full" />
-            Praxis. Dokumentation. Fortschritt.
+            {de ? "Praxis. Dokumentation. Fortschritt." : "Praktika. Sənədləşmə. İnkişaf."}
           </div>
         </div>
       </aside>
@@ -161,7 +186,7 @@ export default function Navigation() {
         </div>
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? "Menü schließen" : "Menü öffnen"}
+          aria-label={mobileOpen ? (de ? "Menü schließen" : "Menyunu bağla") : (de ? "Menü öffnen" : "Menyunu aç")}
           className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors"
         >
           {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -196,6 +221,8 @@ export default function Navigation() {
                 );
               })}
             </div>
+            <div className="px-4 py-2 flex gap-2"><button type="button" onClick={() => setLanguage("de")} aria-pressed={de} className="text-xs rounded-lg border border-blue-200 p-2">Deutsch</button><button type="button" onClick={() => setLanguage("az")} aria-pressed={!de} className="text-xs rounded-lg border border-blue-200 p-2">Azərbaycanca</button></div>
+            <Link href="/beispiele" onClick={() => setMobileOpen(false)} className="px-6 py-2 text-xs font-semibold text-blue-700">{localizedLabels["/beispiele"]}</Link>
             <AuthSection onAction={() => setMobileOpen(false)} />
           </nav>
         </div>

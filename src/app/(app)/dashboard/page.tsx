@@ -109,52 +109,34 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-10">
-      {/* Hero */}
-      <div className="fisi-hero fisi-tech-grid relative rounded-[24px] overflow-hidden p-6 sm:p-8 lg:p-9">
-        <div className="relative grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-10 items-center">
-          <div>
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.12em] border border-blue-200 bg-white/85 text-[#1b69a8] mb-5 shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#20a6d2]" />
-              OrikLab · Systemintegration
-            </span>
-            <h1 className="text-3xl sm:text-[38px] font-extrabold tracking-[-0.035em] text-[#153a5c] leading-tight mb-3">
-              Dein IT-Labor.<br /><span className="text-[#1476bd]">Alles dokumentiert.</span>
-            </h1>
-            <p className="text-sm sm:text-base text-[#4b657d] leading-relaxed max-w-xl mb-6">
-              Systeme verstehen, Netzwerke aufbauen, Befehle sichern und Fehler systematisch lösen –
-              in einem Workspace für deine FISI-Praxis.
-            </p>
-            <div className="flex flex-wrap gap-2 mb-6">
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 border border-blue-100 text-[11px] font-semibold text-[#2b6088]"><Network size={13} /> Netzwerk</span>
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 border border-blue-100 text-[11px] font-semibold text-[#2b6088]"><Server size={13} /> Systeme</span>
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 border border-blue-100 text-[11px] font-semibold text-[#2b6088]"><Terminal size={13} /> Terminal & Logs</span>
+      {/* Logged-in dashboard is a personal workspace, not the public marketing hero. */}
+      {user ? (
+        <section className="fisi-hero rounded-[24px] p-6 sm:p-8">
+          <div className="grid md:grid-cols-[1fr_auto] items-center gap-5">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[.14em] text-blue-700 mb-2">FISI LabBook · Persönlicher Workspace</p>
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#153a5c]">Willkommen zurück{user.user_metadata?.name ? `, ${String(user.user_metadata.name).split(" ")[0]}` : ""}!</h1>
+              <p className="mt-2 text-sm text-[#50718b] max-w-xl">Deine IT-Dokumentation, eigenen Labore und Praxisnotizen an einem Ort. Die nachfolgenden Kennzahlen beziehen sich auf deinen eigenen Account.</p>
             </div>
-            <Link href="/labore" className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white bg-[#176cba] hover:bg-[#105c9f] shadow-lg shadow-blue-500/15 transition-colors">
-              Labore entdecken <ArrowRight size={15} />
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/workspace" className="px-4 py-2.5 rounded-xl bg-[#176cba] text-white font-bold text-sm hover:bg-[#0b599f]">Mein Workspace <ArrowRight size={15} className="inline ml-1" /></Link>
+              <Link href="/beispiele" className="px-4 py-2.5 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-50">Beispiele ansehen</Link>
+            </div>
           </div>
-
-          <div className="relative rounded-[20px] border border-[#cee2f6] bg-white/90 shadow-[0_22px_55px_-35px_rgba(33,103,163,0.35)] p-5 sm:p-6">
-            <div className="flex items-center justify-between gap-3 border-b border-[#e3edf8] pb-3 mb-5">
-              <div className="flex items-center gap-2 text-[11px] font-bold text-[#335c7b] tracking-[0.08em] uppercase"><Network size={15} className="text-blue-600" /> Netzwerk-Labor</div>
-              <span className="text-[10px] text-[#66849d] bg-[#edf6ff] rounded-md px-2 py-1">Beispiel-Topologie</span>
-            </div>
-            <div className="grid grid-cols-[1fr_0.4fr_1fr_0.4fr_1fr] items-center text-center gap-1 mb-5">
-              <div className="flex flex-col items-center gap-2"><div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700"><Router size={22} /></div><span className="text-[10px] font-semibold text-slate-600">Router</span></div>
-              <div className="h-px bg-[#a9cbe8] relative -mt-5"><span className="absolute -top-1 left-1/2 w-2 h-2 rounded-full bg-blue-400" /></div>
-              <div className="flex flex-col items-center gap-2"><div className="w-12 h-12 rounded-xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-700"><Network size={22} /></div><span className="text-[10px] font-semibold text-slate-600">Switch</span></div>
-              <div className="h-px bg-[#a9cbe8] relative -mt-5"><span className="absolute -top-1 left-1/2 w-2 h-2 rounded-full bg-cyan-400" /></div>
-              <div className="flex flex-col items-center gap-2"><div className="w-12 h-12 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-700"><Server size={22} /></div><span className="text-[10px] font-semibold text-slate-600">Server</span></div>
-            </div>
-            <div className="rounded-xl bg-[#143550] px-4 py-3 font-mono text-[11px] leading-relaxed text-[#cdeaff] shadow-inner">
-              <span className="text-[#78d4fa]">PS C:\&gt;</span> Test-NetConnection server.lab<br />
-              <span className="text-[#7bdfb4]">#</span> Netzwerk prüfen · Ergebnis dokumentieren
-            </div>
-            <div className="flex items-center gap-2 mt-4 text-[11px] text-[#65829c]"><ShieldCheck size={14} className="text-[#198cbd]" /> Praxisnah lernen und nachvollziehbar festhalten <CircleCheck size={13} className="text-[#22a0bd] ml-auto" /></div>
+        </section>
+      ) : (
+        <section className="fisi-hero fisi-tech-grid rounded-[24px] p-6 sm:p-8">
+          <p className="text-[11px] text-blue-700 font-bold uppercase tracking-[.14em] mb-2">FISI LabBook · Eingeschränkte Demo</p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#153a5c]">IT-Labore und Beispiele entdecken</h1>
+          <p className="text-sm text-[#50718b] mt-3 max-w-2xl">Ohne Registrierung kannst du öffentlich freigegebene Beispiele ansehen. Für eigene Labore, Notizen und vollständige Workspace-Funktionen ist ein kostenloses Konto erforderlich.</p>
+          <div className="flex flex-wrap gap-3 mt-5">
+            <Link href="/beispiele" className="px-4 py-2.5 rounded-xl bg-[#176cba] text-white text-sm font-bold">Gefüllten Beispiel-Workspace ansehen →</Link>
+            <Link href="/registrieren" className="px-4 py-2.5 rounded-xl bg-white border border-blue-200 text-blue-800 text-sm font-bold">Kostenlos registrieren</Link>
           </div>
-        </div>
-      </div>
+        </section>
+      )}
 
+      {!user && (
       {/* Demo stats */}
       <div>
         <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">
@@ -173,6 +155,7 @@ export default function DashboardPage() {
         )}
       </div>
 
+      )}
       {/* Personal workspace – logged-in only */}
       {user && (
         <div>

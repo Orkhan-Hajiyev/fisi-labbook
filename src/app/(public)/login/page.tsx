@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase, supabaseConfigMissing } from "@/lib/supabase";
 import SupabaseMissingBanner from "@/components/SupabaseMissingBanner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 function mapLoginError(message: string): string {
   if (message.includes("Invalid login credentials"))
@@ -18,6 +19,8 @@ function mapLoginError(message: string): string {
 
 export default function LoginPage() {
   const router = useRouter();
+  const { language } = useLanguage();
+  const de = language === "de";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -39,12 +42,12 @@ export default function LoginPage() {
     try {
       const { error: authError } = await supabase!.auth.signInWithPassword({ email, password });
       if (authError) {
-        setError(mapLoginError(authError.message));
+        setError(de ? mapLoginError(authError.message) : "Giriş alınmadı. E-poçt ünvanını, şifrəni və hesab təsdiqini yoxla.");
         return;
       }
       router.push("/dashboard");
     } catch {
-      setError("Verbindung fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.");
+      setError(de ? "Verbindung fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut." : "Bağlantı alınmadı. İnternet bağlantını yoxla və yenidən cəhd et.");
     } finally {
       setLoading(false);
     }
@@ -64,9 +67,9 @@ export default function LoginPage() {
         </Link>
 
         <div className="rounded-2xl border border-slate-200 bg-blue-50 p-8">
-          <h1 className="text-xl font-bold text-slate-900 mb-1">Mit OrikOS-Konto einloggen</h1>
+          <h1 className="text-xl font-bold text-slate-900 mb-1">{de ? "Mit deinem Konto anmelden" : "Hesabına daxil ol"}</h1>
           <p className="text-sm text-slate-600 mb-7">
-            Melden Sie sich mit Ihrem OrikOS-Konto an.
+            {de ? "Melde dich an, um deinen persönlichen FISI-Workspace zu öffnen." : "Şəxsi FISI Workspace-inə keçmək üçün daxil ol."}
           </p>
 
           {error && (
@@ -111,7 +114,7 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold text-white transition-colors"
             >
-              {loading ? "Bitte warten…" : "Einloggen"}
+              {loading ? (de ? "Bitte warten…" : "Gözləyin…") : (de ? "Einloggen" : "Daxil ol")}
             </button>
           </form>
 

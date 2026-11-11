@@ -5,6 +5,7 @@ import Link from "next/link";
 import { supabase, supabaseConfigMissing } from "@/lib/supabase";
 import SupabaseMissingBanner from "@/components/SupabaseMissingBanner";
 import { CheckCircle2 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 function mapSignUpError(message: string): string {
   if (message.includes("User already registered"))
@@ -21,6 +22,8 @@ function mapSignUpError(message: string): string {
 }
 
 export default function RegistrierenPage() {
+  const { language } = useLanguage();
+  const de = language === "de";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,12 +66,12 @@ export default function RegistrierenPage() {
         options: { data: { name: name.trim() } },
       });
       if (authError) {
-        setError(mapSignUpError(authError.message));
+        setError(de ? mapSignUpError(authError.message) : "Qeydiyyat alınmadı. Məlumatları yoxlayıb yenidən cəhd et.");
         return;
       }
       setSuccess(true);
     } catch {
-      setError("Verbindung fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.");
+      setError(de ? "Verbindung fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut." : "Bağlantı alınmadı. İnternet bağlantını yoxlayıb yenidən cəhd et.");
     } finally {
       setLoading(false);
     }
@@ -82,13 +85,12 @@ export default function RegistrierenPage() {
             <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 size={22} className="text-emerald-700" />
             </div>
-            <h2 className="text-lg font-bold text-slate-900 mb-3">Registrierung erfolgreich</h2>
+            <h2 className="text-lg font-bold text-slate-900 mb-3">{de ? "Registrierung erfolgreich" : "Qeydiyyat uğurlu oldu"}</h2>
             <p className="text-sm text-slate-600 leading-relaxed mb-2">
-              Bitte prüfen Sie Ihr E-Mail-Postfach und bestätigen Sie Ihre E-Mail-Adresse über den
-              Link. Danach können Sie sich einloggen.
+              {de ? "Bitte prüfe dein E-Mail-Postfach und bestätige deine E-Mail-Adresse über den Bestätigungslink. Danach kannst du dich anmelden." : "E-poçtunu yoxla və göndərilən keçidlə ünvanını təsdiqlə. Bundan sonra hesabına daxil ola bilərsən."}
             </p>
             <p className="text-xs text-slate-500 leading-relaxed mb-6">
-              Falls die E-Mail nicht ankommt, prüfen Sie bitte auch Ihren Spam-Ordner.
+              {de ? "Falls die E-Mail nicht ankommt, prüfe bitte auch deinen Spam-Ordner." : "Məktub gəlməsə, spam qovluğunu da yoxla."}
             </p>
             <Link
               href="/login"
@@ -116,9 +118,9 @@ export default function RegistrierenPage() {
         </Link>
 
         <div className="rounded-2xl border border-slate-200 bg-blue-50 p-8">
-          <h1 className="text-xl font-bold text-slate-900 mb-1">Kostenloses OrikOS-Konto erstellen</h1>
+          <h1 className="text-xl font-bold text-slate-900 mb-1">{de ? "Kostenloses FISI-LabBook-Konto erstellen" : "Pulsuz FISI LabBook hesabı yarat"}</h1>
           <p className="text-sm text-slate-600 mb-7">
-            OrikOS-Konto erstellen und FISI-Dokumentation starten.
+            {de ? "Registriere dich kostenlos und nutze deinen persönlichen IT-Workspace. Für die derzeit angebotenen Funktionen ist kein kostenpflichtiges Abo erforderlich." : "Pulsuz qeydiyyatdan keç və şəxsi IT iş sahəndən istifadə et. Hazırda təqdim olunan funksiyalar üçün ödənişli abunə tələb olunmur."}
           </p>
 
           {error && (
@@ -129,7 +131,7 @@ export default function RegistrierenPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="register-name" className="block text-xs font-medium text-slate-600 mb-1.5">Name</label>
+              <label htmlFor="register-name" className="block text-xs font-medium text-slate-600 mb-1.5">{de ? "Name" : "Ad"}</label>
               <input
                 id="register-name"
                 type="text"
@@ -142,7 +144,7 @@ export default function RegistrierenPage() {
               />
             </div>
             <div>
-              <label htmlFor="register-email" className="block text-xs font-medium text-slate-600 mb-1.5">E-Mail</label>
+              <label htmlFor="register-email" className="block text-xs font-medium text-slate-600 mb-1.5">{de ? "E-Mail" : "E-poçt"}</label>
               <input
                 id="register-email"
                 type="email"
@@ -155,7 +157,7 @@ export default function RegistrierenPage() {
               />
             </div>
             <div>
-              <label htmlFor="register-password" className="block text-xs font-medium text-slate-600 mb-1.5">Passwort</label>
+              <label htmlFor="register-password" className="block text-xs font-medium text-slate-600 mb-1.5">{de ? "Passwort" : "Şifrə"}</label>
               <input
                 id="register-password"
                 type="password"
@@ -169,7 +171,7 @@ export default function RegistrierenPage() {
             </div>
             <div>
               <label htmlFor="register-password-confirm" className="block text-xs font-medium text-slate-600 mb-1.5">
-                Passwort bestätigen
+                {de ? "Passwort bestätigen" : "Şifrəni təsdiqlə"}
               </label>
               <input
                 id="register-password-confirm"
@@ -187,12 +189,12 @@ export default function RegistrierenPage() {
               disabled={loading}
               className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold text-white transition-colors"
             >
-              {loading ? "Bitte warten…" : "Kostenlos registrieren"}
+              {loading ? (de ? "Bitte warten…" : "Gözləyin…") : (de ? "Kostenlos registrieren" : "Pulsuz qeydiyyatdan keç")}
             </button>
           </form>
 
           <p className="text-xs text-slate-600 text-center mt-6">
-            Bereits registriert?{" "}
+            {de ? "Bereits registriert?" : "Artıq hesabın var?"}{" "}
             <Link href="/login" className="text-blue-700 hover:text-blue-800 transition-colors">
               Einloggen
             </Link>
