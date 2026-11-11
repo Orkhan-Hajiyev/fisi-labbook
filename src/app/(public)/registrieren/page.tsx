@@ -80,14 +80,14 @@ export default function RegistrierenPage() {
         <div className="w-full max-w-md">
           <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-8 text-center">
             <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 size={22} className="text-emerald-400" />
+              <CheckCircle2 size={22} className="text-emerald-700" />
             </div>
-            <h2 className="text-lg font-bold text-white mb-3">Registrierung erfolgreich</h2>
-            <p className="text-sm text-slate-400 leading-relaxed mb-2">
+            <h2 className="text-lg font-bold text-slate-900 mb-3">Registrierung erfolgreich</h2>
+            <p className="text-sm text-slate-600 leading-relaxed mb-2">
               Bitte prüfen Sie Ihr E-Mail-Postfach und bestätigen Sie Ihre E-Mail-Adresse über den
               Link. Danach können Sie sich einloggen.
             </p>
-            <p className="text-xs text-slate-600 leading-relaxed mb-6">
+            <p className="text-xs text-slate-500 leading-relaxed mb-6">
               Falls die E-Mail nicht ankommt, prüfen Sie bitte auch Ihren Spam-Ordner.
             </p>
             <Link
@@ -107,29 +107,29 @@ export default function RegistrierenPage() {
       <div className="w-full max-w-md">
         {/* Logo link */}
         <Link href="/" className="flex items-center gap-2.5 mb-8 w-fit">
-          <div className="w-8 h-8 rounded-lg bg-[#161b27] border border-white/10 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-[#e8f2ff] border border-slate-200 flex items-center justify-center shrink-0">
             <span className="text-[11px] font-black bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent select-none">
               FL
             </span>
           </div>
-          <span className="text-sm font-bold text-white">FISI LabBook</span>
+          <span className="text-sm font-bold text-slate-900">FISI LabBook</span>
         </Link>
 
-        <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-8">
-          <h1 className="text-xl font-bold text-white mb-1">Kostenloses OrikOS-Konto erstellen</h1>
-          <p className="text-sm text-slate-500 mb-7">
+        <div className="rounded-2xl border border-slate-200 bg-blue-50 p-8">
+          <h1 className="text-xl font-bold text-slate-900 mb-1">Kostenloses OrikOS-Konto erstellen</h1>
+          <p className="text-sm text-slate-600 mb-7">
             OrikOS-Konto erstellen und FISI-Dokumentation starten.
           </p>
 
           {error && (
             <div role="alert" className="mb-5 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-              <p className="text-sm text-red-400">{error}</p>
+              <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="register-name" className="block text-xs font-medium text-slate-400 mb-1.5">Name</label>
+              <label htmlFor="register-name" className="block text-xs font-medium text-slate-600 mb-1.5">Name</label>
               <input
                 id="register-name"
                 type="text"
@@ -138,11 +138,11 @@ export default function RegistrierenPage() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Max Mustermann"
-                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               />
             </div>
             <div>
-              <label htmlFor="register-email" className="block text-xs font-medium text-slate-400 mb-1.5">E-Mail</label>
+              <label htmlFor="register-email" className="block text-xs font-medium text-slate-600 mb-1.5">E-Mail</label>
               <input
                 id="register-email"
                 type="email"
@@ -151,11 +151,11 @@ export default function RegistrierenPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="name@beispiel.de"
-                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               />
             </div>
             <div>
-              <label htmlFor="register-password" className="block text-xs font-medium text-slate-400 mb-1.5">Passwort</label>
+              <label htmlFor="register-password" className="block text-xs font-medium text-slate-600 mb-1.5">Passwort</label>
               <input
                 id="register-password"
                 type="password"
@@ -164,11 +164,11 @@ export default function RegistrierenPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="Min. 6 Zeichen"
-                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               />
             </div>
             <div>
-              <label htmlFor="register-password-confirm" className="block text-xs font-medium text-slate-400 mb-1.5">
+              <label htmlFor="register-password-confirm" className="block text-xs font-medium text-slate-600 mb-1.5">
                 Passwort bestätigen
               </label>
               <input
@@ -179,7 +179,7 @@ export default function RegistrierenPage() {
                 onChange={(e) => setPasswordConfirm(e.target.value)}
                 required
                 placeholder="Passwort wiederholen"
-                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               />
             </div>
             <button
@@ -191,9 +191,9 @@ export default function RegistrierenPage() {
             </button>
           </form>
 
-          <p className="text-xs text-slate-500 text-center mt-6">
+          <p className="text-xs text-slate-600 text-center mt-6">
             Bereits registriert?{" "}
-            <Link href="/login" className="text-blue-400 hover:text-blue-300 transition-colors">
+            <Link href="/login" className="text-blue-700 hover:text-blue-800 transition-colors">
               Einloggen
             </Link>
           </p>

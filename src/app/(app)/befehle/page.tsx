@@ -19,7 +19,7 @@ import type { FisiCommand, FisiUserCommand } from "@/lib/types";
 
 function InlineCode({ children }: { children: string }) {
   return (
-    <pre className="rounded-lg bg-[#0a0c10] border border-white/5 px-4 py-3 text-sm text-emerald-300 font-mono overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">
+    <pre className="rounded-lg bg-[#f1f6fd] border border-slate-200 px-4 py-3 text-sm text-emerald-800 font-mono overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">
       <code>{children}</code>
     </pre>
   );
@@ -39,20 +39,20 @@ function UserCommandCard({
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
-    <div className="rounded-xl border border-blue-500/10 bg-[#0f1623] p-5 space-y-4 relative">
+    <div className="rounded-xl border border-blue-500/10 bg-white p-5 space-y-4 relative">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-1.5 bg-blue-500/10 border border-blue-500/15 px-3 py-1 rounded-lg">
-            <Terminal size={13} className="text-blue-400" />
-            <code className="text-sm font-mono font-semibold text-blue-300">{cmd.command}</code>
+            <Terminal size={13} className="text-blue-700" />
+            <code className="text-sm font-mono font-semibold text-blue-800">{cmd.command}</code>
           </div>
           {cmd.platform && (
-            <span className="flex items-center gap-1 text-[11px] bg-blue-500/10 text-blue-300 border border-blue-500/15 px-2.5 py-1 rounded-lg">
+            <span className="flex items-center gap-1 text-[11px] bg-blue-500/10 text-blue-800 border border-blue-500/15 px-2.5 py-1 rounded-lg">
               <Monitor size={10} />{cmd.platform}
             </span>
           )}
           {cmd.category && (
-            <span className="flex items-center gap-1 text-[11px] bg-violet-500/10 text-violet-300 border border-violet-500/15 px-2.5 py-1 rounded-lg">
+            <span className="flex items-center gap-1 text-[11px] bg-violet-500/10 text-violet-800 border border-violet-500/15 px-2.5 py-1 rounded-lg">
               <Tag size={10} />{cmd.category}
             </span>
           )}
@@ -61,24 +61,24 @@ function UserCommandCard({
         <div className="flex items-center gap-1 shrink-0">
           {confirmDelete ? (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-red-400">Löschen?</span>
+              <span className="text-xs text-red-700">Löschen?</span>
               <button onClick={() => onDelete(cmd.id)}
-                className="px-2.5 py-1 rounded-lg bg-red-500/15 text-red-400 hover:bg-red-500/25 text-xs font-medium transition-colors">
+                className="px-2.5 py-1 rounded-lg bg-red-500/15 text-red-700 hover:bg-red-500/25 text-xs font-medium transition-colors">
                 Ja
               </button>
               <button onClick={() => setConfirmDelete(false)}
-                className="px-2.5 py-1 rounded-lg bg-white/5 text-slate-400 hover:bg-white/10 text-xs font-medium transition-colors">
+                className="px-2.5 py-1 rounded-lg bg-blue-50 text-slate-600 hover:bg-blue-50 text-xs font-medium transition-colors">
                 Nein
               </button>
             </div>
           ) : (
             <>
               <button onClick={() => onEdit(cmd)} aria-label="Bearbeiten"
-                className="p-1.5 rounded-lg text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+                className="p-1.5 rounded-lg text-slate-600 hover:text-blue-700 hover:bg-blue-500/10 transition-colors">
                 <Pencil size={13} />
               </button>
               <button onClick={() => setConfirmDelete(true)} aria-label="Löschen"
-                className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors">
+                className="p-1.5 rounded-lg text-slate-600 hover:text-red-700 hover:bg-red-500/10 transition-colors">
                 <Trash2 size={13} />
               </button>
             </>
@@ -87,12 +87,12 @@ function UserCommandCard({
       </div>
 
       {cmd.purpose && (
-        <p className="text-sm text-slate-300 leading-relaxed">{cmd.purpose}</p>
+        <p className="text-sm text-slate-700 leading-relaxed">{cmd.purpose}</p>
       )}
 
       {cmd.example && (
         <div className="space-y-1.5">
-          <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Beispiel</p>
+          <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider">Beispiel</p>
           <InlineCode>{cmd.example}</InlineCode>
         </div>
       )}
@@ -100,14 +100,14 @@ function UserCommandCard({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {cmd.typical_use_case && (
           <div>
-            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-1">Typischer Anwendungsfall</p>
-            <p className="text-xs text-slate-400 leading-relaxed">{cmd.typical_use_case}</p>
+            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1">Typischer Anwendungsfall</p>
+            <p className="text-xs text-slate-600 leading-relaxed">{cmd.typical_use_case}</p>
           </div>
         )}
         {cmd.notes && (
           <div>
-            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-1">Notizen</p>
-            <p className="text-xs text-slate-400 leading-relaxed">{cmd.notes}</p>
+            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1">Notizen</p>
+            <p className="text-xs text-slate-600 leading-relaxed">{cmd.notes}</p>
           </div>
         )}
       </div>
@@ -141,54 +141,54 @@ function DemoCommandCard({ cmd, user, onCopied }: {
   }
 
   return (
-    <div className="rounded-xl border border-white/5 bg-white/[0.02] hover:border-white/10 transition-all duration-150 p-5 space-y-4">
+    <div className="rounded-xl border border-slate-200 bg-blue-50 hover:border-slate-200 transition-all duration-150 p-5 space-y-4">
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/15 px-3 py-1 rounded-lg">
-          <Terminal size={13} className="text-emerald-400" />
-          <code className="text-sm font-mono font-semibold text-emerald-300">{cmd.command}</code>
+          <Terminal size={13} className="text-emerald-700" />
+          <code className="text-sm font-mono font-semibold text-emerald-800">{cmd.command}</code>
         </div>
         {cmd.platform && (
-          <span className="flex items-center gap-1 text-[11px] bg-blue-500/10 text-blue-300 border border-blue-500/15 px-2.5 py-1 rounded-lg">
+          <span className="flex items-center gap-1 text-[11px] bg-blue-500/10 text-blue-800 border border-blue-500/15 px-2.5 py-1 rounded-lg">
             <Monitor size={10} />{cmd.platform}
           </span>
         )}
         {cmd.category && (
-          <span className="flex items-center gap-1 text-[11px] bg-violet-500/10 text-violet-300 border border-violet-500/15 px-2.5 py-1 rounded-lg">
+          <span className="flex items-center gap-1 text-[11px] bg-violet-500/10 text-violet-800 border border-violet-500/15 px-2.5 py-1 rounded-lg">
             <Tag size={10} />{cmd.category}
           </span>
         )}
       </div>
-      {cmd.purpose && <p className="text-sm text-slate-300 leading-relaxed">{cmd.purpose}</p>}
+      {cmd.purpose && <p className="text-sm text-slate-700 leading-relaxed">{cmd.purpose}</p>}
       {cmd.example && (
         <div className="space-y-1.5">
-          <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Beispiel</p>
+          <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider">Beispiel</p>
           <InlineCode>{cmd.example}</InlineCode>
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {cmd.typical_use_case && (
           <div>
-            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-1">Typischer Anwendungsfall</p>
-            <p className="text-xs text-slate-400 leading-relaxed">{cmd.typical_use_case}</p>
+            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1">Typischer Anwendungsfall</p>
+            <p className="text-xs text-slate-600 leading-relaxed">{cmd.typical_use_case}</p>
           </div>
         )}
         {cmd.notes && (
           <div>
-            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-1">Notizen</p>
-            <p className="text-xs text-slate-400 leading-relaxed">{cmd.notes}</p>
+            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1">Notizen</p>
+            <p className="text-xs text-slate-600 leading-relaxed">{cmd.notes}</p>
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between pt-3 border-t border-white/5">
-        <span className="text-[10px] text-slate-700 uppercase tracking-wider font-medium">Demo</span>
+      <div className="flex items-center justify-between pt-3 border-t border-slate-200">
+        <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Demo</span>
         {user ? (
           <button onClick={handleCopy} disabled={copying}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-400 hover:text-blue-300 transition-all disabled:opacity-50">
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-700 hover:text-blue-800 transition-all disabled:opacity-50">
             <Copy size={11} />
             {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
           </button>
         ) : (
-          <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 text-[11px] text-slate-600 cursor-not-allowed">
+          <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
             <Lock size={11} />
             Anmeldung erforderlich
           </button>
@@ -331,30 +331,30 @@ function CommandHelper({ onSelect }: { onSelect: (s: CommandSuggestion) => void 
       {!open ? (
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 text-xs font-medium text-blue-400 hover:text-blue-300 transition-all"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 text-xs font-medium text-blue-700 hover:text-blue-800 transition-all"
         >
           <Terminal size={13} />
           Befehl vorschlagen
         </button>
       ) : (
-        <div className="rounded-xl border border-blue-500/15 bg-[#0d1420] p-5 space-y-4">
+        <div className="rounded-xl border border-blue-500/15 bg-[#edf5ff] p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Befehl vorschlagen</h3>
-            <button onClick={() => setOpen(false)} className="text-slate-500 hover:text-slate-300 transition-colors">
+            <h3 className="text-xs font-semibold text-blue-700 uppercase tracking-wider">Befehl vorschlagen</h3>
+            <button onClick={() => setOpen(false)} className="text-slate-600 hover:text-slate-700 transition-colors">
               <Plus size={14} className="rotate-45" />
             </button>
           </div>
 
           <div className="flex flex-wrap gap-2">
             <div className="flex flex-col gap-1">
-              <label className="text-[10px] text-slate-500 uppercase tracking-wider">Plattform</label>
+              <label className="text-[10px] text-slate-600 uppercase tracking-wider">Plattform</label>
               <div className="flex flex-wrap gap-1.5">
                 {platforms.map((p) => (
                   <button key={p} onClick={() => { setPlatform(p); setCategory(""); }}
                     className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
                       platform === p
                         ? "bg-blue-600 text-white"
-                        : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200"
+                        : "bg-blue-50 text-slate-600 hover:bg-blue-50 hover:text-slate-800"
                     }`}>
                     {p}
                   </button>
@@ -364,14 +364,14 @@ function CommandHelper({ onSelect }: { onSelect: (s: CommandSuggestion) => void 
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-[10px] text-slate-500 uppercase tracking-wider">Kategorie</label>
+            <label className="text-[10px] text-slate-600 uppercase tracking-wider">Kategorie</label>
             <div className="flex flex-wrap gap-1.5">
               {categories.map((c) => (
                 <button key={c} onClick={() => setCategory(c)}
                   className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
                     activeCat === c
                       ? "bg-violet-600/80 text-white"
-                      : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200"
+                      : "bg-blue-50 text-slate-600 hover:bg-blue-50 hover:text-slate-800"
                   }`}>
                   {c}
                 </button>
@@ -381,12 +381,12 @@ function CommandHelper({ onSelect }: { onSelect: (s: CommandSuggestion) => void 
 
           {suggestions.length > 0 && (
             <div className="space-y-2">
-              <p className="text-[10px] text-slate-500 uppercase tracking-wider">Vorschläge – klicken zum Übernehmen</p>
+              <p className="text-[10px] text-slate-600 uppercase tracking-wider">Vorschläge – klicken zum Übernehmen</p>
               {suggestions.map((s, i) => (
                 <button key={i} onClick={() => { onSelect(s); setOpen(false); }}
-                  className="w-full text-left px-4 py-3 rounded-lg bg-white/[0.02] border border-white/5 hover:border-blue-500/20 hover:bg-blue-500/5 transition-all group">
-                  <code className="text-sm font-mono text-emerald-300 group-hover:text-emerald-200">{s.command}</code>
-                  {s.purpose && <p className="text-xs text-slate-500 mt-0.5">{s.purpose}</p>}
+                  className="w-full text-left px-4 py-3 rounded-lg bg-blue-50 border border-slate-200 hover:border-blue-500/20 hover:bg-blue-500/5 transition-all group">
+                  <code className="text-sm font-mono text-emerald-800 group-hover:text-emerald-200">{s.command}</code>
+                  {s.purpose && <p className="text-xs text-slate-600 mt-0.5">{s.purpose}</p>}
                 </button>
               ))}
             </div>
@@ -515,8 +515,8 @@ export default function BefehlePageContent() {
       {notif && (
         <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-xl border shadow-xl text-sm font-medium transition-all ${
           notif.kind === "success"
-            ? "bg-emerald-500/15 border-emerald-500/20 text-emerald-300"
-            : "bg-red-500/15 border-red-500/20 text-red-300"
+            ? "bg-emerald-500/15 border-emerald-500/20 text-emerald-800"
+            : "bg-red-500/15 border-red-500/20 text-red-800"
         }`}>
           {notif.kind === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
           {notif.message}
@@ -533,7 +533,7 @@ export default function BefehlePageContent() {
       {user && (
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Meine Befehle</h2>
+            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Meine Befehle</h2>
             {!showCreateForm && (
               <button onClick={() => setShowCreateForm(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors">
@@ -559,13 +559,13 @@ export default function BefehlePageContent() {
             <>
               {userCommands.length > 0 && (
                 <div className="mb-4 relative">
-                  <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                  <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
                   <input
                     type="text"
                     value={userQuery}
                     onChange={(e) => setUserQuery(e.target.value)}
                     placeholder="Befehl, Plattform oder Kategorie suchen..."
-                    className="w-full max-w-xl pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 transition-all"
+                    className="w-full max-w-xl pl-10 pr-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 transition-all"
                   />
                 </div>
               )}
@@ -595,7 +595,7 @@ export default function BefehlePageContent() {
       {/* Hilfen & Vorlagen */}
       {user && (
         <div className="mb-10">
-          <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Hilfen &amp; Vorlagen</h2>
+          <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">Hilfen &amp; Vorlagen</h2>
           <CommandHelper onSelect={(s) => {
             setHelperPrefill({ command: s.command, platform: s.platform, category: s.category, purpose: s.purpose, example: s.example, typical_use_case: s.typical_use_case });
             setShowCreateForm(true);
@@ -607,16 +607,16 @@ export default function BefehlePageContent() {
       {/* Reference section */}
       <ReferenceSection title="Referenz-Befehle">
         <div className="mb-5 relative">
-          <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+          <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
           <input
             type="text"
             value={demoQuery}
             onChange={(e) => setDemoQuery(e.target.value)}
             placeholder="Befehl, Plattform oder Kategorie suchen..."
-            className="w-full max-w-xl pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
+            className="w-full max-w-xl pl-10 pr-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
           />
           {demoQuery && (
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] text-slate-500">
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] text-slate-600">
               {filteredDemo.length} Treffer
             </span>
           )}

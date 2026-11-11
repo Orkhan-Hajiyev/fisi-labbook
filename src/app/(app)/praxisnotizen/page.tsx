@@ -56,16 +56,16 @@ const FEATURE_CARDS = [
 ];
 
 const accentMap: Record<string, string> = {
-  blue:    "bg-blue-500/10 border-blue-500/15 text-blue-400",
-  violet:  "bg-violet-500/10 border-violet-500/15 text-violet-400",
-  emerald: "bg-emerald-500/10 border-emerald-500/15 text-emerald-400",
-  amber:   "bg-amber-500/10 border-amber-500/15 text-amber-400",
-  cyan:    "bg-cyan-500/10 border-cyan-500/15 text-cyan-400",
-  slate:   "bg-slate-500/10 border-slate-500/15 text-slate-400",
+  blue:    "bg-blue-500/10 border-blue-500/15 text-blue-700",
+  violet:  "bg-violet-500/10 border-violet-500/15 text-violet-700",
+  emerald: "bg-emerald-500/10 border-emerald-500/15 text-emerald-700",
+  amber:   "bg-amber-500/10 border-amber-500/15 text-amber-700",
+  cyan:    "bg-cyan-500/10 border-cyan-500/15 text-cyan-700",
+  slate:   "bg-slate-500/10 border-slate-500/15 text-slate-600",
 };
 
 const selectCls =
-  "text-xs px-3 py-1.5 rounded-lg bg-[#0d0f14] border border-white/10 text-slate-400 focus:outline-none focus:border-blue-500/30 cursor-pointer transition-all";
+  "text-xs px-3 py-1.5 rounded-lg bg-[#f3f8ff] border border-slate-200 text-slate-600 focus:outline-none focus:border-blue-500/30 cursor-pointer transition-all";
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
@@ -82,13 +82,13 @@ function PublicView() {
         description="Persönlicher Arbeitsbereich für technische Notizen und FISI-Dokumentation"
       />
 
-      <div className="rounded-xl border border-white/5 bg-white/[0.02] p-6 space-y-4">
-        <p className="text-sm text-slate-400 leading-relaxed max-w-2xl">
+      <div className="rounded-xl border border-slate-200 bg-blue-50 p-6 space-y-4">
+        <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">
           Praxisnotizen ist als persönlicher Arbeitsbereich für technische Notizen,
           Tagesaufgaben, Troubleshooting-Ideen, Befehle, Tags und strukturierte
           FISI-Dokumentation vorgesehen.
         </p>
-        <p className="text-sm text-slate-400 leading-relaxed max-w-2xl">
+        <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">
           Zum Erstellen und Verwalten eigener Praxisnotizen ist ein kostenloses
           OrikOS-Konto erforderlich.
         </p>
@@ -101,7 +101,7 @@ function PublicView() {
           </Link>
           <Link
             href="/login"
-            className="px-4 py-2 rounded-lg border border-white/10 hover:border-white/20 text-sm font-medium text-slate-300 hover:text-white transition-all"
+            className="px-4 py-2 rounded-lg border border-slate-200 hover:border-slate-200 text-sm font-medium text-slate-700 hover:text-slate-900 transition-all"
           >
             Einloggen
           </Link>
@@ -109,18 +109,18 @@ function PublicView() {
       </div>
 
       <div>
-        <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">
+        <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">
           Funktionen
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {FEATURE_CARDS.map(({ icon: Icon, title, desc, accent }) => (
-            <div key={title} className="rounded-xl border border-white/5 bg-white/[0.02] p-5 space-y-3">
+            <div key={title} className="rounded-xl border border-slate-200 bg-blue-50 p-5 space-y-3">
               <div className={`w-8 h-8 rounded-lg border flex items-center justify-center ${accentMap[accent]}`}>
                 <Icon size={14} />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-white mb-1">{title}</h3>
-                <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
+                <h3 className="text-sm font-semibold text-slate-900 mb-1">{title}</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -267,8 +267,8 @@ export default function PraxisNotizenPage() {
         <div
           className={`fixed top-5 right-5 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl border shadow-xl text-sm font-medium max-w-xs ${
             notif.type === "success"
-              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-              : "bg-red-500/10 border-red-500/20 text-red-400"
+              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700"
+              : "bg-red-500/10 border-red-500/20 text-red-700"
           }`}
         >
           {notif.type === "success"
@@ -288,18 +288,18 @@ export default function PraxisNotizenPage() {
       {/* Toolbar */}
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-0">
-          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Notizen durchsuchen…"
-            className="w-full pl-9 pr-8 py-2 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
+            className="w-full pl-9 pr-8 py-2 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-600 transition-colors"
             >
               <X size={13} />
             </button>
@@ -331,14 +331,14 @@ export default function PraxisNotizenPage() {
         {hasActiveFilters && (
           <button
             onClick={() => { setFilterStatus(""); setFilterCategory(""); setFilterPriority(""); }}
-            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 px-2.5 py-1.5 rounded-lg hover:bg-white/5 transition-all"
+            className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-700 px-2.5 py-1.5 rounded-lg hover:bg-blue-50 transition-all"
           >
             <X size={11} />
             Filter zurücksetzen
           </button>
         )}
         {notes !== null && notes.length > 0 && (
-          <span className="ml-auto text-[11px] text-slate-600">
+          <span className="ml-auto text-[11px] text-slate-500">
             {filteredNotes.length} / {notes.length} Notizen
           </span>
         )}
@@ -355,8 +355,8 @@ export default function PraxisNotizenPage() {
       {!notesLoading && notesError && (
         <div className="flex justify-center py-16">
           <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-5 max-w-sm text-center">
-            <p className="text-sm text-red-400 font-medium mb-1">Fehler beim Laden</p>
-            <p className="text-xs text-red-400/70">Praxisnotizen konnten nicht geladen werden.</p>
+            <p className="text-sm text-red-700 font-medium mb-1">Fehler beim Laden</p>
+            <p className="text-xs text-red-700/70">Praxisnotizen konnten nicht geladen werden.</p>
           </div>
         </div>
       )}

@@ -223,21 +223,21 @@ function StatCard({
   icon: React.ElementType; label: string; value: number; href: string; accent: string;
 }) {
   const accentMap: Record<string, string> = {
-    blue:    "text-blue-400 bg-blue-500/10 border-blue-500/15",
-    cyan:    "text-cyan-400 bg-cyan-500/10 border-cyan-500/15",
-    violet:  "text-violet-400 bg-violet-500/10 border-violet-500/15",
-    amber:   "text-amber-400 bg-amber-500/10 border-amber-500/15",
-    emerald: "text-emerald-400 bg-emerald-500/10 border-emerald-500/15",
-    slate:   "text-slate-400 bg-slate-500/10 border-slate-500/15",
+    blue:    "text-blue-700 bg-blue-500/10 border-blue-500/15",
+    cyan:    "text-cyan-700 bg-cyan-500/10 border-cyan-500/15",
+    violet:  "text-violet-700 bg-violet-500/10 border-violet-500/15",
+    amber:   "text-amber-700 bg-amber-500/10 border-amber-500/15",
+    emerald: "text-emerald-700 bg-emerald-500/10 border-emerald-500/15",
+    slate:   "text-slate-600 bg-slate-500/10 border-slate-500/15",
   };
   const cls = accentMap[accent] ?? accentMap.slate;
   return (
-    <Link href={href} className="block rounded-xl border border-white/5 bg-white/[0.02] hover:border-white/10 p-4 transition-all duration-150 group">
+    <Link href={href} className="block rounded-xl border border-slate-200 bg-blue-50 hover:border-slate-200 p-4 transition-all duration-150 group">
       <div className={`w-8 h-8 rounded-lg border flex items-center justify-center mb-2 ${cls}`}>
         <Icon size={16} />
       </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
-      <p className="text-xs text-slate-500 mt-0.5">{label}</p>
+      <p className="text-2xl font-bold text-slate-900">{value}</p>
+      <p className="text-xs text-slate-600 mt-0.5">{label}</p>
     </Link>
   );
 }
@@ -267,32 +267,32 @@ function LabGroup({
   const total = linked.systems.length + linked.commands.length + linked.troubleshooting.length + linked.docker.length + linked.notes.length;
 
   return (
-    <div className="rounded-xl border border-white/8 bg-white/[0.02] overflow-hidden">
+    <div className="rounded-xl border border-slate-200 bg-blue-50 overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-white/[0.02] transition-colors"
+        className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-blue-50 transition-colors"
       >
         <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/15 flex items-center justify-center shrink-0">
-          <FlaskConical size={15} className="text-blue-400" />
+          <FlaskConical size={15} className="text-blue-700" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-white">{lab.title}</p>
-          <p className="text-[11px] text-slate-500">{total} verknüpfte Einträge</p>
+          <p className="text-sm font-semibold text-slate-900">{lab.title}</p>
+          <p className="text-[11px] text-slate-600">{total} verknüpfte Einträge</p>
         </div>
-        {expanded ? <ChevronDown size={15} className="text-slate-500 shrink-0" /> : <ChevronRight size={15} className="text-slate-500 shrink-0" />}
+        {expanded ? <ChevronDown size={15} className="text-slate-600 shrink-0" /> : <ChevronRight size={15} className="text-slate-600 shrink-0" />}
       </button>
 
       {expanded && (
-        <div className="px-5 pb-4 space-y-3 border-t border-white/5">
+        <div className="px-5 pb-4 space-y-3 border-t border-slate-200">
           {linked.systems.length > 0 && (
             <div className="pt-3">
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Systeme</p>
+              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Systeme</p>
               <div className="space-y-1">
                 {linked.systems.map((s) => (
-                  <div key={s.id} className="flex items-center gap-2 text-xs text-slate-400">
-                    <Server size={11} className="text-cyan-500 shrink-0" />
-                    <code className="font-mono text-cyan-300">{s.hostname}</code>
-                    {s.ip_address && <span className="text-slate-600">({s.ip_address})</span>}
+                  <div key={s.id} className="flex items-center gap-2 text-xs text-slate-600">
+                    <Server size={11} className="text-cyan-700 shrink-0" />
+                    <code className="font-mono text-cyan-800">{s.hostname}</code>
+                    {s.ip_address && <span className="text-slate-500">({s.ip_address})</span>}
                   </div>
                 ))}
               </div>
@@ -300,12 +300,12 @@ function LabGroup({
           )}
           {linked.commands.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Befehle</p>
+              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Befehle</p>
               <div className="space-y-1">
                 {linked.commands.map((c) => (
-                  <div key={c.id} className="flex items-center gap-2 text-xs text-slate-400">
-                    <Terminal size={11} className="text-violet-500 shrink-0" />
-                    <code className="font-mono text-violet-300">{c.command}</code>
+                  <div key={c.id} className="flex items-center gap-2 text-xs text-slate-600">
+                    <Terminal size={11} className="text-violet-700 shrink-0" />
+                    <code className="font-mono text-violet-800">{c.command}</code>
                   </div>
                 ))}
               </div>
@@ -313,11 +313,11 @@ function LabGroup({
           )}
           {linked.troubleshooting.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Fehleranalysen</p>
+              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Fehleranalysen</p>
               <div className="space-y-1">
                 {linked.troubleshooting.map((t) => (
-                  <div key={t.id} className="flex items-center gap-2 text-xs text-slate-400">
-                    <Bug size={11} className="text-amber-500 shrink-0" />
+                  <div key={t.id} className="flex items-center gap-2 text-xs text-slate-600">
+                    <Bug size={11} className="text-amber-700 shrink-0" />
                     {t.title}
                   </div>
                 ))}
@@ -326,13 +326,13 @@ function LabGroup({
           )}
           {linked.docker.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Docker-Dienste</p>
+              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Docker-Dienste</p>
               <div className="space-y-1">
                 {linked.docker.map((d) => (
-                  <div key={d.id} className="flex items-center gap-2 text-xs text-slate-400">
-                    <Container size={11} className="text-emerald-500 shrink-0" />
+                  <div key={d.id} className="flex items-center gap-2 text-xs text-slate-600">
+                    <Container size={11} className="text-emerald-700 shrink-0" />
                     {d.name}
-                    {d.image && <span className="text-slate-600">({d.image})</span>}
+                    {d.image && <span className="text-slate-500">({d.image})</span>}
                   </div>
                 ))}
               </div>
@@ -340,11 +340,11 @@ function LabGroup({
           )}
           {linked.notes.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Praxisnotizen</p>
+              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Praxisnotizen</p>
               <div className="space-y-1">
                 {linked.notes.map((n) => (
-                  <div key={n.id} className="flex items-center gap-2 text-xs text-slate-400">
-                    <StickyNote size={11} className="text-blue-500 shrink-0" />
+                  <div key={n.id} className="flex items-center gap-2 text-xs text-slate-600">
+                    <StickyNote size={11} className="text-blue-700 shrink-0" />
                     {n.title}
                   </div>
                 ))}
@@ -352,9 +352,9 @@ function LabGroup({
             </div>
           )}
           {total === 0 && (
-            <p className="text-[11px] text-slate-600 pt-2">Noch keine verknüpften Inhalte.</p>
+            <p className="text-[11px] text-slate-500 pt-2">Noch keine verknüpften Inhalte.</p>
           )}
-          <div className="pt-3 border-t border-white/5 flex flex-wrap items-center gap-2">
+          <div className="pt-3 border-t border-slate-200 flex flex-wrap items-center gap-2">
             <button
               onClick={() => {
                 const md = generateLabMarkdown(lab, linked);
@@ -365,7 +365,7 @@ function LabGroup({
                 a.click();
                 URL.revokeObjectURL(url);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/8 hover:border-white/15 text-xs text-slate-400 hover:text-slate-200 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 hover:border-slate-200 text-xs text-slate-600 hover:text-slate-800 transition-all"
             >
               <Download size={11} />
               Markdown exportieren
@@ -464,7 +464,7 @@ export default function WorkspacePage() {
     <div className="print:text-black print:bg-white">
       {notif && (
         <div className={`fixed top-5 right-5 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl border shadow-xl text-sm font-medium max-w-xs print:hidden ${
-          notif.type === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" : "bg-red-500/10 border-red-500/20 text-red-400"
+          notif.type === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700" : "bg-red-500/10 border-red-500/20 text-red-700"
         }`}>
           {notif.type === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
           {notif.message}
@@ -481,14 +481,14 @@ export default function WorkspacePage() {
           <div className="flex items-center gap-2 mt-6">
             <button
               onClick={handleExportMarkdown}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] text-xs text-slate-400 hover:text-slate-200 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-blue-50 hover:bg-blue-50 text-xs text-slate-600 hover:text-slate-800 transition-all"
             >
               <Download size={13} />
               Als Markdown exportieren
             </button>
             <button
               onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] text-xs text-slate-400 hover:text-slate-200 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-blue-50 hover:bg-blue-50 text-xs text-slate-600 hover:text-slate-800 transition-all"
             >
               <Printer size={13} />
               Als PDF drucken
@@ -509,19 +509,19 @@ export default function WorkspacePage() {
 
       {/* Not logged in */}
       {!user && (
-        <div className="rounded-xl border border-blue-500/10 bg-[#0f1623] p-10 text-center">
+        <div className="rounded-xl border border-blue-500/10 bg-white p-10 text-center">
           <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mx-auto mb-4">
-            <Lock size={20} className="text-blue-400" />
+            <Lock size={20} className="text-blue-700" />
           </div>
-          <h3 className="text-sm font-semibold text-white mb-2">Anmeldung erforderlich</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto mb-5">
+          <h3 className="text-sm font-semibold text-slate-900 mb-2">Anmeldung erforderlich</h3>
+          <p className="text-xs text-slate-600 max-w-sm mx-auto mb-5">
             Der persönliche Workspace ist nur für angemeldete Benutzer verfügbar.
           </p>
           <div className="flex items-center justify-center gap-3">
             <Link href="/login" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors">
               Einloggen
             </Link>
-            <Link href="/registrieren" className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-slate-300 transition-colors">
+            <Link href="/registrieren" className="px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
               Kostenlos registrieren
             </Link>
           </div>
@@ -540,22 +540,22 @@ export default function WorkspacePage() {
       )}
 
       {user && !loading && isEmpty && (
-        <div className="rounded-xl border border-white/5 bg-white/[0.02] p-10 text-center">
+        <div className="rounded-xl border border-slate-200 bg-blue-50 p-10 text-center">
           <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mx-auto mb-4">
-            <LayoutGrid size={20} className="text-blue-400" />
+            <LayoutGrid size={20} className="text-blue-700" />
           </div>
-          <h3 className="text-sm font-semibold text-white mb-2">Noch keine persönlichen Inhalte vorhanden</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto mb-6">
+          <h3 className="text-sm font-semibold text-slate-900 mb-2">Noch keine persönlichen Inhalte vorhanden</h3>
+          <p className="text-xs text-slate-600 max-w-sm mx-auto mb-6">
             Starten Sie mit einem Labor, einem System oder einer Praxisnotiz.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link href="/labore" className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors">
               <Plus size={14} />Neues Labor erstellen
             </Link>
-            <Link href="/praxisnotizen" className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-slate-300 transition-colors">
+            <Link href="/praxisnotizen" className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
               <Plus size={14} />Neue Praxisnotiz erstellen
             </Link>
-            <Link href="/befehle" className="px-4 py-2 rounded-lg text-sm text-slate-500 hover:text-slate-300 transition-colors">
+            <Link href="/befehle" className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-700 transition-colors">
               Zur Befehlsbibliothek →
             </Link>
           </div>
@@ -566,7 +566,7 @@ export default function WorkspacePage() {
         <div className="space-y-8">
           {/* Summary cards */}
           <div>
-            <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Übersicht</h2>
+            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Übersicht</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               <StatCard label="Labore"          value={data.labs.length}            icon={FlaskConical} href="/labore"         accent="blue" />
               <StatCard label="Systeme"         value={data.systems.length}         icon={Server}       href="/systeme"        accent="cyan" />
@@ -580,7 +580,7 @@ export default function WorkspacePage() {
           {/* Lab-based structure */}
           {data.labs.length > 0 && (
             <div>
-              <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Labore und verknüpfte Inhalte</h2>
+              <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Labore und verknüpfte Inhalte</h2>
               <div className="space-y-3">
                 {data.labs.map((lab) => (
                   <LabGroup
@@ -600,14 +600,14 @@ export default function WorkspacePage() {
           {/* Unlinked systems */}
           {unlinkedSystems.length > 0 && (
             <div>
-              <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Systeme – Nicht zugeordnet</h2>
-              <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 space-y-2">
+              <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Systeme – Nicht zugeordnet</h2>
+              <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                 {unlinkedSystems.map((s) => (
-                  <div key={s.id} className="flex items-center gap-2 text-xs text-slate-400">
-                    <Server size={12} className="text-cyan-500 shrink-0" />
-                    <code className="font-mono text-cyan-300">{s.hostname}</code>
-                    {s.ip_address && <span className="text-slate-600">({s.ip_address})</span>}
-                    {s.os && <span className="text-slate-600">· {s.os}</span>}
+                  <div key={s.id} className="flex items-center gap-2 text-xs text-slate-600">
+                    <Server size={12} className="text-cyan-700 shrink-0" />
+                    <code className="font-mono text-cyan-800">{s.hostname}</code>
+                    {s.ip_address && <span className="text-slate-500">({s.ip_address})</span>}
+                    {s.os && <span className="text-slate-500">· {s.os}</span>}
                   </div>
                 ))}
               </div>
@@ -619,13 +619,13 @@ export default function WorkspacePage() {
             <div className="space-y-6">
               {data.systems.length > 0 && (
                 <div>
-                  <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Meine Systeme</h2>
-                  <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 space-y-2">
+                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Meine Systeme</h2>
+                  <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                     {data.systems.map((s) => (
-                      <div key={s.id} className="flex items-center gap-2 text-xs text-slate-400">
-                        <Server size={12} className="text-cyan-500 shrink-0" />
-                        <code className="font-mono text-cyan-300">{s.hostname}</code>
-                        {s.ip_address && <span className="text-slate-600">({s.ip_address})</span>}
+                      <div key={s.id} className="flex items-center gap-2 text-xs text-slate-600">
+                        <Server size={12} className="text-cyan-700 shrink-0" />
+                        <code className="font-mono text-cyan-800">{s.hostname}</code>
+                        {s.ip_address && <span className="text-slate-500">({s.ip_address})</span>}
                       </div>
                     ))}
                   </div>
@@ -633,13 +633,13 @@ export default function WorkspacePage() {
               )}
               {data.commands.length > 0 && (
                 <div>
-                  <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Meine Befehle</h2>
-                  <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 space-y-2">
+                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Meine Befehle</h2>
+                  <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                     {data.commands.map((c) => (
-                      <div key={c.id} className="flex items-center gap-2 text-xs text-slate-400">
-                        <Terminal size={12} className="text-violet-500 shrink-0" />
-                        <code className="font-mono text-violet-300">{c.command}</code>
-                        {c.platform && <span className="text-slate-600">· {c.platform}</span>}
+                      <div key={c.id} className="flex items-center gap-2 text-xs text-slate-600">
+                        <Terminal size={12} className="text-violet-700 shrink-0" />
+                        <code className="font-mono text-violet-800">{c.command}</code>
+                        {c.platform && <span className="text-slate-500">· {c.platform}</span>}
                       </div>
                     ))}
                   </div>
@@ -647,13 +647,13 @@ export default function WorkspacePage() {
               )}
               {data.troubleshooting.length > 0 && (
                 <div>
-                  <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Meine Fehleranalysen</h2>
-                  <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 space-y-2">
+                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Meine Fehleranalysen</h2>
+                  <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                     {data.troubleshooting.map((t) => (
-                      <div key={t.id} className="flex items-center gap-2 text-xs text-slate-400">
-                        <Bug size={12} className="text-amber-500 shrink-0" />
+                      <div key={t.id} className="flex items-center gap-2 text-xs text-slate-600">
+                        <Bug size={12} className="text-amber-700 shrink-0" />
                         {t.title}
-                        {t.category && <span className="text-slate-600">· {t.category}</span>}
+                        {t.category && <span className="text-slate-500">· {t.category}</span>}
                       </div>
                     ))}
                   </div>
@@ -661,13 +661,13 @@ export default function WorkspacePage() {
               )}
               {data.docker.length > 0 && (
                 <div>
-                  <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Meine Docker-Dienste</h2>
-                  <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 space-y-2">
+                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Meine Docker-Dienste</h2>
+                  <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                     {data.docker.map((d) => (
-                      <div key={d.id} className="flex items-center gap-2 text-xs text-slate-400">
-                        <Container size={12} className="text-emerald-500 shrink-0" />
+                      <div key={d.id} className="flex items-center gap-2 text-xs text-slate-600">
+                        <Container size={12} className="text-emerald-700 shrink-0" />
                         {d.name}
-                        {d.image && <span className="text-slate-600">· {d.image}</span>}
+                        {d.image && <span className="text-slate-500">· {d.image}</span>}
                       </div>
                     ))}
                   </div>
@@ -675,13 +675,13 @@ export default function WorkspacePage() {
               )}
               {data.notes.length > 0 && (
                 <div>
-                  <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Meine Praxisnotizen</h2>
-                  <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 space-y-2">
+                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Meine Praxisnotizen</h2>
+                  <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                     {data.notes.map((n) => (
-                      <div key={n.id} className="flex items-center gap-2 text-xs text-slate-400">
-                        <StickyNote size={12} className="text-blue-500 shrink-0" />
+                      <div key={n.id} className="flex items-center gap-2 text-xs text-slate-600">
+                        <StickyNote size={12} className="text-blue-700 shrink-0" />
                         {n.title}
-                        {n.category && <span className="text-slate-600">· {n.category}</span>}
+                        {n.category && <span className="text-slate-500">· {n.category}</span>}
                       </div>
                     ))}
                   </div>
@@ -691,18 +691,18 @@ export default function WorkspacePage() {
           )}
 
           {/* Action buttons */}
-          <div className="border-t border-white/5 pt-6 print:hidden">
+          <div className="border-t border-slate-200 pt-6 print:hidden">
             <div className="flex flex-wrap gap-3">
               <Link href="/labore"
                 className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors">
                 <Plus size={14} />Neues Labor erstellen
               </Link>
               <Link href="/praxisnotizen"
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-slate-300 transition-colors">
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
                 <Plus size={14} />Neue Praxisnotiz erstellen
               </Link>
               <Link href="/befehle"
-                className="px-4 py-2 rounded-lg text-sm text-slate-500 hover:text-slate-300 transition-colors">
+                className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-700 transition-colors">
                 Zur Befehlsbibliothek →
               </Link>
             </div>

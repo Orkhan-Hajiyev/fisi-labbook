@@ -2,7 +2,7 @@ import { FolderKanban, Target, Database, Layers, Briefcase, Rocket, CheckCircle2
 import PageHeader from "@/components/PageHeader";
 
 const techStack = [
-  "Next.js 15 (App Router)",
+  "Next.js 16 (App Router)",
   "TypeScript",
   "Tailwind CSS",
   "Supabase PostgreSQL",
@@ -22,11 +22,11 @@ const areas = [
 ];
 
 const future = [
-  "Authentifizierung und Admin-Bereich",
-  "Export-Funktionen (PDF, Markdown)",
+  "Teamverwaltung und erweiterte Rollen",
+  "Gestaltete PDF-Berichte und Exportvorlagen",
   "Topologie-Diagramme",
   "Automatisierte Zusammenfassungen",
-  "Erweiterte Suchfunktionen",
+  "Semantische Suche und intelligente Filter",
 ];
 
 function Section({
@@ -41,20 +41,20 @@ function Section({
   children: React.ReactNode;
 }) {
   const colors: Record<string, string> = {
-    blue: "bg-blue-500/10 border-blue-500/15 text-blue-400",
-    cyan: "bg-cyan-500/10 border-cyan-500/15 text-cyan-400",
-    violet: "bg-violet-500/10 border-violet-500/15 text-violet-400",
-    emerald: "bg-emerald-500/10 border-emerald-500/15 text-emerald-400",
-    amber: "bg-amber-500/10 border-amber-500/15 text-amber-400",
+    blue: "bg-blue-500/10 border-blue-500/15 text-blue-700",
+    cyan: "bg-cyan-500/10 border-cyan-500/15 text-cyan-700",
+    violet: "bg-violet-500/10 border-violet-500/15 text-violet-700",
+    emerald: "bg-emerald-500/10 border-emerald-500/15 text-emerald-700",
+    amber: "bg-amber-500/10 border-amber-500/15 text-amber-700",
   };
   const cls = colors[accent] ?? colors.blue;
   return (
-    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-6">
+    <div className="rounded-xl border border-slate-200 bg-blue-50 p-6">
       <div className="flex items-center gap-3 mb-4">
         <div className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 ${cls}`}>
           <Icon size={15} />
         </div>
-        <h2 className="text-sm font-semibold text-white">{title}</h2>
+        <h2 className="text-sm font-semibold text-slate-900">{title}</h2>
       </div>
       {children}
     </div>
@@ -65,8 +65,8 @@ function BulletList({ items }: { items: string[] }) {
   return (
     <ul className="space-y-2">
       {items.map((item) => (
-        <li key={item} className="flex items-start gap-2.5 text-sm text-slate-400">
-          <CheckCircle2 size={13} className="text-blue-400 shrink-0 mt-0.5" />
+        <li key={item} className="flex items-start gap-2.5 text-sm text-slate-600">
+          <CheckCircle2 size={13} className="text-blue-700 shrink-0 mt-0.5" />
           <span>{item}</span>
         </li>
       ))}
@@ -86,7 +86,7 @@ export default function PortfolioPage() {
       <div className="space-y-5">
         {/* Ziel */}
         <Section icon={Target} title="Ziel des Projekts" accent="blue">
-          <p className="text-sm text-slate-400 leading-relaxed">
+          <p className="text-sm text-slate-600 leading-relaxed">
             FISI LabBook wurde entwickelt, um praktische IT-Labore, Systeme, Befehle, Docker-Dienste und
             Fehleranalysen strukturiert zu dokumentieren. Der Fokus liegt auf praxisnaher
             Systemintegration, nachvollziehbarer technischer Dokumentation und professioneller
@@ -105,7 +105,7 @@ export default function PortfolioPage() {
             {techStack.map((tech) => (
               <span
                 key={tech}
-                className="text-xs bg-white/5 border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg font-medium"
+                className="text-xs bg-blue-50 border border-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium"
               >
                 {tech}
               </span>
@@ -115,7 +115,7 @@ export default function PortfolioPage() {
 
         {/* Nutzen im Praktikum */}
         <Section icon={Briefcase} title="Nutzen im Praktikum" accent="emerald">
-          <p className="text-sm text-slate-400 leading-relaxed">
+          <p className="text-sm text-slate-600 leading-relaxed">
             Die Plattform zeigt eine strukturierte Arbeitsweise, technisches Verständnis,
             Dokumentationsfähigkeit und praxisorientierte Problemlösung im Bereich Fachinformatiker für
             Systemintegration. Sie eignet sich als Portfolio-Nachweis für Bewerbungsgespräche und

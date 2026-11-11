@@ -21,8 +21,8 @@ interface Props {
   onCancel: () => void;
 }
 
-const inputCls = "w-full px-3 py-2 rounded-lg bg-[#0d0f14] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 transition-all";
-const labelCls = "block text-xs font-medium text-slate-400 mb-1.5";
+const inputCls = "w-full px-3 py-2 rounded-lg bg-[#f3f8ff] border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 transition-all";
+const labelCls = "block text-xs font-medium text-slate-600 mb-1.5";
 
 const STATUS_OPTIONS = [
   { value: "aktiv",   label: "Aktiv"   },
@@ -61,20 +61,20 @@ export default function DockerServiceForm({ service, onSave, onCancel }: Props) 
   }
 
   return (
-    <div className="rounded-xl border border-blue-500/15 bg-[#0f1623] p-6 space-y-5">
+    <div className="rounded-xl border border-blue-500/15 bg-white p-6 space-y-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-white">
+        <h3 className="text-sm font-semibold text-slate-900">
           {service ? "Docker-Dienst bearbeiten" : "Neuen Docker-Dienst erstellen"}
         </h3>
         <button type="button" onClick={onCancel} aria-label="Schließen"
-          className="p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-white/5 transition-colors">
+          className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
           <X size={16} />
         </button>
       </div>
 
       {error && (
         <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-          <p className="text-sm text-red-400">{error}</p>
+          <p className="text-sm text-red-700">{error}</p>
         </div>
       )}
 
@@ -136,9 +136,9 @@ export default function DockerServiceForm({ service, onSave, onCancel }: Props) 
             placeholder="Hinweise, Abhängigkeiten…" rows={2} className={inputCls + " resize-none"} />
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-2 border-t border-white/5">
+        <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-200">
           <button type="button" onClick={onCancel}
-            className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
+            className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
             Abbrechen
           </button>
           <button type="submit" disabled={loading}

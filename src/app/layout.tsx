@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "FISI LabBook",
   },
   icons: {
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0ea5e9",
+  themeColor: "#176cba",
   width: "device-width",
   initialScale: 1,
   minimumScale: 1,
@@ -55,7 +55,7 @@ export default function RootLayout({
       lang="de"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="bg-[#0d0f14] text-slate-200">{children}</body>
+      <body className="bg-[#f3f8ff] text-slate-800">{children}</body>
     </html>
   );
 }

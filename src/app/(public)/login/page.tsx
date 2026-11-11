@@ -55,29 +55,29 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo link */}
         <Link href="/" className="flex items-center gap-2.5 mb-8 w-fit">
-          <div className="w-8 h-8 rounded-lg bg-[#161b27] border border-white/10 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-[#e8f2ff] border border-slate-200 flex items-center justify-center shrink-0">
             <span className="text-[11px] font-black bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent select-none">
               FL
             </span>
           </div>
-          <span className="text-sm font-bold text-white">FISI LabBook</span>
+          <span className="text-sm font-bold text-slate-900">FISI LabBook</span>
         </Link>
 
-        <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-8">
-          <h1 className="text-xl font-bold text-white mb-1">Mit OrikOS-Konto einloggen</h1>
-          <p className="text-sm text-slate-500 mb-7">
+        <div className="rounded-2xl border border-slate-200 bg-blue-50 p-8">
+          <h1 className="text-xl font-bold text-slate-900 mb-1">Mit OrikOS-Konto einloggen</h1>
+          <p className="text-sm text-slate-600 mb-7">
             Melden Sie sich mit Ihrem OrikOS-Konto an.
           </p>
 
           {error && (
             <div role="alert" className="mb-5 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-              <p className="text-sm text-red-400">{error}</p>
+              <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="login-email" className="block text-xs font-medium text-slate-400 mb-1.5">
+              <label htmlFor="login-email" className="block text-xs font-medium text-slate-600 mb-1.5">
                 E-Mail
               </label>
               <input
@@ -88,11 +88,11 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="name@beispiel.de"
-                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               />
             </div>
             <div>
-              <label htmlFor="login-password" className="block text-xs font-medium text-slate-400 mb-1.5">
+              <label htmlFor="login-password" className="block text-xs font-medium text-slate-600 mb-1.5">
                 Passwort
               </label>
               <input
@@ -103,7 +103,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="••••••••"
-                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               />
             </div>
             <button
@@ -115,11 +115,11 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-xs text-slate-500 text-center mt-6">
+          <p className="text-xs text-slate-600 text-center mt-6">
             Noch kein Konto?{" "}
             <Link
               href="/registrieren"
-              className="text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-blue-700 hover:text-blue-800 transition-colors"
             >
               Kostenlos registrieren
             </Link>

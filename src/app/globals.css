@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0d0f14;
-  --foreground: #e2e8f0;
+  --background: #f4f8fe;
+  --foreground: #19324a;
+  --fisi-blue: #1764b3;
+  --fisi-border: #dae7f5;
 }
 
 @theme inline {
@@ -13,9 +15,47 @@
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 60% 30% at 88% -4%, rgba(88, 166, 233, 0.16), transparent 80%),
+    radial-gradient(ellipse 45% 35% at 8% 70%, rgba(150, 207, 247, 0.1), transparent 85%),
+    linear-gradient(180deg, #f8fbff 0%, var(--background) 55%, #f2f7fd 100%);
   color: var(--foreground);
   font-family: var(--font-geist-sans, system-ui, sans-serif);
+  color-scheme: light;
+}
+
+::selection {
+  background: #bfdbfe;
+  color: #153b67;
+}
+
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 3px;
+}
+
+.fisi-card {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--fisi-border);
+  box-shadow: 0 18px 42px -34px rgba(24, 84, 144, 0.26);
+}
+
+.fisi-card:hover {
+  border-color: #b8d5ef;
+  box-shadow: 0 22px 46px -33px rgba(24, 84, 144, 0.29);
+}
+
+.fisi-tech-grid {
+  background-image: linear-gradient(rgba(63, 139, 203, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(63, 139, 203, 0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.fisi-hero {
+  background: linear-gradient(112deg, #e9f4ff 0%, #f7fbff 58%, #fff 100%);
+  border: 1px solid #cbdff4;
+  box-shadow: 0 24px 60px -42px rgba(31, 102, 170, 0.38);
 }
 
 * {
@@ -27,14 +67,22 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #eef4fb;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2d3a;
+  background: #bfcee0;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3d4a;
+  background: #93adca;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @media print {

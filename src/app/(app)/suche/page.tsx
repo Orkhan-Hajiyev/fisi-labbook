@@ -54,25 +54,25 @@ function ResultSection<T extends { id: string }>({
   if (items.length === 0) return null;
 
   const accentMap: Record<string, string> = {
-    blue:    "text-blue-400",
-    cyan:    "text-cyan-400",
-    violet:  "text-violet-400",
-    amber:   "text-amber-400",
-    emerald: "text-emerald-400",
-    slate:   "text-slate-400",
+    blue:    "text-blue-700",
+    cyan:    "text-cyan-700",
+    violet:  "text-violet-700",
+    amber:   "text-amber-700",
+    emerald: "text-emerald-700",
+    slate:   "text-slate-600",
   };
 
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
-        <Icon size={14} className={accentMap[accent] ?? "text-slate-400"} />
-        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{title}</h3>
-        <span className="text-[10px] bg-white/5 text-slate-500 px-2 py-0.5 rounded-full">{items.length}</span>
+        <Icon size={14} className={accentMap[accent] ?? "text-slate-600"} />
+        <h3 className="text-xs font-semibold text-slate-600 uppercase tracking-wider">{title}</h3>
+        <span className="text-[10px] bg-blue-50 text-slate-600 px-2 py-0.5 rounded-full">{items.length}</span>
       </div>
       <div className="space-y-2">
         {items.map((item) => (
           <Link key={item.id} href={href}
-            className="block rounded-xl border border-white/5 bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.04] p-4 transition-all duration-150">
+            className="block rounded-xl border border-slate-200 bg-blue-50 hover:border-slate-200 hover:bg-blue-50 p-4 transition-all duration-150">
             {renderItem(item)}
           </Link>
         ))}
@@ -177,19 +177,19 @@ export default function SuchePage() {
       />
 
       {!user ? (
-        <div className="rounded-xl border border-blue-500/10 bg-[#0f1623] p-10 text-center">
+        <div className="rounded-xl border border-blue-500/10 bg-white p-10 text-center">
           <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mx-auto mb-4">
-            <Lock size={20} className="text-blue-400" />
+            <Lock size={20} className="text-blue-700" />
           </div>
-          <h3 className="text-sm font-semibold text-white mb-2">Anmeldung erforderlich</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto mb-5">
+          <h3 className="text-sm font-semibold text-slate-900 mb-2">Anmeldung erforderlich</h3>
+          <p className="text-xs text-slate-600 max-w-sm mx-auto mb-5">
             Die globale Suche ist für angemeldete Benutzer verfügbar.
           </p>
           <div className="flex items-center justify-center gap-3">
             <Link href="/login" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors">
               Einloggen
             </Link>
-            <Link href="/registrieren" className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-slate-300 transition-colors">
+            <Link href="/registrieren" className="px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
               Kostenlos registrieren
             </Link>
           </div>
@@ -198,7 +198,7 @@ export default function SuchePage() {
         <div className="space-y-6">
           {/* Search input */}
           <div className="relative">
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
             <input
               type="text"
               aria-label="Persönlichen Workspace durchsuchen"
@@ -207,12 +207,12 @@ export default function SuchePage() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Gesamten Workspace durchsuchen…"
-              className="w-full pl-11 pr-24 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
+              className="w-full pl-11 pr-24 py-3 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               autoFocus
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
               {query && (
-                <button onClick={clearSearch} aria-label="Suche löschen" className="p-1 text-slate-600 hover:text-slate-400 transition-colors">
+                <button onClick={clearSearch} aria-label="Suche löschen" className="p-1 text-slate-500 hover:text-slate-600 transition-colors">
                   <X size={14} />
                 </button>
               )}
@@ -231,29 +231,29 @@ export default function SuchePage() {
           {!loading && searchError && <ErrorState message="Die Suche ist fehlgeschlagen. Bitte versuche es erneut." />}
 
           {!loading && visibleSearched && total === 0 && (
-            <div className="rounded-xl border border-white/5 bg-white/[0.02] p-10 text-center">
-              <Search size={28} className="text-slate-700 mx-auto mb-3" />
-              <p className="text-sm text-slate-500">Keine Ergebnisse gefunden.</p>
-              <p className="text-xs text-slate-600 mt-1">Versuchen Sie einen anderen Suchbegriff.</p>
+            <div className="rounded-xl border border-slate-200 bg-blue-50 p-10 text-center">
+              <Search size={28} className="text-slate-500 mx-auto mb-3" />
+              <p className="text-sm text-slate-600">Keine Ergebnisse gefunden.</p>
+              <p className="text-xs text-slate-500 mt-1">Versuchen Sie einen anderen Suchbegriff.</p>
 
             </div>
           )}
 
           {!loading && visibleSearched && total > 0 && (
             <div className="space-y-6">
-              <p className="text-xs text-slate-500">
-                <span className="text-white font-semibold">{total}</span>{" "}
+              <p className="text-xs text-slate-600">
+                <span className="text-slate-900 font-semibold">{total}</span>{" "}
                 Ergebnisse für{" "}
-                <span className="text-blue-400">&bdquo;{searchedTerm}&ldquo;</span>
+                <span className="text-blue-700">&bdquo;{searchedTerm}&ldquo;</span>
               </p>
 
               <ResultSection
                 icon={FlaskConical} title="Labore" items={visibleResults!.labs} href="/labore" accent="blue"
                 renderItem={(lab) => (
                   <div>
-                    <p className="text-sm font-medium text-white">{highlight(lab.title, searchedTerm)}</p>
-                    {lab.topic && <p className="text-xs text-slate-500 mt-0.5">{highlight(lab.topic, searchedTerm)}</p>}
-                    {lab.goal && <p className="text-xs text-slate-600 mt-1 line-clamp-1">{highlight(lab.goal, searchedTerm)}</p>}
+                    <p className="text-sm font-medium text-slate-900">{highlight(lab.title, searchedTerm)}</p>
+                    {lab.topic && <p className="text-xs text-slate-600 mt-0.5">{highlight(lab.topic, searchedTerm)}</p>}
+                    {lab.goal && <p className="text-xs text-slate-500 mt-1 line-clamp-1">{highlight(lab.goal, searchedTerm)}</p>}
                   </div>
                 )}
               />
@@ -262,11 +262,11 @@ export default function SuchePage() {
                 icon={Server} title="Systeme" items={visibleResults!.systems} href="/systeme" accent="cyan"
                 renderItem={(sys) => (
                   <div>
-                    <p className="text-sm font-medium text-white font-mono">{highlight(sys.hostname, searchedTerm)}</p>
+                    <p className="text-sm font-medium text-slate-900 font-mono">{highlight(sys.hostname, searchedTerm)}</p>
                     <div className="flex flex-wrap gap-3 mt-1">
-                      {sys.ip_address && <span className="text-xs text-slate-500">{highlight(sys.ip_address, searchedTerm)}</span>}
-                      {sys.os && <span className="text-xs text-slate-500">{highlight(sys.os, searchedTerm)}</span>}
-                      {sys.role && <span className="text-xs text-slate-500">{highlight(sys.role, searchedTerm)}</span>}
+                      {sys.ip_address && <span className="text-xs text-slate-600">{highlight(sys.ip_address, searchedTerm)}</span>}
+                      {sys.os && <span className="text-xs text-slate-600">{highlight(sys.os, searchedTerm)}</span>}
+                      {sys.role && <span className="text-xs text-slate-600">{highlight(sys.role, searchedTerm)}</span>}
                     </div>
                   </div>
                 )}
@@ -276,9 +276,9 @@ export default function SuchePage() {
                 icon={Terminal} title="Befehle" items={visibleResults!.commands} href="/befehle" accent="violet"
                 renderItem={(cmd) => (
                   <div>
-                    <code className="text-sm font-mono text-violet-300">{highlight(cmd.command, searchedTerm)}</code>
-                    {cmd.purpose && <p className="text-xs text-slate-500 mt-0.5">{highlight(cmd.purpose, searchedTerm)}</p>}
-                    {cmd.platform && <span className="text-[11px] text-slate-600">{cmd.platform}</span>}
+                    <code className="text-sm font-mono text-violet-800">{highlight(cmd.command, searchedTerm)}</code>
+                    {cmd.purpose && <p className="text-xs text-slate-600 mt-0.5">{highlight(cmd.purpose, searchedTerm)}</p>}
+                    {cmd.platform && <span className="text-[11px] text-slate-500">{cmd.platform}</span>}
                   </div>
                 )}
               />
@@ -287,9 +287,9 @@ export default function SuchePage() {
                 icon={Bug} title="Fehleranalysen" items={visibleResults!.troubleshooting} href="/fehleranalyse" accent="amber"
                 renderItem={(t) => (
                   <div>
-                    <p className="text-sm font-medium text-white">{highlight(t.title, searchedTerm)}</p>
-                    {t.symptoms && <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{highlight(t.symptoms, searchedTerm)}</p>}
-                    {t.category && <span className="text-[11px] text-slate-600">{t.category}</span>}
+                    <p className="text-sm font-medium text-slate-900">{highlight(t.title, searchedTerm)}</p>
+                    {t.symptoms && <p className="text-xs text-slate-600 mt-0.5 line-clamp-1">{highlight(t.symptoms, searchedTerm)}</p>}
+                    {t.category && <span className="text-[11px] text-slate-500">{t.category}</span>}
                   </div>
                 )}
               />
@@ -298,9 +298,9 @@ export default function SuchePage() {
                 icon={Container} title="Docker-Dienste" items={visibleResults!.docker} href="/docker-dienste" accent="emerald"
                 renderItem={(d) => (
                   <div>
-                    <p className="text-sm font-medium text-white">{highlight(d.name, searchedTerm)}</p>
-                    {d.image && <p className="text-xs text-slate-500 mt-0.5 font-mono">{highlight(d.image, searchedTerm)}</p>}
-                    {d.purpose && <p className="text-xs text-slate-600 mt-0.5 line-clamp-1">{highlight(d.purpose, searchedTerm)}</p>}
+                    <p className="text-sm font-medium text-slate-900">{highlight(d.name, searchedTerm)}</p>
+                    {d.image && <p className="text-xs text-slate-600 mt-0.5 font-mono">{highlight(d.image, searchedTerm)}</p>}
+                    {d.purpose && <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{highlight(d.purpose, searchedTerm)}</p>}
                   </div>
                 )}
               />
@@ -309,9 +309,9 @@ export default function SuchePage() {
                 icon={StickyNote} title="Praxisnotizen" items={visibleResults!.notes} href="/praxisnotizen" accent="slate"
                 renderItem={(n) => (
                   <div>
-                    <p className="text-sm font-medium text-white">{highlight(n.title, searchedTerm)}</p>
-                    {n.content && <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{highlight(n.content, searchedTerm)}</p>}
-                    {n.category && <span className="text-[11px] text-slate-600">{n.category}</span>}
+                    <p className="text-sm font-medium text-slate-900">{highlight(n.title, searchedTerm)}</p>
+                    {n.content && <p className="text-xs text-slate-600 mt-0.5 line-clamp-1">{highlight(n.content, searchedTerm)}</p>}
+                    {n.category && <span className="text-[11px] text-slate-500">{n.category}</span>}
                   </div>
                 )}
               />
