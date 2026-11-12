@@ -114,6 +114,12 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 | `public.fisi_troubleshooting_cases` | Troubleshooting-Fälle |
 | `public.fisi_docker_services` | Docker-Dienste und Compose-Snippets |
 
+Die fünf Referenztabellen müssen per RLS für **`anon` und `authenticated`** lesbar sein,
+damit Demo-Inhalte nach der Anmeldung nicht verschwinden. Für bestehende Projekte
+liegt die einmalige Korrektur in `supabase/fisi_public_reference_read.sql`.
+Sie ändert ausschließlich SELECT-Policies der Referenztabellen, nicht die
+persönlichen `fisi_user_*`-Tabellen.
+
 ---
 
 ## Lokale Entwicklung

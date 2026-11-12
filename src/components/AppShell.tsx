@@ -1,10 +1,22 @@
 "use client";
 
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Navigation from "@/components/Navigation";
 import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
 import DemoBanner from "@/components/DemoBanner";
+
+function AccountScopedPage({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  // Remount pages after sign-in, sign-out, or account change so personal
+  // lists, drafts and pending request state cannot cross account boundaries.
+  const accountKey = loading ? "auth-loading" : user?.id ?? "guest";
+  return (
+    <div key={accountKey} className="flex-1 px-4 sm:px-6 py-6 sm:py-8 max-w-7xl w-full mx-auto min-w-0">
+      {children}
+    </div>
+  );
+}
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -15,9 +27,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <main className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
           <TopBar />
           <DemoBanner />
-          <div className="flex-1 px-4 sm:px-6 py-6 sm:py-8 max-w-7xl w-full mx-auto min-w-0">
+          <AccountScopedPage>
             {children}
-          </div>
+          </AccountScopedPage>
           <Footer />
         </main>
       </div>

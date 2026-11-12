@@ -1,252 +1,111 @@
+"use client";
+
 import Link from "next/link";
-import {
-  FlaskConical,
-  Server,
-  Terminal,
-  Bug,
-  Container,
-  StickyNote,
-  ArrowRight,
-  CheckCircle2,
-  Mail,
-  ShieldCheck,
-  Smartphone,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2, Info, Layers3, Network, Play, ShieldCheck } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import InfrastructureHero from "@/components/InfrastructureShowcase";
 
-const modules = [
-  {
-    icon: FlaskConical,
-    label: "Labore",
-    desc: "Dokumentierte IT-Laborumgebungen mit Status, Ziel und Beschreibung.",
-    accent: "blue",
+const translations = {
+  de: {
+    eyebrow: "FÜR FACHINFORMATIKER:INNEN · SYSTEMINTEGRATION",
+    title1: "Dein digitales IT-Labor.",
+    title2: "Lernen. Anwenden. Dokumentieren.",
+    lead: "FISI LabBook verbindet praxisnahe IT-Labore, Systemdokumentation, Admin-Befehle und strukturierte Fehleranalysen in einer übersichtlichen Plattform.",
+    trust: ["Praxisnah", "Übersichtlich", "Kostenlos"],
+    demo: "Demo eingeschränkt testen", examples: "Ausgefülltes Beispiel ansehen", signup: "Kostenlos registrieren", login: "Anmelden",
+    titleChoice: "Drei Wege, FISI LabBook kennenzulernen", demoNotice: "Demo und Beispielbereich dienen zum Kennenlernen; es besteht keine Verbindung zu echten Servern.",
+    choiceLead: "Du entscheidest, wie du die Plattform entdecken möchtest.",
+    items: [
+      { title: "Eingeschränkte Demo", subtitle: "Ohne Registrierung", text: "Öffentliche IT-Beispiele und ausgewählte Funktionen ansehen. Eigene Einträge lassen sich hier nicht dauerhaft speichern.", cta: "Demo starten" },
+      { title: "Ausgefüllter Beispiel-Workspace", subtitle: "Geführter Rundgang", text: "Ein vollständig illustriertes Übungsprojekt mit Labor, System, Befehlen, Docker, Fehleranalyse und Notizen – mit Erklärungen zu jedem Bereich.", cta: "Beispiele entdecken" },
+      { title: "Dein persönlicher Workspace", subtitle: "Kostenlos nach Registrierung", text: "Eigene Labore und Systeme anlegen, Befehle und Praxisnotizen verwalten und verfügbare Exportfunktionen nutzen.", cta: "Kostenloses Konto erstellen" },
+    ],
+    modulesTitle: "Alles für deinen FISI-Alltag", modulesLead: "Von der Einrichtung eines Servers bis zur dokumentierten Fehlerbehebung.",
+    modules: [
+      ["IT-Labore", "Übungen, Ziele und Ergebnisse nachvollziehbar festhalten."],
+      ["Systeme & Dienste", "Server, IP-Adressen, Rollen und Dienste strukturieren."],
+      ["Befehle", "PowerShell, Linux und Netzwerkkommandos sammeln."],
+      ["Fehleranalyse", "Symptome, Ursachen und Lösungen dokumentieren."],
+      ["Docker", "Container, Ports und Compose-Beispiele im Blick behalten."],
+      ["Praxisnotizen", "Persönliches IT-Wissen dauerhaft festhalten."],
+    ],
+    freeEyebrow: "KOSTENLOS STARTEN", freeTitle: "Dein Wissen verdient einen eigenen IT-Workspace.",
+    freeText: "Registriere dich kostenlos und dokumentiere eigene Labore, Systeme, Befehle und Praxisnotizen an einem Ort. Zur Aktivierung kann eine E-Mail-Bestätigung erforderlich sein.",
+    freeLink: "Kostenloses Konto erstellen", paidNote: "Für die derzeit angebotenen Funktionen ist kein kostenpflichtiges Abo erforderlich.",
   },
-  {
-    icon: Server,
-    label: "Systeme",
-    desc: "Infrastruktur-Dokumentation: Hostnames, IP-Adressen, Rollen, Dienste.",
-    accent: "cyan",
+  az: {
+    eyebrow: "İT SAHƏSİNDƏ SİSTEM İNTEQRASİYASINI ÖYRƏNƏNLƏR ÜÇÜN",
+    title1: "Sənin rəqəmsal IT laboratoriyan.",
+    title2: "Öyrən. Tətbiq et. Sənədləşdir.",
+    lead: "FISI LabBook praktiki IT laboratoriyalarını, sistem sənədlərini, inzibati əmrləri və sistemli xəta təhlilini vahid, aydın platformada birləşdirir.",
+    trust: ["Praktik öyrənmə", "Aydın quruluş", "Pulsuz istifadə"],
+    demo: "Məhdud demonu sına", examples: "Doldurulmuş nümunəyə bax", signup: "Pulsuz qeydiyyatdan keç", login: "Daxil ol",
+    titleChoice: "FISI LabBook ilə tanış olmağın üç yolu", demoNotice: "Demo və nümunə bölmələri öyrənmə məqsədlidir; real serverlərə qoşulmur.",
+    choiceLead: "Platformanı necə kəşf etmək istədiyini özün seç.",
+    items: [
+      { title: "Məhdud demo", subtitle: "Qeydiyyatsız", text: "Açıq IT nümunələrinə və seçilmiş funksiyalara bax. Burada şəxsi qeydləri daimi saxlamaq mümkün deyil.", cta: "Demonu aç" },
+      { title: "Tam doldurulmuş nümunə iş mühiti", subtitle: "İzahlı tanışlıq", text: "Laboratoriya, sistem, əmrlər, Docker, xəta təhlili və qeydləri əhatə edən, hər bölməsi izah olunmuş nümunə layihəni araşdır.", cta: "Nümunələri kəşf et" },
+      { title: "Şəxsi iş mühiti", subtitle: "Qeydiyyatdan sonra pulsuz", text: "Öz laboratoriyalarını və sistemlərini yarat, əmrlərini və praktiki qeydlərini idarə et, mövcud ixrac funksiyalarından istifadə et.", cta: "Pulsuz hesab yarat" },
+    ],
+    modulesTitle: "Sistem inteqrasiyası praktikası üçün hər şey", modulesLead: "Server quraşdırılmasından xətanın həllinin sənədləşdirilməsinə qədər.",
+    modules: [
+      ["IT laboratoriyaları", "Tapşırıqları, məqsədləri və nəticələri sistemli qeyd et."],
+      ["Sistemlər və xidmətlər", "Serverləri, IP ünvanlarını, rolları və xidmətləri sənədləşdir."],
+      ["Əmrlər", "PowerShell, Linux və şəbəkə əmrlərini topla."],
+      ["Xəta təhlili", "Əlamətləri, səbəbləri və həll yollarını qeyd et."],
+      ["Docker", "Konteynerləri, portları və Compose nümunələrini izləməyə kömək edir."],
+      ["Praktiki qeydlər", "Şəxsi IT biliklərini bir yerdə saxla."],
+    ],
+    freeEyebrow: "PULSUZ BAŞLA", freeTitle: "Öyrəndiklərini şəxsi IT laboratoriyanda topla.",
+    freeText: "Pulsuz hesab yarat, laboratoriyalarını və sistemlərini sənədləşdir, əmrlərini və praktiki qeydlərini bir məkanda idarə et. Qeydiyyatı tamamlamaq üçün e-poçt təsdiqi tələb oluna bilər.",
+    freeLink: "Pulsuz hesab yarat", paidNote: "Hazırda ödənişli abunə tələb olunmur.",
   },
-  {
-    icon: Terminal,
-    label: "Befehle",
-    desc: "Admin-Befehlsreferenz mit Plattform, Kategorie und Beispielen.",
-    accent: "violet",
-  },
-  {
-    icon: Bug,
-    label: "Fehleranalyse",
-    desc: "Strukturierte Troubleshooting-Fälle: Symptome, Ursache, Lösung.",
-    accent: "amber",
-  },
-  {
-    icon: Container,
-    label: "Docker-Dienste",
-    desc: "Container-Dienste mit Images, Ports und Compose-Snippets.",
-    accent: "emerald",
-  },
-  {
-    icon: StickyNote,
-    label: "Praxisnotizen",
-    desc: "Persönlicher Arbeitsbereich für technische Notizen und FISI-Dokumentation.",
-    accent: "slate",
-  },
-];
+} as const;
 
-const accentMap: Record<string, string> = {
-  blue: "bg-blue-500/10 border-blue-500/15 text-blue-400",
-  cyan: "bg-cyan-500/10 border-cyan-500/15 text-cyan-400",
-  violet: "bg-violet-500/10 border-violet-500/15 text-violet-400",
-  amber: "bg-amber-500/10 border-amber-500/15 text-amber-400",
-  emerald: "bg-emerald-500/10 border-emerald-500/15 text-emerald-400",
-  slate: "bg-slate-500/10 border-slate-500/15 text-slate-400",
-};
-
-const steps = [
-  {
-    icon: CheckCircle2,
-    step: "01",
-    title: "OrikOS-Konto erstellen",
-    desc: "Name, E-Mail und Passwort eingeben und kostenfrei registrieren.",
-  },
-  {
-    icon: Mail,
-    step: "02",
-    title: "E-Mail bestätigen",
-    desc: "Den Bestätigungslink in Ihrem Postfach öffnen und Konto aktivieren.",
-  },
-  {
-    icon: ShieldCheck,
-    step: "03",
-    title: "App nutzen",
-    desc: "Mit OrikOS-Konto einloggen und persönliche FISI-Dokumentation verwalten.",
-  },
-];
+const choiceIcons = [Play, Layers3, ShieldCheck];
+const choiceLinks = ["/dashboard", "/beispiele", "/registrieren"];
 
 export default function LandingPage() {
-  return (
-    <div className="flex flex-col">
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden border-b border-white/5">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/8 via-transparent to-cyan-600/5 pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(59,130,246,0.08),transparent)] pointer-events-none" />
+  const { language } = useLanguage();
+  const t = translations[language];
+  const de = language === "de";
 
-        <div className="relative max-w-5xl mx-auto px-6 py-24 sm:py-32 text-center">
-          {/* Badge */}
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-cyan-500/20 bg-cyan-500/5 text-cyan-500/80 mb-8">
-            OrikOS-Ökosystemprojekt
-          </span>
-
-          {/* Title */}
-          <h1 className="text-5xl sm:text-6xl font-black text-white tracking-tight leading-none mb-5">
-            FISI LabBook
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-blue-400/90 font-medium mb-6 leading-snug">
-            Ihre persönliche Plattform für Systemintegration,
-            <br className="hidden sm:block" /> Labor-Dokumentation und Fehleranalyse.
-          </p>
-
-          {/* Main description */}
-          <p className="text-slate-400 leading-relaxed max-w-2xl mx-auto mb-8 text-sm sm:text-base">
-            FISI LabBook unterstützt angehende Fachinformatiker für Systemintegration dabei,
-            praktische IT-Labore, Systeme, Befehle, Fehleranalysen, Docker-Dienste und
-            Praxisnotizen strukturiert zu dokumentieren und dauerhaft zu verwalten.
-          </p>
-
-          {/* Registration note */}
-          <p className="text-xs text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
-            Erstellen Sie ein kostenloses OrikOS-Konto, bestätigen Sie Ihre E-Mail-Adresse und
-            starten Sie mit Ihrer persönlichen FISI-Dokumentation.
-          </p>
-
-          {/* CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/8 hover:border-white/20 text-sm font-medium text-slate-200 transition-all"
-            >
-              Zur App
-              <ArrowRight size={14} />
-            </Link>
-            <Link
-              href="/registrieren"
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors shadow-lg shadow-blue-600/20"
-            >
-              Kostenlos registrieren
-            </Link>
-            <Link
-              href="/login"
-              className="px-5 py-2.5 rounded-xl border border-white/10 hover:border-white/20 text-sm font-medium text-slate-300 hover:text-white transition-all"
-            >
-              Einloggen
-            </Link>
+  return <div className="pb-12">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#f5faff] to-white">
+      <div className="max-w-7xl mx-auto px-5 sm:px-7 py-12 sm:py-16 grid lg:grid-cols-[1fr_1.02fr] items-center gap-8 lg:gap-12">
+        <div>
+          <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-[#eaf5ff] px-3 py-1.5 text-[11px] font-bold tracking-wide text-[#1263ad]"><Network size={14} />{t.eyebrow}</span>
+          <h1 className="mt-6 text-[clamp(2.2rem,4vw,3.65rem)] font-extrabold tracking-tight leading-[1.12] text-[#102c54]">{t.title1}<span className="block mt-2 text-[#176ed3]">{t.title2}</span></h1>
+          <p className="mt-6 text-[#4d6987] text-base leading-relaxed max-w-xl">{t.lead}</p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link href="/dashboard" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 bg-[#116bc9] hover:bg-[#0959b0] text-white text-sm font-bold shadow-lg shadow-blue-500/20">{t.demo}<ArrowRight size={16}/></Link>
+            <Link href="/beispiele" className="inline-flex items-center gap-2 rounded-xl px-5 py-3 border border-[#bdd7ef] bg-white hover:bg-blue-50 text-[#165a9a] text-sm font-bold">{t.examples}<Layers3 size={16}/></Link>
           </div>
+          <div className="mt-6 flex flex-wrap gap-5 text-xs font-semibold text-[#4b759a]">{t.trust.map(s=><span key={s} className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-blue-600" />{s}</span>)}</div>
         </div>
-      </section>
+        <InfrastructureHero language={language} />
+      </div>
+    </section>
 
-      {/* ── How it works ── */}
-      <section className="border-b border-white/5 py-16">
-        <div className="max-w-5xl mx-auto px-6">
-          <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-widest text-center mb-10">
-            So funktioniert&apos;s
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {steps.map(({ icon: Icon, step, title, desc }) => (
-              <div
-                key={step}
-                className="relative rounded-xl border border-white/5 bg-white/[0.02] p-6"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-[10px] font-black text-slate-700 tabular-nums">{step}</span>
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/15 flex items-center justify-center">
-                    <Icon size={13} className="text-blue-400" />
-                  </div>
-                </div>
-                <h3 className="text-sm font-semibold text-white mb-1.5">{title}</h3>
-                <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+    <section className="max-w-7xl mx-auto px-5 sm:px-7 py-12" aria-labelledby="ways-title">
+      <div className="mb-7"><p className="text-xs font-extrabold tracking-[.16em] text-blue-700 uppercase">FISI LABBOOK</p><h2 id="ways-title" className="mt-2 text-2xl sm:text-3xl font-extrabold text-[#143960]">{t.titleChoice}</h2><p className="text-[#5c7791] mt-2 text-sm">{t.choiceLead}</p></div>
+      <div className="grid md:grid-cols-3 gap-4">
+        {t.items.map((item,i)=>{const Icon=choiceIcons[i]; return <article key={item.title} className={`fisi-card rounded-[22px] p-6 flex flex-col gap-4 ${i===1?"border-blue-300 bg-[#eff7ff]":""}`}>
+          <div className="flex items-center justify-between"><span className="w-12 h-12 grid place-items-center rounded-2xl bg-[#e5f1ff] text-blue-700"><Icon size={25}/></span><span className="rounded-full bg-[#eaf2fc] px-3 py-1 text-[10px] text-[#366f9d] font-bold">{item.subtitle}</span></div>
+          <h3 className="text-lg font-bold text-[#17385e]">{item.title}</h3><p className="text-sm leading-relaxed text-[#58728d] flex-1">{item.text}</p>
+          <Link href={choiceLinks[i]} className="flex items-center justify-between text-sm font-bold text-blue-700 hover:text-blue-900 pt-2 border-t border-blue-100">{item.cta}<ArrowRight size={17}/></Link>
+        </article>})}
+      </div>
+      <p className="mt-5 flex items-start gap-2 text-sm leading-6 text-[#587793]"><Info className="mt-0.5 shrink-0 text-[#2478c8]" size={17}/>{t.demoNotice}</p>
+    </section>
 
-      {/* ── Modules ── */}
-      <section className="border-b border-white/5 py-16">
-        <div className="max-w-5xl mx-auto px-6">
-          <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-widest text-center mb-10">
-            Module der Plattform
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {modules.map(({ icon: Icon, label, desc, accent }) => (
-              <div
-                key={label}
-                className="rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.035] hover:border-white/10 transition-all duration-150 p-5"
-              >
-                <div
-                  className={`w-8 h-8 rounded-lg border flex items-center justify-center mb-3 ${accentMap[accent]}`}
-                >
-                  <Icon size={14} />
-                </div>
-                <h3 className="text-sm font-semibold text-white mb-1">{label}</h3>
-                <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
+    <section className="max-w-7xl mx-auto px-5 sm:px-7 pt-14 pb-6" aria-labelledby="signup-title">
+      <div className="relative overflow-hidden rounded-[26px] border border-[#b8d7f6] bg-gradient-to-r from-[#e4f1ff] via-[#eff7ff] to-[#d8ebff] p-7 sm:p-10">
+        <div className="relative grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="max-w-3xl"><p className="text-xs font-extrabold uppercase tracking-widest text-[#176cbd]">{t.freeEyebrow}</p><h2 id="signup-title" className="mt-3 text-2xl sm:text-[30px] font-extrabold leading-tight text-[#123b66]">{t.freeTitle}</h2><p className="mt-3 text-sm sm:text-base leading-7 text-[#50718d]">{t.freeText}</p><p className="mt-3 flex items-center gap-2 text-xs font-semibold text-[#236cae]"><CheckCircle2 size={16}/>{t.paidNote}</p></div>
+          <Link href="/registrieren" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1168c7] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/15 transition-colors hover:bg-[#0956a5]">{t.freeLink}<ArrowRight size={17}/></Link>
         </div>
-      </section>
-
-      {/* ── Mobile install ── */}
-      <section className="border-b border-white/5 py-14">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="flex flex-col sm:flex-row items-start gap-6 rounded-xl border border-white/5 bg-white/[0.02] p-6 sm:p-8">
-            <div className="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/15 flex items-center justify-center shrink-0 mt-0.5">
-              <Smartphone size={16} className="text-blue-400" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h2 className="text-sm font-semibold text-white mb-1.5">FISI LabBook mobil nutzen</h2>
-              <p className="text-xs text-slate-500 leading-relaxed mb-5">
-                FISI LabBook kann auf dem Smartphone wie eine App genutzt werden. Öffnen Sie die
-                Plattform im Browser und fügen Sie sie über &bdquo;Zum Startbildschirm
-                hinzufügen&ldquo; zu Ihrem Gerät hinzu.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3">
-                  <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                    Android / Chrome
-                  </p>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Menü öffnen <span className="text-slate-600">→</span>{" "}
-                    <span className="text-slate-300">Zum Startbildschirm hinzufügen</span>
-                  </p>
-                </div>
-                <div className="rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3">
-                  <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                    iPhone / Safari
-                  </p>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Teilen öffnen <span className="text-slate-600">→</span>{" "}
-                    <span className="text-slate-300">Zum Home-Bildschirm</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── OrikOS brand block ── */}
-      <section className="py-14">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-cyan-500/15 bg-cyan-500/5 text-cyan-500/60 mb-4">
-            OrikOS-Ökosystemprojekt
-          </span>
-          <p className="text-sm text-slate-500 leading-relaxed max-w-xl mx-auto">
-            Ein OrikOS-Projekt innerhalb der OrikLab-Webplattform – entwickelt für praxisnahe
-            Systemintegration, technische Dokumentation und strukturierte Fehleranalyse.
-          </p>
-        </div>
-      </section>
-    </div>
-  );
+      </div>
+    </section>
+  </div>;
 }

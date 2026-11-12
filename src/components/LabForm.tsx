@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useState } from "react";
 import { X } from "lucide-react";
 import type { FisiUserLab } from "@/lib/types";
@@ -28,10 +30,11 @@ interface Props {
   onCancel: () => void;
 }
 
-const inputCls = "w-full px-3 py-2 rounded-lg bg-[#0d0f14] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 transition-all";
-const labelCls = "block text-xs font-medium text-slate-400 mb-1.5";
+const inputCls = "w-full px-3 py-2 rounded-lg bg-[#f3f8ff] border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 transition-all";
+const labelCls = "block text-xs font-medium text-slate-600 mb-1.5";
 
 export default function LabForm({ lab, onSave, onCancel }: Props) {
+  const translateUI = useT();
   const [title,       setTitle]       = useState(lab?.title              ?? "");
   const [topic,       setTopic]       = useState(lab?.topic              ?? "");
   const [environment, setEnvironment] = useState(lab?.environment        ?? "");
@@ -57,81 +60,79 @@ export default function LabForm({ lab, onSave, onCancel }: Props) {
   }
 
   return (
-    <div className="rounded-xl border border-blue-500/15 bg-[#0f1623] p-6 space-y-5">
+    <div className="rounded-xl border border-blue-500/15 bg-white p-6 space-y-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-white">{lab ? "Labor bearbeiten" : "Neues Labor erstellen"}</h3>
-        <button type="button" onClick={onCancel} aria-label="Schließen"
-          className="p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-white/5 transition-colors">
+        <h3 className="text-sm font-semibold text-slate-900">{lab ? "Labor bearbeiten" : "Neues Labor erstellen"}</h3>
+        <button type="button" onClick={onCancel} aria-label={translateUI("Schließen")}
+          className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
           <X size={16} />
         </button>
       </div>
 
       {error && (
         <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-          <p className="text-sm text-red-400">{error}</p>
+          <p className="text-sm text-red-700">{error}</p>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className={labelCls}>Titel</label>
+          <label className={labelCls}><T>Titel</T></label>
           <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}
-            placeholder="Titel des Labors" className={inputCls} required />
+            placeholder={translateUI("Titel des Labors")} className={inputCls} required />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className={labelCls}>Thema</label>
+            <label className={labelCls}><T>Thema</T></label>
             <input type="text" value={topic} onChange={(e) => setTopic(e.target.value)}
-              placeholder="z.B. Active Directory" className={inputCls} />
+              placeholder={translateUI("z.B. Active Directory")} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>Umgebung</label>
+            <label className={labelCls}><T>Umgebung</T></label>
             <input type="text" value={environment} onChange={(e) => setEnvironment(e.target.value)}
-              placeholder="z.B. VMware, Hyper-V" className={inputCls} />
+              placeholder={translateUI("z.B. VMware, Hyper-V")} className={inputCls} />
           </div>
         </div>
 
         <div>
-          <label className={labelCls}>Ziel</label>
+          <label className={labelCls}><T>Ziel</T></label>
           <input type="text" value={goal} onChange={(e) => setGoal(e.target.value)}
-            placeholder="Ziel des Labors" className={inputCls} />
+            placeholder={translateUI("Ziel des Labors")} className={inputCls} />
         </div>
 
         <div>
-          <label className={labelCls}>Beschreibung</label>
+          <label className={labelCls}><T>Beschreibung</T></label>
           <textarea value={description} onChange={(e) => setDescription(e.target.value)}
-            placeholder="Beschreibung oder Notizen…" rows={4} className={inputCls + " resize-none"} />
+            placeholder={translateUI("Beschreibung oder Notizen…")} rows={4} className={inputCls + " resize-none"} />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label className={labelCls}>Status</label>
+            <label className={labelCls}><T>Status</T></label>
             <select value={status} onChange={(e) => setStatus(e.target.value)}
               className={inputCls + " cursor-pointer"}>
               {STATUS_OPTIONS.map(({ value, label }) => (
-                <option key={value} value={value}>{label}</option>
+                <option key={value} value={value}><T>{label}</T></option>
               ))}
             </select>
           </div>
           <div>
-            <label className={labelCls}>Startdatum</label>
+            <label className={labelCls}><T>Startdatum</T></label>
             <input type="date" value={startedAt} onChange={(e) => setStartedAt(e.target.value)} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>Abschlussdatum</label>
+            <label className={labelCls}><T>Abschlussdatum</T></label>
             <input type="date" value={completedAt} onChange={(e) => setCompletedAt(e.target.value)} className={inputCls} />
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-2 border-t border-white/5">
+        <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-200">
           <button type="button" onClick={onCancel}
-            className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
-            Abbrechen
-          </button>
+            className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors"><T>Abbrechen</T></button>
           <button type="submit" disabled={loading}
             className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold text-white transition-colors">
-            {loading ? "Wird gespeichert…" : "Speichern"}
+            {loading ? translateUI("Wird gespeichert…") : translateUI("Speichern")}
           </button>
         </div>
       </form>

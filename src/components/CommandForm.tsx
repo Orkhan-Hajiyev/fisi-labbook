@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useState } from "react";
 import { X } from "lucide-react";
 import type { FisiUserCommand } from "@/lib/types";
@@ -21,13 +23,14 @@ interface Props {
   onCancel: () => void;
 }
 
-const inputCls = "w-full px-3 py-2 rounded-lg bg-[#0d0f14] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 transition-all";
-const labelCls = "block text-xs font-medium text-slate-400 mb-1.5";
+const inputCls = "w-full px-3 py-2 rounded-lg bg-[#f3f8ff] border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 transition-all";
+const labelCls = "block text-xs font-medium text-slate-600 mb-1.5";
 
 const PLATFORMS = ["Windows", "Linux", "PowerShell", "CMD", "Bash", "Python", "Docker", "Sonstiges"];
 const CATEGORIES = ["Netzwerk", "System", "Active Directory", "DNS", "DHCP", "Firewall", "Docker", "Dateisystem", "Benutzer", "Sonstiges"];
 
 export default function CommandForm({ command, prefill, onSave, onCancel }: Props) {
+  const translateUI = useT();
   const [cmd,           setCmd]          = useState(command?.command          ?? prefill?.command          ?? "");
   const [platform,      setPlatform]     = useState(command?.platform         ?? prefill?.platform         ?? "");
   const [category,      setCategory]     = useState(command?.category         ?? prefill?.category         ?? "");
@@ -52,80 +55,78 @@ export default function CommandForm({ command, prefill, onSave, onCancel }: Prop
   }
 
   return (
-    <div className="rounded-xl border border-blue-500/15 bg-[#0f1623] p-6 space-y-5">
+    <div className="rounded-xl border border-blue-500/15 bg-white p-6 space-y-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-white">{command ? "Befehl bearbeiten" : "Neuen Befehl erstellen"}</h3>
-        <button type="button" onClick={onCancel} aria-label="Schließen"
-          className="p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-white/5 transition-colors">
+        <h3 className="text-sm font-semibold text-slate-900">{command ? "Befehl bearbeiten" : "Neuen Befehl erstellen"}</h3>
+        <button type="button" onClick={onCancel} aria-label={translateUI("Schließen")}
+          className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
           <X size={16} />
         </button>
       </div>
 
       {error && (
         <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-          <p className="text-sm text-red-400">{error}</p>
+          <p className="text-sm text-red-700">{error}</p>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className={labelCls}>Befehl</label>
+          <label className={labelCls}><T>Befehl</T></label>
           <input type="text" value={cmd} onChange={(e) => setCmd(e.target.value)}
             placeholder="netstat -an" className={inputCls + " font-mono"} required />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className={labelCls}>Plattform</label>
+            <label className={labelCls}><T>Plattform</T></label>
             <select value={platform} onChange={(e) => setPlatform(e.target.value)}
               className={inputCls + " cursor-pointer"}>
-              <option value="">Keine</option>
+              <option value=""><T>Keine</T></option>
               {PLATFORMS.map((p) => <option key={p} value={p}>{p}</option>)}
             </select>
           </div>
           <div>
-            <label className={labelCls}>Kategorie</label>
+            <label className={labelCls}><T>Kategorie</T></label>
             <select value={category} onChange={(e) => setCategory(e.target.value)}
               className={inputCls + " cursor-pointer"}>
-              <option value="">Keine</option>
+              <option value=""><T>Keine</T></option>
               {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
         </div>
 
         <div>
-          <label className={labelCls}>Zweck</label>
+          <label className={labelCls}><T>Zweck</T></label>
           <input type="text" value={purpose} onChange={(e) => setPurpose(e.target.value)}
-            placeholder="Wofür wird dieser Befehl verwendet?" className={inputCls} />
+            placeholder={translateUI("Wofür wird dieser Befehl verwendet?")} className={inputCls} />
         </div>
 
         <div>
-          <label className={labelCls}>Beispiel</label>
+          <label className={labelCls}><T>Beispiel</T></label>
           <textarea value={example} onChange={(e) => setExample(e.target.value)}
             placeholder="netstat -an | findstr :80" rows={3} className={inputCls + " resize-none font-mono"} />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className={labelCls}>Typischer Anwendungsfall</label>
+            <label className={labelCls}><T>Typischer Anwendungsfall</T></label>
             <textarea value={typicalUse} onChange={(e) => setTypicalUse(e.target.value)}
-              placeholder="z.B. offene Ports prüfen" rows={2} className={inputCls + " resize-none"} />
+              placeholder={translateUI("z.B. offene Ports prüfen")} rows={2} className={inputCls + " resize-none"} />
           </div>
           <div>
-            <label className={labelCls}>Notizen</label>
+            <label className={labelCls}><T>Notizen</T></label>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
-              placeholder="Hinweise, Varianten…" rows={2} className={inputCls + " resize-none"} />
+              placeholder={translateUI("Hinweise, Varianten…")} rows={2} className={inputCls + " resize-none"} />
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-2 border-t border-white/5">
+        <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-200">
           <button type="button" onClick={onCancel}
-            className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
-            Abbrechen
-          </button>
+            className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors"><T>Abbrechen</T></button>
           <button type="submit" disabled={loading}
             className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold text-white transition-colors">
-            {loading ? "Wird gespeichert…" : "Speichern"}
+            {loading ? translateUI("Wird gespeichert…") : translateUI("Speichern")}
           </button>
         </div>
       </form>

@@ -1,5 +1,8 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+import { useLanguage } from "@/contexts/LanguageContext";
+
 import { useEffect, useState, useMemo } from "react";
 import {
   StickyNote,
@@ -56,16 +59,16 @@ const FEATURE_CARDS = [
 ];
 
 const accentMap: Record<string, string> = {
-  blue:    "bg-blue-500/10 border-blue-500/15 text-blue-400",
-  violet:  "bg-violet-500/10 border-violet-500/15 text-violet-400",
-  emerald: "bg-emerald-500/10 border-emerald-500/15 text-emerald-400",
-  amber:   "bg-amber-500/10 border-amber-500/15 text-amber-400",
-  cyan:    "bg-cyan-500/10 border-cyan-500/15 text-cyan-400",
-  slate:   "bg-slate-500/10 border-slate-500/15 text-slate-400",
+  blue:    "bg-blue-500/10 border-blue-500/15 text-blue-700",
+  violet:  "bg-violet-500/10 border-violet-500/15 text-violet-700",
+  emerald: "bg-emerald-500/10 border-emerald-500/15 text-emerald-700",
+  amber:   "bg-amber-500/10 border-amber-500/15 text-amber-700",
+  cyan:    "bg-cyan-500/10 border-cyan-500/15 text-cyan-700",
+  slate:   "bg-slate-500/10 border-slate-500/15 text-slate-600",
 };
 
 const selectCls =
-  "text-xs px-3 py-1.5 rounded-lg bg-[#0d0f14] border border-white/10 text-slate-400 focus:outline-none focus:border-blue-500/30 cursor-pointer transition-all";
+  "text-xs px-3 py-1.5 rounded-lg bg-[#f3f8ff] border border-slate-200 text-slate-600 focus:outline-none focus:border-blue-500/30 cursor-pointer transition-all";
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
@@ -74,58 +77,34 @@ interface Notif { type: "success" | "error"; message: string; }
 // ── Public view (unauthenticated) ─────────────────────────────────────────
 
 function PublicView() {
+  const { language } = useLanguage();
+  const de = language === "de";
   return (
-    <div className="space-y-8">
-      <PageHeader
-        icon={StickyNote}
-        title="Praxisnotizen"
-        description="Persönlicher Arbeitsbereich für technische Notizen und FISI-Dokumentation"
-      />
-
-      <div className="rounded-xl border border-white/5 bg-white/[0.02] p-6 space-y-4">
-        <p className="text-sm text-slate-400 leading-relaxed max-w-2xl">
-          Praxisnotizen ist als persönlicher Arbeitsbereich für technische Notizen,
-          Tagesaufgaben, Troubleshooting-Ideen, Befehle, Tags und strukturierte
-          FISI-Dokumentation vorgesehen.
+    <div className="space-y-7">
+      <PageHeader icon={StickyNote} title={de ? "Praxisnotizen" : "Praktiki qeydlər"}
+        description={de ? "Persönlicher Bereich für IT-Notizen, Aufgaben und dokumentierte Praxiserfahrung." : "IT qeydləri, tapşırıqlar və praktiki təcrübələrin sənədləşdirilməsi üçün şəxsi bölmə."} />
+      <section className="rounded-2xl border border-[#c7def5] bg-gradient-to-br from-[#e9f4ff] to-white p-6 sm:p-8">
+        <h2 className="text-xl font-extrabold text-[#193e68]">{de ? "Dein Wissen. Strukturiert dokumentiert." : "Öyrəndiklərini sistemli şəkildə sənədləşdir."}</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-[#506f8a]">
+          {de ? "Sammle technische Erkenntnisse, Fehleranalysen, Befehle und Aufgaben in deinem persönlichen Bereich. Eigene Einträge kannst du nach kostenloser Registrierung erstellen und speichern." : "Texniki biliklərini, xəta təhlillərini, əmrləri və tapşırıqlarını şəxsi iş mühitində topla. Öz qeydlərini yaratmaq və saxlamaq üçün pulsuz qeydiyyatdan keç."}
         </p>
-        <p className="text-sm text-slate-400 leading-relaxed max-w-2xl">
-          Zum Erstellen und Verwalten eigener Praxisnotizen ist ein kostenloses
-          OrikOS-Konto erforderlich.
-        </p>
-        <div className="flex flex-wrap gap-3 pt-1">
-          <Link
-            href="/registrieren"
-            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors"
-          >
-            Kostenlos registrieren
-          </Link>
-          <Link
-            href="/login"
-            className="px-4 py-2 rounded-lg border border-white/10 hover:border-white/20 text-sm font-medium text-slate-300 hover:text-white transition-all"
-          >
-            Einloggen
-          </Link>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link href="/registrieren" className="rounded-xl bg-[#126acc] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#075aae]">{de ? "Kostenlos registrieren" : "Pulsuz qeydiyyatdan keç"}</Link>
+          <Link href="/beispiele" className="rounded-xl border border-[#b8d6f1] bg-white px-5 py-2.5 text-sm font-bold text-[#1769ae] hover:bg-blue-50">{de ? "Ausgefüllte Beispiele ansehen" : "Doldurulmuş nümunələrə bax"}</Link>
         </div>
-      </div>
-
-      <div>
-        <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">
-          Funktionen
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      </section>
+      <section aria-labelledby="note-features">
+        <h2 id="note-features" className="mb-5 text-sm font-extrabold uppercase tracking-wider text-[#345e86]">{de ? "Geplante und verfügbare Funktionen" : "Mövcud və nəzərdə tutulan imkanlar"}</h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURE_CARDS.map(({ icon: Icon, title, desc, accent }) => (
-            <div key={title} className="rounded-xl border border-white/5 bg-white/[0.02] p-5 space-y-3">
-              <div className={`w-8 h-8 rounded-lg border flex items-center justify-center ${accentMap[accent]}`}>
-                <Icon size={14} />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-white mb-1">{title}</h3>
-                <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
-              </div>
-            </div>
+            <article key={title} className="rounded-2xl border border-[#d4e5f5] bg-white p-5">
+              <div className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl border ${accentMap[accent]}`}><Icon size={19} /></div>
+              <h3 className="text-sm font-bold text-[#193e68]"><T>{title}</T></h3>
+              <p className="mt-2 text-xs leading-6 text-[#52718c]"><T>{desc}</T></p>
+            </article>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }
@@ -133,6 +112,7 @@ function PublicView() {
 // ── Main page ─────────────────────────────────────────────────────────────
 
 export default function PraxisNotizenPage() {
+  const translateUI = useT();
   const { user, loading: authLoading } = useAuth();
 
   // Notes — null means "not yet fetched"; avoids synchronous setState in effects
@@ -267,39 +247,39 @@ export default function PraxisNotizenPage() {
         <div
           className={`fixed top-5 right-5 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl border shadow-xl text-sm font-medium max-w-xs ${
             notif.type === "success"
-              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-              : "bg-red-500/10 border-red-500/20 text-red-400"
+              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700"
+              : "bg-red-500/10 border-red-500/20 text-red-700"
           }`}
         >
           {notif.type === "success"
             ? <CheckCircle2 size={15} />
             : <AlertCircle size={15} />
           }
-          {notif.message}
+          {translateUI(notif.message)}
         </div>
       )}
 
       <PageHeader
         icon={StickyNote}
-        title="Praxisnotizen"
-        description="Ihr persönlicher Arbeitsbereich für technische Notizen, Tagesaufgaben, Troubleshooting-Ideen, Befehle, Tags und strukturierte FISI-Dokumentation."
+        title={translateUI("Praxisnotizen")}
+        description={translateUI("Ihr persönlicher Arbeitsbereich für technische Notizen, Tagesaufgaben, Troubleshooting-Ideen, Befehle, Tags und strukturierte FISI-Dokumentation.")}
       />
 
       {/* Toolbar */}
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-0">
-          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Notizen durchsuchen…"
-            className="w-full pl-9 pr-8 py-2 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
+            placeholder={translateUI("Notizen durchsuchen…")}
+            className="w-full pl-9 pr-8 py-2 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-600 transition-colors"
             >
               <X size={13} />
             </button>
@@ -309,36 +289,34 @@ export default function PraxisNotizenPage() {
           onClick={() => { setShowCreateForm(true); setEditNote(null); }}
           className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors shrink-0"
         >
-          <Plus size={15} />
-          Neue Notiz
-        </button>
+          <Plus size={15} /><T>Neue Notiz</T></button>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
         <select value={filterStatus}   onChange={(e) => setFilterStatus(e.target.value)}   className={selectCls}>
-          <option value="">Status</option>
+          <option value=""><T>Status</T></option>
           {STATUS_OPTS.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
         </select>
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className={selectCls}>
-          <option value="">Kategorie</option>
+          <option value=""><T>Kategorie</T></option>
           {CATEGORY_OPTS.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
         <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className={selectCls}>
-          <option value="">Priorität</option>
+          <option value=""><T>Priorität</T></option>
           {PRIORITY_OPTS.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
         </select>
         {hasActiveFilters && (
           <button
             onClick={() => { setFilterStatus(""); setFilterCategory(""); setFilterPriority(""); }}
-            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 px-2.5 py-1.5 rounded-lg hover:bg-white/5 transition-all"
+            className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-700 px-2.5 py-1.5 rounded-lg hover:bg-blue-50 transition-all"
           >
             <X size={11} />
             Filter zurücksetzen
           </button>
         )}
         {notes !== null && notes.length > 0 && (
-          <span className="ml-auto text-[11px] text-slate-600">
+          <span className="ml-auto text-[11px] text-slate-500">
             {filteredNotes.length} / {notes.length} Notizen
           </span>
         )}
@@ -355,23 +333,23 @@ export default function PraxisNotizenPage() {
       {!notesLoading && notesError && (
         <div className="flex justify-center py-16">
           <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-5 max-w-sm text-center">
-            <p className="text-sm text-red-400 font-medium mb-1">Fehler beim Laden</p>
-            <p className="text-xs text-red-400/70">Praxisnotizen konnten nicht geladen werden.</p>
+            <p className="text-sm text-red-700 font-medium mb-1"><T>Fehler beim Laden</T></p>
+            <p className="text-xs text-red-700/70"><T>Praxisnotizen konnten nicht geladen werden.</T></p>
           </div>
         </div>
       )}
 
       {!notesLoading && !notesError && notes !== null && notes.length === 0 && !showCreateForm && (
         <EmptyState
-          title="Noch keine Praxisnotizen vorhanden"
-          description="Erstellen Sie Ihre erste Notiz, um technische Aufgaben, Ideen oder Fehleranalysen strukturiert festzuhalten."
+          title={translateUI("Noch keine Praxisnotizen vorhanden")}
+          description={translateUI("Erstellen Sie Ihre erste Notiz, um technische Aufgaben, Ideen oder Fehleranalysen strukturiert festzuhalten.")}
         />
       )}
 
       {!notesLoading && !notesError && filteredNotes.length === 0 && (notes?.length ?? 0) > 0 && (
         <EmptyState
-          title="Keine Treffer"
-          description="Keine Notiz entspricht den aktuellen Such- und Filterkriterien."
+          title={translateUI("Keine Treffer")}
+          description={translateUI("Keine Notiz entspricht den aktuellen Such- und Filterkriterien.")}
         />
       )}
 

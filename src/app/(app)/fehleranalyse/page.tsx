@@ -1,5 +1,10 @@
 "use client";
 
+import { useLanguage } from "@/contexts/LanguageContext";
+import { demoText } from "@/lib/demo-i18n";
+
+import { T, useT } from "@/components/TranslatedText";
+
 import { useEffect, useState, useMemo } from "react";
 import {
   Bug, AlertCircle, Search as SearchIcon, Lightbulb, Target, Tag,
@@ -24,16 +29,16 @@ function getDifficultyConfig(d: string | null): DifficultyConfig {
     case "einfach":
     case "leicht":
     case "easy":
-      return { label: d === "einfach" ? "Einfach" : "Leicht", className: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20" };
+      return { label: d === "einfach" ? "Einfach" : "Leicht", className: "bg-emerald-500/15 text-emerald-700 border-emerald-500/20" };
     case "mittel":
     case "medium":
-      return { label: "Mittel", className: "bg-amber-500/15 text-amber-400 border-amber-500/20" };
+      return { label: "Mittel", className: "bg-amber-500/15 text-amber-700 border-amber-500/20" };
     case "fortgeschritten":
     case "schwer":
     case "hard":
-      return { label: d === "schwer" ? "Schwer" : "Fortgeschritten", className: "bg-red-500/15 text-red-400 border-red-500/20" };
+      return { label: d === "schwer" ? "Schwer" : "Fortgeschritten", className: "bg-red-500/15 text-red-700 border-red-500/20" };
     default:
-      return { label: d ?? "—", className: "bg-white/5 text-slate-400 border-white/10" };
+      return { label: d ?? "—", className: "bg-blue-50 text-slate-600 border-slate-200" };
   }
 }
 
@@ -44,10 +49,10 @@ function Step({
 }) {
   if (!value) return null;
   const colors: Record<string, string> = {
-    slate: "bg-slate-500/10 border-slate-500/20 text-slate-400",
-    amber: "bg-amber-500/10 border-amber-500/20 text-amber-400",
-    blue: "bg-blue-500/10 border-blue-500/20 text-blue-400",
-    emerald: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
+    slate: "bg-slate-500/10 border-slate-500/20 text-slate-600",
+    amber: "bg-amber-500/10 border-amber-500/20 text-amber-700",
+    blue: "bg-blue-500/10 border-blue-500/20 text-blue-700",
+    emerald: "bg-emerald-500/10 border-emerald-500/20 text-emerald-700",
   };
   return (
     <div className="flex gap-3">
@@ -55,8 +60,8 @@ function Step({
         <Icon size={13} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">{label}</p>
-        <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line">{value}</p>
+        <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider mb-1">{label}</p>
+        <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-line">{value}</p>
       </div>
     </div>
   );
@@ -75,12 +80,12 @@ function UserTroubleshootingCard({
   const diff = getDifficultyConfig(item.difficulty);
 
   return (
-    <div className="rounded-xl border border-blue-500/10 bg-[#0f1623] p-5 space-y-4">
+    <div className="rounded-xl border border-blue-500/10 bg-white p-5 space-y-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-white">{item.title}</h3>
+          <h3 className="text-sm font-semibold text-slate-900">{item.title}</h3>
           {item.category && (
-            <span className="inline-flex items-center gap-1 text-[11px] text-slate-500 mt-1">
+            <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 mt-1">
               <Tag size={10} />{item.category}
             </span>
           )}
@@ -93,24 +98,20 @@ function UserTroubleshootingCard({
           )}
           {confirmDelete ? (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-red-400">Löschen?</span>
+              <span className="text-xs text-red-700"><T>Löschen?</T></span>
               <button onClick={() => onDelete(item.id)}
-                className="px-2.5 py-1 rounded-lg bg-red-500/15 text-red-400 hover:bg-red-500/25 text-xs font-medium transition-colors">
-                Ja
-              </button>
+                className="px-2.5 py-1 rounded-lg bg-red-500/15 text-red-700 hover:bg-red-500/25 text-xs font-medium transition-colors"><T>Ja</T></button>
               <button onClick={() => setConfirmDelete(false)}
-                className="px-2.5 py-1 rounded-lg bg-white/5 text-slate-400 hover:bg-white/10 text-xs font-medium transition-colors">
-                Nein
-              </button>
+                className="px-2.5 py-1 rounded-lg bg-blue-50 text-slate-600 hover:bg-blue-50 text-xs font-medium transition-colors"><T>Nein</T></button>
             </div>
           ) : (
             <>
               <button onClick={() => onEdit(item)} aria-label="Bearbeiten"
-                className="p-1.5 rounded-lg text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+                className="p-1.5 rounded-lg text-slate-600 hover:text-blue-700 hover:bg-blue-500/10 transition-colors">
                 <Pencil size={13} />
               </button>
               <button onClick={() => setConfirmDelete(true)} aria-label="Löschen"
-                className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors">
+                className="p-1.5 rounded-lg text-slate-600 hover:text-red-700 hover:bg-red-500/10 transition-colors">
                 <Trash2 size={13} />
               </button>
             </>
@@ -127,8 +128,8 @@ function UserTroubleshootingCard({
 
       {item.result && (
         <div className="rounded-lg bg-emerald-500/5 border border-emerald-500/15 px-4 py-3">
-          <p className="text-[11px] font-semibold text-emerald-500 uppercase tracking-wider mb-1">Ergebnis</p>
-          <p className="text-xs text-emerald-300 leading-relaxed">{item.result}</p>
+          <p className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider mb-1"><T>Ergebnis</T></p>
+          <p className="text-xs text-emerald-800 leading-relaxed">{item.result}</p>
         </div>
       )}
     </div>
@@ -142,6 +143,7 @@ function DemoCaseCard({ c, user, onCopied }: {
 }) {
   const diff = getDifficultyConfig(c.difficulty);
   const [copying, setCopying] = useState(false);
+  const { language } = useLanguage();
 
   async function handleCopy() {
     if (!user || !supabase) return;
@@ -158,54 +160,52 @@ function DemoCaseCard({ c, user, onCopied }: {
       result: c.result,
     });
     setCopying(false);
-    if (err) { onCopied("Fehler beim Übernehmen."); return; }
-    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+    if (err) { onCopied(language === "de" ? "Fehler beim Übernehmen." : "Şablon köçürülmədi."); return; }
+    onCopied(language === "de" ? "Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen." : "Şablon şəxsi iş mühitinə köçürüldü.");
   }
 
   return (
-    <div className="rounded-xl border border-white/5 bg-white/[0.02] hover:border-white/10 transition-all duration-150 p-5 space-y-5">
+    <div className="rounded-xl border border-slate-200 bg-blue-50 hover:border-slate-200 transition-all duration-150 p-5 space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-white">{c.title}</h3>
+          <h3 className="text-sm font-semibold text-slate-900">{demoText(c.title, language)}</h3>
           {c.category && (
-            <span className="inline-flex items-center gap-1 text-[11px] text-slate-500 mt-1">
-              <Tag size={10} />{c.category}
+            <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 mt-1">
+              <Tag size={10} />{demoText(c.category, language)}
             </span>
           )}
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {c.difficulty && (
             <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full border ${diff.className}`}>
-              {diff.label}
+              {demoText(diff.label, language)}
             </span>
           )}
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Step icon={AlertCircle} label="Symptome" value={c.symptoms} accent="amber" />
-        <Step icon={SearchIcon} label="Prüfschritte" value={c.checks} accent="blue" />
-        <Step icon={Lightbulb} label="Ursache" value={c.root_cause} accent="slate" />
-        <Step icon={Target} label="Lösung" value={c.solution} accent="emerald" />
+        <Step icon={AlertCircle} label="Symptome" value={demoText(c.symptoms, language)} accent="amber" />
+        <Step icon={SearchIcon} label="Prüfschritte" value={demoText(c.checks, language)} accent="blue" />
+        <Step icon={Lightbulb} label="Ursache" value={demoText(c.root_cause, language)} accent="slate" />
+        <Step icon={Target} label="Lösung" value={demoText(c.solution, language)} accent="emerald" />
       </div>
       {c.result && (
         <div className="rounded-lg bg-emerald-500/5 border border-emerald-500/15 px-4 py-3">
-          <p className="text-[11px] font-semibold text-emerald-500 uppercase tracking-wider mb-1">Ergebnis</p>
-          <p className="text-xs text-emerald-300 leading-relaxed">{c.result}</p>
+          <p className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider mb-1"><T>Ergebnis</T></p>
+          <p className="text-xs text-emerald-800 leading-relaxed">{demoText(c.result, language)}</p>
         </div>
       )}
-      <div className="flex items-center justify-between pt-3 border-t border-white/5">
-        <span className="text-[10px] text-slate-700 uppercase tracking-wider font-medium">Demo</span>
+      <div className="flex items-center justify-between pt-3 border-t border-slate-200">
+        <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Demo</span>
         {user ? (
           <button onClick={handleCopy} disabled={copying}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-400 hover:text-blue-300 transition-all disabled:opacity-50">
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-700 hover:text-blue-800 transition-all disabled:opacity-50">
             <Copy size={11} />
-            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+            {copying ? (language === "de" ? "Wird übernommen…" : "Köçürülür…") : (language === "de" ? "Als Vorlage übernehmen" : "Şablon kimi götür")}
           </button>
         ) : (
-          <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 text-[11px] text-slate-600 cursor-not-allowed">
-            <Lock size={11} />
-            Anmeldung erforderlich
-          </button>
+          <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
+            <Lock size={11} /><T>Anmeldung erforderlich</T></button>
         )}
       </div>
     </div>
@@ -339,29 +339,29 @@ function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }
       {!open ? (
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 text-xs font-medium text-amber-400 hover:text-amber-300 transition-all"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 text-xs font-medium text-amber-700 hover:text-amber-800 transition-all"
         >
           <SearchIcon size={13} />
           Checkliste verwenden
         </button>
       ) : (
-        <div className="rounded-xl border border-amber-500/15 bg-[#141008] p-5 space-y-4">
+        <div className="rounded-xl border border-amber-500/15 bg-[#fff7ed] p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-semibold text-amber-400 uppercase tracking-wider">Troubleshooting-Checkliste</h3>
-            <button onClick={() => { setOpen(false); setSelected(null); }} className="text-slate-500 hover:text-slate-300 transition-colors">
+            <h3 className="text-xs font-semibold text-amber-700 uppercase tracking-wider"><T>Troubleshooting-Checkliste</T></h3>
+            <button onClick={() => { setOpen(false); setSelected(null); }} className="text-slate-600 hover:text-slate-700 transition-colors">
               <Plus size={14} className="rotate-45" />
             </button>
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-[10px] text-slate-500 uppercase tracking-wider">Problemtyp auswählen</label>
+            <label className="text-[10px] text-slate-600 uppercase tracking-wider"><T>Problemtyp auswählen</T></label>
             <div className="flex flex-wrap gap-1.5">
               {types.map((t) => (
                 <button key={t} onClick={() => setSelected(t)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                     selected === t
-                      ? "bg-amber-600/80 text-white"
-                      : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200"
+                      ? "bg-amber-600/80 text-slate-900"
+                      : "bg-blue-50 text-slate-600 hover:bg-blue-50 hover:text-slate-800"
                   }`}>
                   {t}
                 </button>
@@ -371,14 +371,14 @@ function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }
 
           {activeCL && (
             <div className="space-y-2">
-              <div className="rounded-lg bg-white/[0.02] border border-white/5 p-4 space-y-1.5">
+              <div className="rounded-lg bg-blue-50 border border-slate-200 p-4 space-y-1.5">
                 {activeCL.map((step, i) => (
-                  <p key={i} className="text-xs text-slate-300">{step}</p>
+                  <p key={i} className="text-xs text-slate-700">{step}</p>
                 ))}
               </div>
               <button
                 onClick={() => { onInsert(activeCL.join("\n")); setOpen(false); setSelected(null); }}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-600/80 hover:bg-amber-500/80 text-xs font-semibold text-white transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-600/80 hover:bg-amber-500/80 text-xs font-semibold text-slate-900 transition-colors"
               >
                 In Prüfschritte einfügen
               </button>
@@ -391,6 +391,7 @@ function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }
 }
 
 export default function FehleranalysePage() {
+  const translateUI = useT();
   const { user } = useAuth();
 
   const [cases, setCases] = useState<FisiTroubleshootingCase[]>([]);
@@ -495,25 +496,25 @@ export default function FehleranalysePage() {
       {notif && (
         <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-xl border shadow-xl text-sm font-medium transition-all ${
           notif.kind === "success"
-            ? "bg-emerald-500/15 border-emerald-500/20 text-emerald-300"
-            : "bg-red-500/15 border-red-500/20 text-red-300"
+            ? "bg-emerald-500/15 border-emerald-500/20 text-emerald-800"
+            : "bg-red-500/15 border-red-500/20 text-red-800"
         }`}>
           {notif.kind === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
-          {notif.message}
+          {translateUI(notif.message)}
         </div>
       )}
 
       <PageHeader
         icon={Bug}
-        title="Fehleranalyse"
-        description="Strukturierte Troubleshooting-Fälle: Problem, Prüfung, Ursache, Lösung"
+        title={translateUI("Fehleranalyse")}
+        description={translateUI("Strukturierte Troubleshooting-Fälle: Problem, Prüfung, Ursache, Lösung")}
       />
 
       {/* Personal workspace */}
       {user && (
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Meine Fehleranalysen</h2>
+            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider"><T>Meine Fehleranalysen</T></h2>
             {!showCreateForm && (
               <button onClick={() => setShowCreateForm(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors">
@@ -539,26 +540,26 @@ export default function FehleranalysePage() {
             <>
               {userCases.length > 0 && (
                 <div className="mb-4 relative">
-                  <SearchIcon size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                  <SearchIcon size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
                   <input
                     type="text"
                     value={userQuery}
                     onChange={(e) => setUserQuery(e.target.value)}
-                    placeholder="Titel, Kategorie oder Schwierigkeit suchen..."
-                    className="w-full max-w-xl pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 transition-all"
+                    placeholder={translateUI("Titel, Kategorie oder Schwierigkeit suchen...")}
+                    className="w-full max-w-xl pl-10 pr-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 transition-all"
                   />
                 </div>
               )}
               {userCases.length === 0 && !showCreateForm && (
                 <EmptyPersonalState
-                  title="Noch keine Fehleranalysen"
-                  description="Dokumentieren Sie Troubleshooting-Fälle strukturiert mit Symptomen, Prüfschritten, Ursache und Lösung."
+                  title={translateUI("Noch keine Fehleranalysen")}
+                  description={translateUI("Dokumentieren Sie Troubleshooting-Fälle strukturiert mit Symptomen, Prüfschritten, Ursache und Lösung.")}
                   buttonLabel="Fehleranalyse hinzufügen"
                   onAction={() => setShowCreateForm(true)}
                 />
               )}
               {userCases.length > 0 && filteredUserCases.length === 0 && (
-                <EmptyState title="Keine Treffer" description={`Kein Fall gefunden für "${userQuery}".`} />
+                <EmptyState title={translateUI("Keine Treffer")} description={`Kein Fall gefunden für "${userQuery}".`} />
               )}
               {filteredUserCases.length > 0 && (
                 <div className="space-y-5">
@@ -575,7 +576,7 @@ export default function FehleranalysePage() {
       {/* Hilfen & Vorlagen */}
       {user && (
         <div className="mb-10">
-          <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Hilfen &amp; Vorlagen</h2>
+          <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">Hilfen &amp; Vorlagen</h2>
           <ChecklistHelper onInsert={(cl) => {
             setChecklistPrefill(cl);
             setShowCreateForm(true);
@@ -585,11 +586,11 @@ export default function FehleranalysePage() {
       )}
 
       {/* Reference section */}
-      <ReferenceSection title="Referenz-Fehleranalysen">
+      <ReferenceSection title={translateUI("Referenz-Fehleranalysen")}>
         {demoLoading && <LoadingState />}
         {demoError && <ErrorState />}
         {!demoLoading && !demoError && cases.length === 0 && (
-          <EmptyState title="Keine Fehleranalysen vorhanden" description="Es wurden noch keine Troubleshooting-Fälle angelegt." />
+          <EmptyState title={translateUI("Keine Fehleranalysen vorhanden")} description={translateUI("Es wurden noch keine Troubleshooting-Fälle angelegt.")} />
         )}
         {!demoLoading && !demoError && cases.length > 0 && (
           <div className="space-y-5">

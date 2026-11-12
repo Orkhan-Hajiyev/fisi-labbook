@@ -1,5 +1,10 @@
 "use client";
 
+import { useLanguage } from "@/contexts/LanguageContext";
+import { demoText } from "@/lib/demo-i18n";
+
+import { T, useT } from "@/components/TranslatedText";
+
 import { useEffect, useState, useMemo } from "react";
 import { Server, Network, Globe, Cpu, Plus, Search, X, Edit2, Trash2, AlertCircle, CheckCircle, Copy, Lock } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
@@ -29,9 +34,9 @@ function NetRow({ icon: Icon, label, value }: { icon: React.ElementType; label: 
   if (!value) return null;
   return (
     <div className="flex items-center gap-2 py-1.5">
-      <Icon size={12} className="text-slate-600 shrink-0" />
-      <span className="text-[11px] text-slate-500 w-20 shrink-0">{label}</span>
-      <code className="text-xs text-cyan-300 font-mono bg-cyan-500/5 border border-cyan-500/10 px-2 py-0.5 rounded">{value}</code>
+      <Icon size={12} className="text-slate-500 shrink-0" />
+      <span className="text-[11px] text-slate-600 w-20 shrink-0"><T>{label}</T></span>
+      <code className="text-xs text-cyan-800 font-mono bg-cyan-500/5 border border-cyan-500/10 px-2 py-0.5 rounded">{value}</code>
     </div>
   );
 }
@@ -45,6 +50,7 @@ function DemoSystemCard({ sys, services, user, onCopied }: {
   onCopied: (msg: string) => void;
 }) {
   const [copying, setCopying] = useState(false);
+  const { language } = useLanguage();
 
   async function handleCopy() {
     if (!user || !supabase) return;
@@ -62,27 +68,27 @@ function DemoSystemCard({ sys, services, user, onCopied }: {
       notes: sys.notes,
     });
     setCopying(false);
-    if (err) { onCopied("Fehler beim Übernehmen."); return; }
-    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+    if (err) { onCopied(language === "de" ? "Fehler beim Übernehmen." : "Şablon köçürülmədi."); return; }
+    onCopied(language === "de" ? "Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen." : "Şablon şəxsi iş mühitinə köçürüldü.");
   }
 
   return (
-    <div className="rounded-xl border border-white/5 bg-white/[0.015] p-5 space-y-3 opacity-80">
+    <div className="rounded-xl border border-slate-200 bg-blue-50 p-5 space-y-3 opacity-80">
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 rounded-lg bg-cyan-500/10 border border-cyan-500/15 flex items-center justify-center shrink-0">
-          <Server size={16} className="text-cyan-400" />
+          <Server size={16} className="text-cyan-700" />
         </div>
         <div>
-          <h3 className="text-sm font-bold text-slate-300 font-mono">{sys.hostname}</h3>
-          {sys.role && <p className="text-xs text-slate-500">{sys.role}</p>}
+          <h3 className="text-sm font-bold text-slate-700 font-mono">{sys.hostname}</h3>
+          {sys.role && <p className="text-xs text-slate-600">{demoText(sys.role, language)}</p>}
         </div>
         {sys.os && (
-          <span className="ml-auto text-[11px] bg-white/5 border border-white/10 text-slate-500 px-2 py-0.5 rounded-md flex items-center gap-1.5">
+          <span className="ml-auto text-[11px] bg-blue-50 border border-slate-200 text-slate-600 px-2 py-0.5 rounded-md flex items-center gap-1.5">
             <Cpu size={10} />{sys.os}
           </span>
         )}
       </div>
-      <div className="rounded-lg bg-[#0a0c10] border border-white/5 px-4 py-2 divide-y divide-white/5">
+      <div className="rounded-lg bg-[#f1f6fd] border border-slate-200 px-4 py-2 divide-y divide-white/5">
         <NetRow icon={Network} label="IP-Adresse" value={sys.ip_address} />
         <NetRow icon={Globe} label="Gateway" value={sys.gateway} />
         <NetRow icon={Globe} label="DNS" value={sys.dns} />
@@ -91,23 +97,22 @@ function DemoSystemCard({ sys, services, user, onCopied }: {
       {services.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {services.map((s, i) => (
-            <span key={i} className="text-[11px] bg-blue-500/10 text-blue-300 border border-blue-500/15 px-2 py-0.5 rounded">{s}</span>
+            <span key={i} className="text-[11px] bg-blue-500/10 text-blue-800 border border-blue-500/15 px-2 py-0.5 rounded">{demoText(s, language)}</span>
           ))}
         </div>
       )}
-      <div className="flex items-center justify-between pt-3 border-t border-white/5">
-        <span className="text-[10px] text-slate-700 uppercase tracking-wider font-medium">Demo</span>
+      {sys.notes && <p className="text-xs leading-relaxed text-slate-600">{demoText(sys.notes, language)}</p>}
+      <div className="flex items-center justify-between pt-3 border-t border-slate-200">
+        <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Demo</span>
         {user ? (
           <button onClick={handleCopy} disabled={copying}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-400 hover:text-blue-300 transition-all disabled:opacity-50">
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-700 hover:text-blue-800 transition-all disabled:opacity-50">
             <Copy size={11} />
-            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+            {copying ? (language === "de" ? "Wird übernommen…" : "Köçürülür…") : (language === "de" ? "Als Vorlage übernehmen" : "Şablon kimi götür")}
           </button>
         ) : (
-          <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 text-[11px] text-slate-600 cursor-not-allowed">
-            <Lock size={11} />
-            Anmeldung erforderlich
-          </button>
+          <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
+            <Lock size={11} /><T>Anmeldung erforderlich</T></button>
         )}
       </div>
     </div>
@@ -132,24 +137,24 @@ function UserSystemCard({
   }
 
   return (
-    <div className="rounded-xl border border-white/5 bg-white/[0.02] hover:border-white/10 transition-all duration-150 p-5 space-y-3 flex flex-col">
+    <div className="rounded-xl border border-slate-200 bg-blue-50 hover:border-slate-200 transition-all duration-150 p-5 space-y-3 flex flex-col">
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 rounded-lg bg-cyan-500/10 border border-cyan-500/15 flex items-center justify-center shrink-0">
-          <Server size={16} className="text-cyan-400" />
+          <Server size={16} className="text-cyan-700" />
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="text-sm font-bold text-white font-mono truncate">{system.hostname}</h3>
-          {system.role && <p className="text-xs text-slate-500">{system.role}</p>}
+          <h3 className="text-sm font-bold text-slate-900 font-mono truncate">{system.hostname}</h3>
+          {system.role && <p className="text-xs text-slate-600">{system.role}</p>}
         </div>
         {system.os && (
-          <span className="ml-auto shrink-0 text-[11px] bg-white/5 border border-white/10 text-slate-400 px-2 py-0.5 rounded-md flex items-center gap-1.5">
+          <span className="ml-auto shrink-0 text-[11px] bg-blue-50 border border-slate-200 text-slate-600 px-2 py-0.5 rounded-md flex items-center gap-1.5">
             <Cpu size={10} />{system.os}
           </span>
         )}
       </div>
 
       {(system.ip_address || system.gateway || system.dns || system.domain_name) && (
-        <div className="rounded-lg bg-[#0a0c10] border border-white/5 px-4 py-2 divide-y divide-white/5">
+        <div className="rounded-lg bg-[#f1f6fd] border border-slate-200 px-4 py-2 divide-y divide-white/5">
           <NetRow icon={Network} label="IP-Adresse" value={system.ip_address} />
           <NetRow icon={Globe} label="Gateway" value={system.gateway} />
           <NetRow icon={Globe} label="DNS" value={system.dns} />
@@ -160,34 +165,32 @@ function UserSystemCard({
       {services.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {services.map((s, i) => (
-            <span key={i} className="text-[11px] bg-blue-500/10 text-blue-300 border border-blue-500/15 px-2 py-0.5 rounded">{s}</span>
+            <span key={i} className="text-[11px] bg-blue-500/10 text-blue-800 border border-blue-500/15 px-2 py-0.5 rounded">{s}</span>
           ))}
         </div>
       )}
 
-      {system.notes && <p className="text-xs text-slate-400 leading-relaxed">{system.notes}</p>}
-      {lab && <p className="text-[11px] text-slate-600">Labor: {lab.title}</p>}
+      {system.notes && <p className="text-xs text-slate-600 leading-relaxed">{system.notes}</p>}
+      {lab && <p className="text-[11px] text-slate-500">Labor: {lab.title}</p>}
 
-      <div className="flex items-center justify-end pt-2 border-t border-white/5 mt-auto">
+      <div className="flex items-center justify-end pt-2 border-t border-slate-200 mt-auto">
         {confirmDelete ? (
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1 text-[11px] text-red-400"><AlertCircle size={10} />Wirklich löschen?</span>
+            <span className="flex items-center gap-1 text-[11px] text-red-700"><AlertCircle size={10} /><T>Wirklich löschen?</T></span>
             <button onClick={handleDelete} disabled={deleting}
-              className="text-[11px] font-semibold text-red-400 hover:text-red-300 disabled:opacity-50 transition-colors">
+              className="text-[11px] font-semibold text-red-700 hover:text-red-800 disabled:opacity-50 transition-colors">
               {deleting ? "…" : "Ja"}
             </button>
-            <button onClick={() => setConfirmDelete(false)} className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors">Nein</button>
+            <button onClick={() => setConfirmDelete(false)} className="text-[11px] text-slate-600 hover:text-slate-700 transition-colors"><T>Nein</T></button>
           </div>
         ) : (
           <div className="flex items-center gap-0.5">
             <button onClick={() => onEdit(system)}
-              className="flex items-center gap-1.5 text-[11px] text-slate-500 hover:text-blue-400 px-2 py-1 rounded-lg hover:bg-blue-500/10 transition-all">
-              <Edit2 size={11} />Bearbeiten
-            </button>
+              className="flex items-center gap-1.5 text-[11px] text-slate-600 hover:text-blue-700 px-2 py-1 rounded-lg hover:bg-blue-500/10 transition-all">
+              <Edit2 size={11} /><T>Bearbeiten</T></button>
             <button onClick={() => setConfirmDelete(true)}
-              className="flex items-center gap-1.5 text-[11px] text-slate-500 hover:text-red-400 px-2 py-1 rounded-lg hover:bg-red-500/10 transition-all">
-              <Trash2 size={11} />Löschen
-            </button>
+              className="flex items-center gap-1.5 text-[11px] text-slate-600 hover:text-red-700 px-2 py-1 rounded-lg hover:bg-red-500/10 transition-all">
+              <Trash2 size={11} /><T>Löschen</T></button>
           </div>
         )}
       </div>
@@ -198,6 +201,7 @@ function UserSystemCard({
 // ── Page ─────────────────────────────────────────────────────────────────
 
 export default function SystemePage() {
+  const translateUI = useT();
   const { user } = useAuth();
 
   const [systems,  setSystems]  = useState<FisiSystem[]>([]);
@@ -286,34 +290,33 @@ export default function SystemePage() {
     <div>
       {notif && (
         <div className={`fixed top-5 right-5 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl border shadow-xl text-sm font-medium max-w-xs ${
-          notif.type === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" : "bg-red-500/10 border-red-500/20 text-red-400"
+          notif.type === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700" : "bg-red-500/10 border-red-500/20 text-red-700"
         }`}>
           {notif.type === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
-          {notif.message}
+          {translateUI(notif.message)}
         </div>
       )}
 
-      <PageHeader icon={Server} title="Systeme" description="Infrastruktur- und Systemdokumentation verwalten" />
+      <PageHeader icon={Server} title={translateUI("Systeme")} description={translateUI("Infrastruktur- und Systemdokumentation verwalten")} />
 
       {user && (
         <div>
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Meine Systeme</h2>
+            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider"><T>Meine Systeme</T></h2>
             <button onClick={() => { setShowCreateForm(true); setEditSystem(null); }}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors">
-              <Plus size={13} />Neues System
-            </button>
+              <Plus size={13} /><T>Neues System</T></button>
           </div>
 
           {userSystems && userSystems.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-4">
               <div className="relative flex-1 min-w-0">
-                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
                 <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Systeme durchsuchen…"
-                  className="w-full pl-8 pr-7 py-1.5 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/40 transition-all" />
+                  placeholder={translateUI("Systeme durchsuchen…")}
+                  className="w-full pl-8 pr-7 py-1.5 rounded-lg bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 transition-all" />
                 {searchQuery && (
-                  <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400">
+                  <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-600">
                     <X size={12} />
                   </button>
                 )}
@@ -330,19 +333,19 @@ export default function SystemePage() {
           {userSystemsLoading && <LoadingState text="Meine Systeme werden geladen…" />}
           {!userSystemsLoading && userSystemsError && (
             <div className="rounded-xl bg-red-500/5 border border-red-500/15 p-5 text-center mb-6">
-              <p className="text-sm text-red-400">Fehler beim Laden der Systeme.</p>
+              <p className="text-sm text-red-700"><T>Fehler beim Laden der Systeme.</T></p>
             </div>
           )}
           {!userSystemsLoading && !userSystemsError && userSystems !== null && userSystems.length === 0 && !showCreateForm && (
             <EmptyPersonalState
               title="Noch keine eigenen Systeme vorhanden"
-              description="Dokumentieren Sie Ihre Laborumgebung, Hostnames, IP-Adressen und Dienste."
+              description={translateUI("Dokumentieren Sie Ihre Laborumgebung, Hostnames, IP-Adressen und Dienste.")}
               buttonLabel="Erstes System erstellen"
               onAction={() => setShowCreateForm(true)}
             />
           )}
           {!userSystemsLoading && !userSystemsError && filteredUserSystems.length === 0 && (userSystems?.length ?? 0) > 0 && (
-            <EmptyState title="Keine Treffer" description="Kein System entspricht dem Suchbegriff." />
+            <EmptyState title={translateUI("Keine Treffer")} description={translateUI("Kein System entspricht dem Suchbegriff.")} />
           )}
           {!userSystemsLoading && !userSystemsError && filteredUserSystems.length > 0 && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-2">
@@ -357,11 +360,11 @@ export default function SystemePage() {
         </div>
       )}
 
-      <ReferenceSection title="Demo-Systeme">
+      <ReferenceSection title={translateUI("Demo-Systeme")}>
         {loading && <LoadingState />}
         {error && <ErrorState />}
         {!loading && !error && systems.length === 0 && (
-          <EmptyState title="Keine Demo-Systeme vorhanden" description="Es wurden noch keine Beispiel-Systeme angelegt." />
+          <EmptyState title={translateUI("Keine Demo-Systeme vorhanden")} description={translateUI("Es wurden noch keine Beispiel-Systeme angelegt.")} />
         )}
         {!loading && !error && systems.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

@@ -1,10 +1,12 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+import { useLanguage } from "@/contexts/LanguageContext";
+
 import { useEffect, useState } from "react";
 import {
   FlaskConical, Server, Terminal, Bug, Container, BookOpen,
-  StickyNote, ArrowRight, Info, Plus,
-} from "lucide-react";
+  StickyNote, ArrowRight, Info, Plus, } from "lucide-react";
 import Link from "next/link";
 import StatCard from "@/components/StatCard";
 import LoadingState from "@/components/LoadingState";
@@ -31,14 +33,20 @@ interface PersonalStats {
 }
 
 export default function DashboardPage() {
+  const translateUI = useT();
+  const { language } = useLanguage();
   const { user } = useAuth();
+  const userId = user?.id;
 
   const [demoStats, setDemoStats] = useState<DemoStats | null>(null);
   const [demoLoading, setDemoLoading] = useState(!supabaseConfigMissing);
   const [demoError, setDemoError] = useState(false);
 
-  const [personalStats, setPersonalStats] = useState<PersonalStats | null>(null);
-  const [personalStatsError, setPersonalStatsError] = useState(false);
+  const [personalStatsResult, setPersonalStatsResult] = useState<{ userId: string; data: PersonalStats } | null>(null);
+  const [personalStatsErrorFor, setPersonalStatsErrorFor] = useState<string | null>(null);
+  // Keep data scoped to the account that initiated the request.
+  const personalStats = personalStatsResult && personalStatsResult.userId === user?.id ? personalStatsResult.data : null;
+  const personalStatsError = !!user && personalStatsErrorFor === user.id;
   const personalStatsLoading = !!user && personalStats === null && !personalStatsError;
 
   useEffect(() => {
@@ -66,29 +74,32 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    if (!user || !supabase) return;
+    if (!userId || !supabase) return;
+    let cancelled = false;
     Promise.all([
-      supabase!.from("fisi_user_labs").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase!.from("fisi_user_systems").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase!.from("fisi_user_commands").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase!.from("fisi_user_troubleshooting_cases").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase!.from("fisi_user_docker_services").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase!.from("fisi_user_notes").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase!.from("fisi_user_labs").select("id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase!.from("fisi_user_systems").select("id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase!.from("fisi_user_commands").select("id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase!.from("fisi_user_troubleshooting_cases").select("id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase!.from("fisi_user_docker_services").select("id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase!.from("fisi_user_notes").select("id", { count: "exact", head: true }).eq("user_id", userId),
     ]).then(([labs, systems, commands, troubleshooting, docker, notes]) => {
+      if (cancelled) return;
       if (labs.error || systems.error || commands.error || troubleshooting.error || docker.error || notes.error) {
-        setPersonalStatsError(true);
+        setPersonalStatsErrorFor(userId);
       } else {
-        setPersonalStats({
+        setPersonalStatsResult({ userId, data: {
           labore: labs.count ?? 0,
           systeme: systems.count ?? 0,
           befehle: commands.count ?? 0,
           fehleranalysen: troubleshooting.count ?? 0,
           dockerDienste: docker.count ?? 0,
           notizen: notes.count ?? 0,
-        });
+        } });
       }
     });
-  }, [user]);
+    return () => { cancelled = true; };
+  }, [userId]);
 
   if (supabaseConfigMissing) return <SupabaseMissingBanner />;
 
@@ -102,94 +113,85 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-10">
-      {/* Hero */}
-      <div className="relative rounded-2xl overflow-hidden border border-white/5 bg-gradient-to-br from-[#111827] via-[#0f1623] to-[#0d1117] p-8">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-cyan-600/5 pointer-events-none" />
-        <div className="relative">
-          <div className="mb-4">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-cyan-500/20 bg-cyan-500/5 text-cyan-500/70">
-              OrikOS-Ökosystemprojekt
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-[#161b27] border border-white/10 shadow-lg shadow-black/50 flex items-center justify-center shrink-0">
-              <span className="text-xl font-black tracking-tight bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent leading-none select-none">
-                FL
-              </span>
-            </div>
+      {/* Logged-in dashboard is a personal workspace, not the public marketing hero. */}
+      {user ? (
+        <section className="fisi-hero rounded-[24px] p-6 sm:p-8">
+          <div className="grid md:grid-cols-[1fr_auto] items-center gap-5">
             <div>
-              <h1 className="text-3xl font-bold text-white tracking-tight">FISI LabBook</h1>
-              <p className="text-sm text-blue-400/80 font-medium">
-                Systemintegration Labor- und Troubleshooting-Plattform
-              </p>
+              <p className="text-[11px] font-bold uppercase tracking-[.14em] text-blue-700 mb-2"><T>FISI LabBook · Persönlicher Workspace</T></p>
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#153a5c]">{language === "de" ? "Willkommen zurück" : "Yenidən xoş gəlmisən"}{user.user_metadata?.name ? `, ${String(user.user_metadata.name).split(" ")[0]}` : ""}!</h1>
+              <p className="mt-2 text-sm text-[#50718b] max-w-xl">{language === "de" ? "Deine IT-Dokumentation, eigenen Labore und Praxisnotizen an einem Ort. Die nachfolgenden Kennzahlen beziehen sich auf deinen eigenen Account." : "IT sənədlərin, şəxsi laboratoriyaların və praktiki qeydlərin bir yerdədir. Aşağıdakı göstəricilər yalnız sənin hesabına aiddir."}</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/workspace" className="px-4 py-2.5 rounded-xl bg-[#176cba] text-white font-bold text-sm hover:bg-[#0b599f]"><T>Mein Workspace</T><ArrowRight size={15} className="inline ml-1" /></Link>
+              <Link href="/beispiele" className="px-4 py-2.5 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-50"><T>Beispiele ansehen</T></Link>
             </div>
           </div>
-
-          <p className="text-slate-400 leading-relaxed max-w-2xl mb-4">
-            Eine praxisorientierte Plattform zur Dokumentation von IT-Laboren, Systemen, Befehlen,
-            Docker-Diensten und Fehleranalysen im Bereich Fachinformatiker für Systemintegration.
-          </p>
-
-          <div className="border-t border-white/5 pt-4">
-            <p className="text-xs text-slate-500 leading-relaxed max-w-2xl">
-              Ein OrikOS-Projekt innerhalb der OrikLab-Webplattform – für praxisnahe
-              Systemintegration, technische Dokumentation und strukturierte Fehleranalyse.
-            </p>
+        </section>
+      ) : (
+        <section className="fisi-hero fisi-tech-grid rounded-[24px] p-6 sm:p-8">
+          <p className="text-[11px] text-blue-700 font-bold uppercase tracking-[.14em] mb-2"><T>FISI LabBook · Eingeschränkte Demo</T></p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#153a5c]"><T>IT-Labore und Beispiele entdecken</T></h1>
+          <p className="text-sm text-[#50718b] mt-3 max-w-2xl">{language === "de" ? "Ohne Registrierung kannst du öffentlich freigegebene Beispiele ansehen. Für eigene Labore, Notizen und vollständige Workspace-Funktionen ist ein kostenloses Konto erforderlich." : "Qeydiyyatsız açıq nümunələrə baxa bilərsən. Şəxsi laboratoriyalar, qeydlər və bütün iş mühiti funksiyaları üçün pulsuz hesab lazımdır."}</p>
+          <div className="flex flex-wrap gap-3 mt-5">
+            <Link href="/beispiele" className="px-4 py-2.5 rounded-xl bg-[#176cba] text-white text-sm font-bold"><T>Gefüllten Beispiel-Workspace ansehen →</T></Link>
+            <Link href="/registrieren" className="px-4 py-2.5 rounded-xl bg-white border border-blue-200 text-blue-800 text-sm font-bold"><T>Kostenlos registrieren</T></Link>
           </div>
-        </div>
-      </div>
+        </section>
+      )}
 
+      {!user && (
+      <div>
       {/* Demo stats */}
       <div>
-        <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">
-          Dokumentationsübersicht
+        <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">
+          <T>Dokumentationsübersicht</T>
         </h2>
         {demoLoading && <LoadingState />}
         {demoError && <ErrorState />}
         {!demoLoading && !demoError && demoStats && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            <StatCard label="Labore" value={demoStats.labore} icon={FlaskConical} href="/labore" accent="blue" />
-            <StatCard label="Systeme" value={demoStats.systeme} icon={Server} href="/systeme" accent="cyan" />
-            <StatCard label="Befehle" value={demoStats.befehle} icon={Terminal} href="/befehle" accent="violet" />
-            <StatCard label="Fehleranalysen" value={demoStats.fehleranalysen} icon={Bug} href="/fehleranalyse" accent="amber" />
-            <StatCard label="Docker-Dienste" value={demoStats.dockerDienste} icon={Container} href="/docker-dienste" accent="emerald" />
+            <StatCard label={translateUI("Labore")} value={demoStats.labore} icon={FlaskConical} href="/labore" accent="blue" />
+            <StatCard label={translateUI("Systeme")} value={demoStats.systeme} icon={Server} href="/systeme" accent="cyan" />
+            <StatCard label={translateUI("Befehle")} value={demoStats.befehle} icon={Terminal} href="/befehle" accent="violet" />
+            <StatCard label={translateUI("Fehleranalysen")} value={demoStats.fehleranalysen} icon={Bug} href="/fehleranalyse" accent="amber" />
+            <StatCard label={translateUI("Docker-Dienste")} value={demoStats.dockerDienste} icon={Container} href="/docker-dienste" accent="emerald" />
           </div>
         )}
       </div>
-
+      </div>
+      )}
       {/* Personal workspace – logged-in only */}
       {user && (
         <div>
-          <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">
-            Persönlicher Arbeitsbereich
+          <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">
+            <T>Persönlicher Arbeitsbereich</T>
           </h2>
 
           {personalStatsLoading && <LoadingState />}
           {personalStatsError && <ErrorState />}
 
           {!personalStatsLoading && !personalStatsError && personalStats && personalIsEmpty && (
-            <div className="rounded-xl border border-blue-500/10 bg-[#0f1623] p-8 text-center">
+            <div className="rounded-xl border border-blue-500/10 bg-white p-8 text-center">
               <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mx-auto mb-4">
-                <FlaskConical size={20} className="text-blue-400" />
+                <FlaskConical size={20} className="text-blue-700" />
               </div>
-              <h3 className="text-sm font-semibold text-white mb-2">Willkommen in Ihrem Arbeitsbereich</h3>
-              <p className="text-xs text-slate-500 leading-relaxed max-w-sm mx-auto mb-6">
-                Starten Sie Ihre persönliche Dokumentation. Erstellen Sie Labore, dokumentieren Sie Systeme,
-                sammeln Sie Befehle und halten Sie Troubleshooting-Erfahrungen fest.
+              <h3 className="text-sm font-semibold text-slate-900 mb-2"><T>Willkommen in Ihrem Arbeitsbereich</T></h3>
+              <p className="text-xs text-slate-600 leading-relaxed max-w-sm mx-auto mb-6">
+                {language === "de" ? "Starte deine persönliche Dokumentation. Erstelle Labore, dokumentiere Systeme, sammle Befehle und halte Erfahrungen aus der Fehleranalyse fest." : "Şəxsi sənədləşdirməyə başla. Laboratoriyalar yarat, sistemləri sənədləşdir, əmrləri topla və xəta təhlili təcrübələrini qeyd et."}
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
                 <Link href="/labore"
                   className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors">
-                  <Plus size={14} />Erstes Labor erstellen
+                  <Plus size={14} /><T>Erstes Labor erstellen</T>
                 </Link>
                 <Link href="/praxisnotizen"
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-medium text-slate-300 transition-colors">
-                  <Plus size={14} />Praxisnotiz erstellen
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm font-medium text-slate-700 transition-colors">
+                  <Plus size={14} /><T>Praxisnotiz erstellen</T>
                 </Link>
                 <Link href="/labore"
-                  className="px-4 py-2 rounded-lg text-sm text-slate-500 hover:text-slate-300 transition-colors">
-                  Beispielinhalte ansehen →
+                  className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-700 transition-colors">
+                  <T>Beispielinhalte ansehen →</T>
                 </Link>
               </div>
             </div>
@@ -197,29 +199,27 @@ export default function DashboardPage() {
 
           {!personalStatsLoading && !personalStatsError && personalStats && !personalIsEmpty && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              <StatCard label="Meine Labore" value={personalStats.labore} icon={FlaskConical} href="/labore" accent="blue" />
-              <StatCard label="Meine Systeme" value={personalStats.systeme} icon={Server} href="/systeme" accent="cyan" />
-              <StatCard label="Meine Befehle" value={personalStats.befehle} icon={Terminal} href="/befehle" accent="violet" />
-              <StatCard label="Fehleranalysen" value={personalStats.fehleranalysen} icon={Bug} href="/fehleranalyse" accent="amber" />
-              <StatCard label="Docker-Dienste" value={personalStats.dockerDienste} icon={Container} href="/docker-dienste" accent="emerald" />
-              <StatCard label="Notizen" value={personalStats.notizen} icon={StickyNote} href="/praxisnotizen" accent="blue" />
+              <StatCard label={translateUI("Meine Labore")} value={personalStats.labore} icon={FlaskConical} href="/labore" accent="blue" />
+              <StatCard label={translateUI("Meine Systeme")} value={personalStats.systeme} icon={Server} href="/systeme" accent="cyan" />
+              <StatCard label={translateUI("Meine Befehle")} value={personalStats.befehle} icon={Terminal} href="/befehle" accent="violet" />
+              <StatCard label={translateUI("Fehleranalysen")} value={personalStats.fehleranalysen} icon={Bug} href="/fehleranalyse" accent="amber" />
+              <StatCard label={translateUI("Docker-Dienste")} value={personalStats.dockerDienste} icon={Container} href="/docker-dienste" accent="emerald" />
+              <StatCard label={translateUI("Notizen")} value={personalStats.notizen} icon={StickyNote} href="/praxisnotizen" accent="blue" />
             </div>
           )}
         </div>
       )}
 
       {/* Purpose section */}
-      <div className="rounded-xl border border-white/5 bg-white/[0.02] p-6">
+      <div className="rounded-xl border border-slate-200 bg-blue-50 p-6">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/15 flex items-center justify-center shrink-0 mt-0.5">
-            <Info size={15} className="text-blue-400" />
+            <Info size={15} className="text-blue-700" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-white mb-2">Über diese Plattform</h2>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Diese Plattform dient der strukturierten Dokumentation praktischer IT-Laborumgebungen,
-              technischer Systeme, administrativer Befehle und typischer Fehleranalysen im Bereich
-              Systemintegration.
+            <h2 className="text-sm font-semibold text-slate-900 mb-2"><T>Über diese Plattform</T></h2>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              {language === "de" ? "Diese Plattform dient der strukturierten Dokumentation praktischer IT-Laborumgebungen, technischer Systeme, administrativer Befehle und typischer Fehleranalysen im Bereich Systemintegration." : "Bu platforma sistem inteqrasiyası üzrə praktiki IT laboratoriyalarını, texniki sistemləri, inzibati əmrləri və tipik xəta halları haqqında məlumatları ardıcıl sənədləşdirmək üçün nəzərdə tutulub."}
             </p>
           </div>
         </div>
@@ -227,32 +227,32 @@ export default function DashboardPage() {
 
       {/* Quick links */}
       <div>
-        <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">
-          Schnellzugriff
+        <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">
+          <T>Schnellzugriff</T>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {[
-            { href: "/labore", label: "Labore", desc: "Dokumentierte IT-Laborumgebungen", icon: FlaskConical },
-            { href: "/systeme", label: "Systeme", desc: "Infrastruktur- und Systemdokumentation", icon: Server },
-            { href: "/befehle", label: "Befehle", desc: "Admin-Befehlsreferenz mit Beispielen", icon: Terminal },
-            { href: "/fehleranalyse", label: "Fehleranalyse", desc: "Troubleshooting-Fälle strukturiert", icon: Bug },
-            { href: "/docker-dienste", label: "Docker-Dienste", desc: "Container-Dienste und Compose-Snippets", icon: Container },
-            { href: "/praxisnotizen", label: "Praxisnotizen", desc: "Persönlicher Notiz- und Aufgabenbereich", icon: StickyNote },
-            { href: "/portfolio", label: "Portfolio", desc: "Projektzusammenfassung und Technologien", icon: BookOpen },
+            { href: "/labore", label: translateUI("Labore"), desc: translateUI("Dokumentierte IT-Laborumgebungen"), icon: FlaskConical },
+            { href: "/systeme", label: translateUI("Systeme"), desc: translateUI("Infrastruktur- und Systemdokumentation"), icon: Server },
+            { href: "/befehle", label: translateUI("Befehle"), desc: translateUI("Admin-Befehlsreferenz mit Beispielen"), icon: Terminal },
+            { href: "/fehleranalyse", label: translateUI("Fehleranalyse"), desc: translateUI("Troubleshooting-Fälle strukturiert"), icon: Bug },
+            { href: "/docker-dienste", label: translateUI("Docker-Dienste"), desc: translateUI("Container-Dienste und Compose-Snippets"), icon: Container },
+            { href: "/praxisnotizen", label: translateUI("Praxisnotizen"), desc: translateUI("Persönlicher Notiz- und Aufgabenbereich"), icon: StickyNote },
+            { href: "/portfolio", label: translateUI("Portfolio"), desc: translateUI("Projektzusammenfassung und Technologien"), icon: BookOpen },
           ].map(({ href, label, desc, icon: Icon }) => (
             <Link
               key={href}
               href={href}
-              className="group flex items-center justify-between p-4 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-blue-500/20 transition-all duration-150"
+              className="group flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-blue-50 hover:bg-blue-50 hover:border-blue-500/20 transition-all duration-150"
             >
               <div className="flex items-center gap-3">
-                <Icon size={16} className="text-slate-500 group-hover:text-blue-400 transition-colors" />
+                <Icon size={16} className="text-slate-600 group-hover:text-blue-700 transition-colors" />
                 <div>
-                  <p className="text-sm font-medium text-slate-200">{label}</p>
-                  <p className="text-xs text-slate-500">{desc}</p>
+                  <p className="text-sm font-medium text-slate-800">{label}</p>
+                  <p className="text-xs text-slate-600">{desc}</p>
                 </div>
               </div>
-              <ArrowRight size={14} className="text-slate-600 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all" />
+              <ArrowRight size={14} className="text-slate-500 group-hover:text-blue-700 group-hover:translate-x-0.5 transition-all" />
             </Link>
           ))}
         </div>
