@@ -203,7 +203,6 @@ export const demoAz: Readonly<Record<string,string>> = {
   "running": "İşləyir",
   "planned": "Planlaşdırılıb",
   "stopped": "Dayandırılıb",
-  "Datenbank": "Verilənlər bazası",
   "Datenbank-Administration": "Verilənlər bazasının idarə edilməsi",
   "Automation": "Avtomatlaşdırma",
   "Domänenbeitritt und Anmeldung": "Domenə qoşulma və giriş",
