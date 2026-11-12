@@ -18,15 +18,7 @@ export default function DemoBanner() {
         {" "}{language === "de" ? "— Öffentliche Beispiele ansehen; eigene Daten erst nach kostenloser Registrierung speichern." : "— Açıq nümunələrə bax; şəxsi məlumatlarını yalnız pulsuz qeydiyyatdan sonra saxlaya bilərsən."}
       </p>
       <div className="flex items-center gap-3 shrink-0">
-        <Link href="/beispiele" className="text-sm font-semibold text-blue-700 hover:underline">{language === "de" ? "Beispiel-Workspace" : "Nümunə Workspace"}</Link>
-        <Link href="/login"
-          className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-          {language === "de" ? "Anmelden" : "Daxil ol"}
-        </Link>
-        <Link href="/registrieren"
-          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors whitespace-nowrap">
-          {language === "de" ? "Kostenlos registrieren" : "Pulsuz qeydiyyat"}
-        </Link>
+        <Link href="/beispiele" className="text-sm font-semibold text-blue-700 hover:underline">{language === "de" ? "Beispiel-Workspace" : "Nümunə iş mühiti"}</Link>
       </div>
     </div>
   );

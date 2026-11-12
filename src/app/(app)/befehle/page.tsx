@@ -1,5 +1,8 @@
 "use client";
 
+import { useLanguage } from "@/contexts/LanguageContext";
+import { demoText } from "@/lib/demo-i18n";
+
 import { T, useT } from "@/components/TranslatedText";
 
 import { useEffect, useState, useMemo } from "react";
@@ -119,6 +122,7 @@ function DemoCommandCard({ cmd, user, onCopied }: {
   onCopied: (msg: string) => void;
 }) {
   const [copying, setCopying] = useState(false);
+  const { language } = useLanguage();
 
   async function handleCopy() {
     if (!user || !supabase) return;
@@ -134,8 +138,8 @@ function DemoCommandCard({ cmd, user, onCopied }: {
       notes: cmd.notes,
     });
     setCopying(false);
-    if (err) { onCopied("Fehler beim Übernehmen."); return; }
-    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+    if (err) { onCopied(language === "de" ? "Fehler beim Übernehmen." : "Şablon köçürülmədi."); return; }
+    onCopied(language === "de" ? "Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen." : "Şablon şəxsi iş mühitinə köçürüldü.");
   }
 
   return (
@@ -152,11 +156,11 @@ function DemoCommandCard({ cmd, user, onCopied }: {
         )}
         {cmd.category && (
           <span className="flex items-center gap-1 text-[11px] bg-violet-500/10 text-violet-800 border border-violet-500/15 px-2.5 py-1 rounded-lg">
-            <Tag size={10} />{cmd.category}
+            <Tag size={10} />{demoText(cmd.category, language)}
           </span>
         )}
       </div>
-      {cmd.purpose && <p className="text-sm text-slate-700 leading-relaxed">{cmd.purpose}</p>}
+      {cmd.purpose && <p className="text-sm text-slate-700 leading-relaxed">{demoText(cmd.purpose, language)}</p>}
       {cmd.example && (
         <div className="space-y-1.5">
           <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider"><T>Beispiel</T></p>
@@ -167,13 +171,13 @@ function DemoCommandCard({ cmd, user, onCopied }: {
         {cmd.typical_use_case && (
           <div>
             <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1"><T>Typischer Anwendungsfall</T></p>
-            <p className="text-xs text-slate-600 leading-relaxed">{cmd.typical_use_case}</p>
+            <p className="text-xs text-slate-600 leading-relaxed">{demoText(cmd.typical_use_case, language)}</p>
           </div>
         )}
         {cmd.notes && (
           <div>
             <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1"><T>Notizen</T></p>
-            <p className="text-xs text-slate-600 leading-relaxed">{cmd.notes}</p>
+            <p className="text-xs text-slate-600 leading-relaxed">{demoText(cmd.notes, language)}</p>
           </div>
         )}
       </div>
@@ -183,7 +187,7 @@ function DemoCommandCard({ cmd, user, onCopied }: {
           <button onClick={handleCopy} disabled={copying}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-700 hover:text-blue-800 transition-all disabled:opacity-50">
             <Copy size={11} />
-            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+            {copying ? (language === "de" ? "Wird übernommen…" : "Köçürülür…") : (language === "de" ? "Als Vorlage übernehmen" : "Şablon kimi götür")}
           </button>
         ) : (
           <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
@@ -514,7 +518,7 @@ export default function BefehlePageContent() {
             : "bg-red-500/15 border-red-500/20 text-red-800"
         }`}>
           {notif.kind === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
-          {notif.message}
+          {translateUI(notif.message)}
         </div>
       )}
 

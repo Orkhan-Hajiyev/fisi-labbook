@@ -1,5 +1,8 @@
 "use client";
 
+import { useLanguage } from "@/contexts/LanguageContext";
+import { demoText } from "@/lib/demo-i18n";
+
 import { T, useT } from "@/components/TranslatedText";
 
 import { useEffect, useState, useMemo } from "react";
@@ -140,6 +143,7 @@ function DemoCaseCard({ c, user, onCopied }: {
 }) {
   const diff = getDifficultyConfig(c.difficulty);
   const [copying, setCopying] = useState(false);
+  const { language } = useLanguage();
 
   async function handleCopy() {
     if (!user || !supabase) return;
@@ -156,39 +160,39 @@ function DemoCaseCard({ c, user, onCopied }: {
       result: c.result,
     });
     setCopying(false);
-    if (err) { onCopied("Fehler beim Übernehmen."); return; }
-    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+    if (err) { onCopied(language === "de" ? "Fehler beim Übernehmen." : "Şablon köçürülmədi."); return; }
+    onCopied(language === "de" ? "Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen." : "Şablon şəxsi iş mühitinə köçürüldü.");
   }
 
   return (
     <div className="rounded-xl border border-slate-200 bg-blue-50 hover:border-slate-200 transition-all duration-150 p-5 space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-slate-900">{c.title}</h3>
+          <h3 className="text-sm font-semibold text-slate-900">{demoText(c.title, language)}</h3>
           {c.category && (
             <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 mt-1">
-              <Tag size={10} />{c.category}
+              <Tag size={10} />{demoText(c.category, language)}
             </span>
           )}
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {c.difficulty && (
             <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full border ${diff.className}`}>
-              {diff.label}
+              {demoText(diff.label, language)}
             </span>
           )}
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Step icon={AlertCircle} label="Symptome" value={c.symptoms} accent="amber" />
-        <Step icon={SearchIcon} label="Prüfschritte" value={c.checks} accent="blue" />
-        <Step icon={Lightbulb} label="Ursache" value={c.root_cause} accent="slate" />
-        <Step icon={Target} label="Lösung" value={c.solution} accent="emerald" />
+        <Step icon={AlertCircle} label="Symptome" value={demoText(c.symptoms, language)} accent="amber" />
+        <Step icon={SearchIcon} label="Prüfschritte" value={demoText(c.checks, language)} accent="blue" />
+        <Step icon={Lightbulb} label="Ursache" value={demoText(c.root_cause, language)} accent="slate" />
+        <Step icon={Target} label="Lösung" value={demoText(c.solution, language)} accent="emerald" />
       </div>
       {c.result && (
         <div className="rounded-lg bg-emerald-500/5 border border-emerald-500/15 px-4 py-3">
           <p className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider mb-1"><T>Ergebnis</T></p>
-          <p className="text-xs text-emerald-800 leading-relaxed">{c.result}</p>
+          <p className="text-xs text-emerald-800 leading-relaxed">{demoText(c.result, language)}</p>
         </div>
       )}
       <div className="flex items-center justify-between pt-3 border-t border-slate-200">
@@ -197,7 +201,7 @@ function DemoCaseCard({ c, user, onCopied }: {
           <button onClick={handleCopy} disabled={copying}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-700 hover:text-blue-800 transition-all disabled:opacity-50">
             <Copy size={11} />
-            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+            {copying ? (language === "de" ? "Wird übernommen…" : "Köçürülür…") : (language === "de" ? "Als Vorlage übernehmen" : "Şablon kimi götür")}
           </button>
         ) : (
           <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
@@ -496,7 +500,7 @@ export default function FehleranalysePage() {
             : "bg-red-500/15 border-red-500/20 text-red-800"
         }`}>
           {notif.kind === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
-          {notif.message}
+          {translateUI(notif.message)}
         </div>
       )}
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BookOpen, CheckCircle2, Container, FlaskConical, Info, Layers3, Network, Play, Server, ShieldCheck, Terminal, Wrench } from "lucide-react";
+import { ArrowRight, CheckCircle2, Info, Layers3, Network, Play, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import InfrastructureHero from "@/components/InfrastructureShowcase";
 
@@ -34,7 +34,7 @@ const translations = {
     freeLink: "Kostenloses Konto erstellen", paidNote: "Für die derzeit angebotenen Funktionen ist kein kostenpflichtiges Abo erforderlich.",
   },
   az: {
-    eyebrow: "İT VƏ SİSTEM İNTEQRASİYASINI ÖYRƏNƏNLƏR ÜÇÜN",
+    eyebrow: "İT SAHƏSİNDƏ SİSTEM İNTEQRASİYASINI ÖYRƏNƏNLƏR ÜÇÜN",
     title1: "Sənin rəqəmsal IT laboratoriyan.",
     title2: "Öyrən. Tətbiq et. Sənədləşdir.",
     lead: "FISI LabBook praktiki IT laboratoriyalarını, sistem sənədlərini, inzibati əmrləri və sistemli xəta təhlilini vahid, aydın platformada birləşdirir.",
@@ -62,10 +62,8 @@ const translations = {
   },
 } as const;
 
-const moduleIcons = [FlaskConical, Server, Terminal, Wrench, Container, BookOpen];
 const choiceIcons = [Play, Layers3, ShieldCheck];
 const choiceLinks = ["/dashboard", "/beispiele", "/registrieren"];
-const moduleLinks = ["/labore", "/systeme", "/befehle", "/fehleranalyse", "/docker-dienste", "/praxisnotizen"];
 
 export default function LandingPage() {
   const { language } = useLanguage();
@@ -99,20 +97,6 @@ export default function LandingPage() {
         </article>})}
       </div>
       <p className="mt-5 flex items-start gap-2 text-sm leading-6 text-[#587793]"><Info className="mt-0.5 shrink-0 text-[#2478c8]" size={17}/>{t.demoNotice}</p>
-    </section>
-
-    <section className="border-y border-[#d8e8f8] bg-gradient-to-b from-[#eef6ff] via-[#f8fbff] to-[#eaf4ff] py-14 sm:py-[70px]" aria-labelledby="modules-title">
-      <div className="max-w-7xl mx-auto px-5 sm:px-7">
-        <p className="text-xs font-extrabold tracking-[.16em] text-blue-700 uppercase">{de ? "DIE MODULE" : "TƏTBİQİN BÖLMƏLƏRİ"}</p>
-        <h2 id="modules-title" className="mt-3 text-[clamp(1.65rem,2.8vw,2.35rem)] font-extrabold tracking-tight leading-tight text-[#14385f]">{t.modulesTitle}</h2>
-        <p className="mt-3 text-base leading-7 text-[#55738e]">{t.modulesLead}</p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {t.modules.map(([title,desc],i)=>{const Icon=moduleIcons[i];return <Link href={moduleLinks[i]} key={title} className="group flex min-h-[172px] flex-col justify-between rounded-[21px] border border-[#c9dff5] bg-white p-6 shadow-[0_18px_34px_-29px_rgba(14,76,140,.38)] transition-all hover:-translate-y-1 hover:border-[#98c5ef] hover:shadow-[0_22px_45px_-30px_rgba(14,76,140,.42)]">
-            <div className="flex items-start justify-between"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-[#e9f4ff] to-[#cfe7ff] text-[#136bc1]"><Icon size={25}/></span><span className="text-xs font-bold text-[#97b8d6]">{String(i+1).padStart(2,"0")}</span></div>
-            <div className="mt-4 flex items-end justify-between gap-3"><div><h3 className="text-lg font-extrabold text-[#173e66]">{title}</h3><p className="mt-2 text-sm leading-6 text-[#55738e]">{desc}</p></div><ArrowRight size={18} className="mb-1 shrink-0 text-[#2478ca] transition-transform group-hover:translate-x-1" aria-hidden="true"/></div>
-          </Link>})}
-        </div>
-      </div>
     </section>
 
     <section className="max-w-7xl mx-auto px-5 sm:px-7 pt-14 pb-6" aria-labelledby="signup-title">

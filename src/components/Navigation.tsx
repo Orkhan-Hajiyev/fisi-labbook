@@ -113,7 +113,7 @@ export default function Navigation() {
     "/praxisnotizen": de ? "Praxisnotizen" : "Praktiki qeydlər",
     "/suche": de ? "Suche" : "Axtarış",
     "/portfolio": de ? "Portfolio" : "Portfolio",
-    "/beispiele": de ? "Beispiel-Workspace" : "Nümunə Workspace",
+    "/beispiele": de ? "Beispiel-Workspace" : "Nümunə iş mühiti",
   };
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -160,18 +160,20 @@ export default function Navigation() {
           })}
         </nav>
 
-        <div className="px-3 pt-2 pb-3 border-t border-blue-100">
-          <div className="grid grid-cols-2 gap-2 mb-2">
-            <button type="button" onClick={() => setLanguage("de")} aria-pressed={de} className={`px-3 py-2 rounded-lg text-xs font-bold ${de ? "bg-blue-700 text-white" : "bg-blue-50 text-blue-700"}`}>DE</button>
-            <button type="button" onClick={() => setLanguage("az")} aria-pressed={!de} className={`px-3 py-2 rounded-lg text-xs font-bold ${!de ? "bg-blue-700 text-white" : "bg-blue-50 text-blue-700"}`}>AZ</button>
-          </div>
-          <Link href="/beispiele" className="flex items-center gap-2 text-xs font-semibold text-blue-700 py-2"><LayoutGrid size={15} />{localizedLabels["/beispiele"]}</Link>
-        </div>
-        {/* No AuthSection on desktop — shown in TopBar instead */}
-        <div className="px-5 py-4 border-t border-slate-200 bg-[#f8fbff]">
-          <div className="flex items-center gap-2 text-[11px] text-slate-500">
-            <span className="h-2 w-2 bg-sky-500 rounded-full" />
-            {de ? "Praxis. Dokumentation. Fortschritt." : "Praktika. Sənədləşmə. İnkişaf."}
+        <div className="border-t border-[#dce9f7] bg-gradient-to-b from-[#f8fbff] to-[#e8f3ff] p-3">
+          <div className="relative overflow-hidden rounded-2xl border border-[#bdd9f3] bg-gradient-to-br from-[#eaf5ff] to-[#cde7ff] px-3 py-2.5">
+            <svg viewBox="0 0 228 85" className="block h-[85px] w-full" role="img" aria-label={de ? "Illustration eines kleinen IT-Netzwerks" : "Kiçik IT şəbəkəsinin təsviri"}>
+              <g fill="none" stroke="#519bda" strokeWidth="2.5" strokeLinecap="round"><path d="M43 44 H91 M136 44 H179 M114 29 V13 M114 59 V72" strokeDasharray="5 4"/></g>
+              <rect x="13" y="25" width="50" height="39" rx="9" fill="#fff" stroke="#8bbde8" strokeWidth="2"/>
+              <rect x="24" y="36" width="28" height="15" rx="4" fill="#a4d6f6"/><path d="M29 57h18" stroke="#2f79b8" strokeWidth="2"/>
+              <rect x="91" y="27" width="46" height="34" rx="9" fill="#185d9e" stroke="#4ea8e9" strokeWidth="2"/>
+              <path d="M99 37h30 M99 45h30" stroke="#81cfff" strokeWidth="3" strokeLinecap="round"/><circle cx="103" cy="54" r="2" fill="#b1e8ff"/><circle cx="111" cy="54" r="2" fill="#b1e8ff"/>
+              <rect x="166" y="23" width="48" height="43" rx="9" fill="#fff" stroke="#8bbde8" strokeWidth="2"/>
+              <path d="M175 33h30M175 43h30M175 53h30" stroke="#2a81c9" strokeWidth="4" strokeLinecap="round"/>
+              <circle cx="114" cy="9" r="6" fill="#1e80cc"/><circle cx="114" cy="77" r="6" fill="#1e80cc"/>
+            </svg>
+            <p className="mt-1 text-[11px] font-bold text-[#225c92]">{de ? "IT-Labor im Überblick" : "IT laboratoriyasına baxış"}</p>
+            <Link href="/beispiele" className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-[#0e6bc0] hover:underline"><LayoutGrid size={13}/>{localizedLabels["/beispiele"]}</Link>
           </div>
         </div>
       </aside>

@@ -1,5 +1,8 @@
 "use client";
 
+import { useLanguage } from "@/contexts/LanguageContext";
+import { demoText } from "@/lib/demo-i18n";
+
 import { T, useT } from "@/components/TranslatedText";
 
 import { useEffect, useState, useMemo } from "react";
@@ -29,6 +32,7 @@ function MetaField({ label, children }: { label: string; children: React.ReactNo
 }
 
 function StatusBadge({ status }: { status: string | null }) {
+  const { language } = useLanguage();
   if (!status) return null;
   const s = status.toLowerCase();
   if (s === "running" || s === "aktiv" || s === "up") {
@@ -43,7 +47,7 @@ function StatusBadge({ status }: { status: string | null }) {
         <XCircle size={10} /><T>Inaktiv</T></span>
     );
   }
-  if (s === "geplant") {
+  if (s === "geplant" || s === "planned") {
     return (
       <span className="inline-flex items-center gap-1.5 text-[11px] bg-slate-500/15 text-slate-600 border border-slate-500/20 px-2.5 py-1 rounded-full">
         <Clock size={10} /><T>Geplant</T></span>
@@ -51,7 +55,7 @@ function StatusBadge({ status }: { status: string | null }) {
   }
   return (
     <span className="inline-flex items-center gap-1.5 text-[11px] bg-slate-500/15 text-slate-600 border border-slate-500/20 px-2.5 py-1 rounded-full">
-      <Clock size={10} /> {status}
+      <Clock size={10} /> {demoText(status, language)}
     </span>
   );
 }
@@ -152,6 +156,7 @@ function DemoDockerCard({ svc, user, onCopied }: {
   onCopied: (msg: string) => void;
 }) {
   const [copying, setCopying] = useState(false);
+  const { language } = useLanguage();
 
   async function handleCopy() {
     if (!user || !supabase) return;
@@ -168,8 +173,8 @@ function DemoDockerCard({ svc, user, onCopied }: {
       notes: svc.notes,
     });
     setCopying(false);
-    if (err) { onCopied("Fehler beim Übernehmen."); return; }
-    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+    if (err) { onCopied(language === "de" ? "Fehler beim Übernehmen." : "Şablon köçürülmədi."); return; }
+    onCopied(language === "de" ? "Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen." : "Şablon şəxsi iş mühitinə köçürüldü.");
   }
 
   return (
@@ -181,7 +186,7 @@ function DemoDockerCard({ svc, user, onCopied }: {
           </div>
           <div>
             <h3 className="text-sm font-bold text-slate-900">{svc.name}</h3>
-            {svc.service_type && <p className="text-[11px] text-slate-600">{svc.service_type}</p>}
+            {svc.service_type && <p className="text-[11px] text-slate-600">{demoText(svc.service_type, language)}</p>}
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -203,16 +208,16 @@ function DemoDockerCard({ svc, user, onCopied }: {
           </MetaField>
         )}
       </div>
-      {svc.purpose && <p className="text-xs text-slate-600 leading-relaxed">{svc.purpose}</p>}
+      {svc.purpose && <p className="text-xs text-slate-600 leading-relaxed">{demoText(svc.purpose, language)}</p>}
       {svc.compose_snippet && <ComposeBlock snippet={svc.compose_snippet} />}
-      {svc.notes && <p className="text-xs text-slate-600 leading-relaxed border-t border-slate-200 pt-3">{svc.notes}</p>}
+      {svc.notes && <p className="text-xs text-slate-600 leading-relaxed border-t border-slate-200 pt-3">{demoText(svc.notes, language)}</p>}
       <div className="flex items-center justify-between pt-3 border-t border-slate-200">
         <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Demo</span>
         {user ? (
           <button onClick={handleCopy} disabled={copying}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-700 hover:text-blue-800 transition-all disabled:opacity-50">
             <Copy size={11} />
-            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+            {copying ? (language === "de" ? "Wird übernommen…" : "Köçürülür…") : (language === "de" ? "Als Vorlage übernehmen" : "Şablon kimi götür")}
           </button>
         ) : (
           <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
@@ -334,7 +339,7 @@ export default function DockerDienstePage() {
             : "bg-red-500/15 border-red-500/20 text-red-800"
         }`}>
           {notif.kind === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
-          {notif.message}
+          {translateUI(notif.message)}
         </div>
       )}
 

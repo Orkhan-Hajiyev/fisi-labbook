@@ -1,5 +1,8 @@
 "use client";
 
+import { useLanguage } from "@/contexts/LanguageContext";
+import { demoText } from "@/lib/demo-i18n";
+
 import { T, useT } from "@/components/TranslatedText";
 
 import { useEffect, useState, useMemo } from "react";
@@ -32,7 +35,7 @@ function NetRow({ icon: Icon, label, value }: { icon: React.ElementType; label: 
   return (
     <div className="flex items-center gap-2 py-1.5">
       <Icon size={12} className="text-slate-500 shrink-0" />
-      <span className="text-[11px] text-slate-600 w-20 shrink-0">{label}</span>
+      <span className="text-[11px] text-slate-600 w-20 shrink-0"><T>{label}</T></span>
       <code className="text-xs text-cyan-800 font-mono bg-cyan-500/5 border border-cyan-500/10 px-2 py-0.5 rounded">{value}</code>
     </div>
   );
@@ -47,6 +50,7 @@ function DemoSystemCard({ sys, services, user, onCopied }: {
   onCopied: (msg: string) => void;
 }) {
   const [copying, setCopying] = useState(false);
+  const { language } = useLanguage();
 
   async function handleCopy() {
     if (!user || !supabase) return;
@@ -64,8 +68,8 @@ function DemoSystemCard({ sys, services, user, onCopied }: {
       notes: sys.notes,
     });
     setCopying(false);
-    if (err) { onCopied("Fehler beim Übernehmen."); return; }
-    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+    if (err) { onCopied(language === "de" ? "Fehler beim Übernehmen." : "Şablon köçürülmədi."); return; }
+    onCopied(language === "de" ? "Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen." : "Şablon şəxsi iş mühitinə köçürüldü.");
   }
 
   return (
@@ -76,7 +80,7 @@ function DemoSystemCard({ sys, services, user, onCopied }: {
         </div>
         <div>
           <h3 className="text-sm font-bold text-slate-700 font-mono">{sys.hostname}</h3>
-          {sys.role && <p className="text-xs text-slate-600">{sys.role}</p>}
+          {sys.role && <p className="text-xs text-slate-600">{demoText(sys.role, language)}</p>}
         </div>
         {sys.os && (
           <span className="ml-auto text-[11px] bg-blue-50 border border-slate-200 text-slate-600 px-2 py-0.5 rounded-md flex items-center gap-1.5">
@@ -93,17 +97,18 @@ function DemoSystemCard({ sys, services, user, onCopied }: {
       {services.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {services.map((s, i) => (
-            <span key={i} className="text-[11px] bg-blue-500/10 text-blue-800 border border-blue-500/15 px-2 py-0.5 rounded">{s}</span>
+            <span key={i} className="text-[11px] bg-blue-500/10 text-blue-800 border border-blue-500/15 px-2 py-0.5 rounded">{demoText(s, language)}</span>
           ))}
         </div>
       )}
+      {sys.notes && <p className="text-xs leading-relaxed text-slate-600">{demoText(sys.notes, language)}</p>}
       <div className="flex items-center justify-between pt-3 border-t border-slate-200">
         <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Demo</span>
         {user ? (
           <button onClick={handleCopy} disabled={copying}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-700 hover:text-blue-800 transition-all disabled:opacity-50">
             <Copy size={11} />
-            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+            {copying ? (language === "de" ? "Wird übernommen…" : "Köçürülür…") : (language === "de" ? "Als Vorlage übernehmen" : "Şablon kimi götür")}
           </button>
         ) : (
           <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
@@ -288,7 +293,7 @@ export default function SystemePage() {
           notif.type === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700" : "bg-red-500/10 border-red-500/20 text-red-700"
         }`}>
           {notif.type === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
-          {notif.message}
+          {translateUI(notif.message)}
         </div>
       )}
 

@@ -276,14 +276,14 @@ export default function PraxisNotizenPage() {
             ? <CheckCircle2 size={15} />
             : <AlertCircle size={15} />
           }
-          {notif.message}
+          {translateUI(notif.message)}
         </div>
       )}
 
       <PageHeader
         icon={StickyNote}
         title={translateUI("Praxisnotizen")}
-        description="Ihr persönlicher Arbeitsbereich für technische Notizen, Tagesaufgaben, Troubleshooting-Ideen, Befehle, Tags und strukturierte FISI-Dokumentation."
+        description={translateUI("Ihr persönlicher Arbeitsbereich für technische Notizen, Tagesaufgaben, Troubleshooting-Ideen, Befehle, Tags und strukturierte FISI-Dokumentation.")}
       />
 
       {/* Toolbar */}

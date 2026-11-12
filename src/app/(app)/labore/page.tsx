@@ -1,5 +1,8 @@
 "use client";
 
+import { useLanguage } from "@/contexts/LanguageContext";
+import { demoText } from "@/lib/demo-i18n";
+
 import { T, useT } from "@/components/TranslatedText";
 
 import { useEffect, useState, useMemo } from "react";
@@ -124,6 +127,7 @@ function UserLabCard({
 function DemoLabCard({ lab, user, onCopied }: { lab: FisiLab; user: ReturnType<typeof useAuth>["user"]; onCopied: (msg: string) => void }) {
   const status = getStatusCfg(lab.status);
   const [copying, setCopying] = useState(false);
+  const { language } = useLanguage();
 
   async function handleCopy() {
     if (!user || !supabase) return;
@@ -140,32 +144,33 @@ function DemoLabCard({ lab, user, onCopied }: { lab: FisiLab; user: ReturnType<t
       completed_at: lab.completed_at,
     });
     setCopying(false);
-    if (err) { onCopied("Fehler beim Übernehmen."); return; }
-    onCopied("Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen.");
+    if (err) { onCopied(language === "de" ? "Fehler beim Übernehmen." : "Şablon köçürülmədi."); return; }
+    onCopied(language === "de" ? "Vorlage wurde in Ihren persönlichen Arbeitsbereich übernommen." : "Şablon şəxsi iş mühitinə köçürüldü.");
   }
 
   return (
     <div className="rounded-xl border border-slate-200 bg-blue-50 p-5 space-y-3 opacity-80">
       <div className="flex items-start justify-between gap-3">
-        <h3 className="text-sm font-semibold text-slate-700 leading-snug">{lab.title}</h3>
+        <h3 className="text-sm font-semibold text-slate-700 leading-snug">{demoText(lab.title, language)}</h3>
         <span className={`shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${status.cls}`}>
-          {status.icon}{status.label}
+          {status.icon}{demoText(status.label, language)}
         </span>
       </div>
       {(lab.topic || lab.environment) && (
         <div className="flex flex-wrap gap-2">
-          {lab.topic && <span className="text-[11px] bg-blue-500/10 text-blue-800 border border-blue-500/15 px-2 py-0.5 rounded-md">{lab.topic}</span>}
-          {lab.environment && <span className="text-[11px] bg-violet-500/10 text-violet-800 border border-violet-500/15 px-2 py-0.5 rounded-md">{lab.environment}</span>}
+          {lab.topic && <span className="text-[11px] bg-blue-500/10 text-blue-800 border border-blue-500/15 px-2 py-0.5 rounded-md">{demoText(lab.topic, language)}</span>}
+          {lab.environment && <span className="text-[11px] bg-violet-500/10 text-violet-800 border border-violet-500/15 px-2 py-0.5 rounded-md">{demoText(lab.environment, language)}</span>}
         </div>
       )}
-      {lab.goal && <p className="text-xs text-slate-600 leading-relaxed">{lab.goal}</p>}
+      {lab.goal && <p className="text-xs text-slate-600 leading-relaxed">{demoText(lab.goal, language)}</p>}
+      {lab.description && <p className="text-xs text-slate-600 leading-relaxed">{demoText(lab.description, language)}</p>}
       <div className="flex items-center justify-between pt-3 border-t border-slate-200">
         <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Demo</span>
         {user ? (
           <button onClick={handleCopy} disabled={copying}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/35 text-xs font-medium text-blue-700 hover:text-blue-800 transition-all disabled:opacity-50">
             <Copy size={11} />
-            {copying ? "Wird übernommen…" : "Als Vorlage übernehmen"}
+            {copying ? (language === "de" ? "Wird übernommen…" : "Köçürülür…") : (language === "de" ? "Als Vorlage übernehmen" : "Şablon kimi götür")}
           </button>
         ) : (
           <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
@@ -270,7 +275,7 @@ export default function LaborePage() {
           notif.type === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700" : "bg-red-500/10 border-red-500/20 text-red-700"
         }`}>
           {notif.type === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
-          {notif.message}
+          {translateUI(notif.message)}
         </div>
       )}
 
