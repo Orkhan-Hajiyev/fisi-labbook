@@ -24,8 +24,8 @@ export default function Footer() {
       <div className="flex flex-col gap-3 py-4 sm:flex-row sm:justify-between sm:items-center">
         <span className="text-xs text-[#66829a]">© {new Date().getFullYear()} FISI LabBook · OrikLab</span>
         <nav aria-label={de ? "Rechtliche Informationen" : "Hüquqi keçidlər"} className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-bold text-[#456b89]">
-          <a href="https://www.oriklab.com/impressum" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">{de ? "Impressum" : "Hüquqi məlumat"}</a>
-          <a href="https://www.oriklab.com/datenschutz" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">{de ? "Datenschutz" : "Məxfilik siyasəti"}</a>
+          <a href="/impressum" className="hover:text-blue-700">{de ? "Impressum" : "Hüquqi məlumat"}</a>
+          <a href="/datenschutz" className="hover:text-blue-700">{de ? "Datenschutz" : "Məxfilik siyasəti"}</a>
         </nav>
       </div>
     </div>
