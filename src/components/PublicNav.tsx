@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Layers3 } from "lucide-react";
+import { ExternalLink, Menu, X, Layers3 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function PublicNav() {
@@ -13,7 +13,7 @@ export default function PublicNav() {
   const links = [
     { href: "/", label: de ? "Startseite" : "Ana səhifə" },
     { href: "/dashboard", label: de ? "Demo testen" : "Demonu sına" },
-    { href: "/beispiele", label: de ? "Beispiel-Workspace" : "Nümunə Workspace" },
+    { href: "/beispiele", label: de ? "Beispiel-Workspace" : "Nümunə iş mühiti" },
   ];
 
   return (
@@ -24,7 +24,7 @@ export default function PublicNav() {
           <span className="leading-tight"><strong className="text-[17px] text-[#12345b] tracking-tight block">FISI <span className="text-[#1476cf]">LabBook</span></strong><span className="text-[10px] text-[#517391]">{de ? "IT-Labor · Praxis · Dokumentation" : "IT laboratoriyası · Praktika · Sənədləşmə"}</span></span>
         </Link>
         <nav aria-label={de ? "Hauptnavigation" : "Əsas naviqasiya"} className="hidden lg:flex items-center gap-1">
-          {links.map(({ href, label }) => <Link key={href} href={href} className="px-3 py-2 rounded-lg text-sm font-semibold text-[#385775] hover:bg-blue-50 hover:text-blue-700 transition-colors">{label}</Link>)}
+          {links.map(({ href, label }) => <Link key={href} href={href} className="px-3 py-2 rounded-lg text-sm font-semibold text-[#385775] hover:bg-blue-50 hover:text-blue-700 transition-colors">{label}</Link>)}<a href="https://www.oriklab.com/" target="_blank" rel="noopener noreferrer" className="ml-1 inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-50">OrikLab <ExternalLink size={14}/></a>
         </nav>
         <div className="hidden sm:flex items-center gap-2">
           <div className="flex items-center rounded-lg border border-[#d4e4f7] p-0.5 bg-[#f4f9ff]" aria-label={de ? "Sprache wählen" : "Dil seçimi"}>
@@ -38,6 +38,7 @@ export default function PublicNav() {
       </div>
       {menuOpen && <nav className="sm:hidden bg-white border-t border-[#dce8f7] px-5 py-4 flex flex-col gap-2">
         {links.map(({ href, label }) => <Link key={href} href={href} onClick={() => setMenuOpen(false)} className="py-2 text-sm font-semibold text-[#214d77]">{label}</Link>)}
+        <a href="https://www.oriklab.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-2 font-bold text-blue-700">OrikLab <ExternalLink size={14}/></a>
         <div className="flex gap-2 py-1">
           <button onClick={() => setLanguage("de")} aria-pressed={de} className="rounded-lg border border-blue-200 px-3 py-1.5 text-sm">Deutsch</button>
           <button onClick={() => setLanguage("az")} aria-pressed={!de} className="rounded-lg border border-blue-200 px-3 py-1.5 text-sm">Azərbaycanca</button>

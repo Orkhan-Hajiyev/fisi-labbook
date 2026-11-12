@@ -1,71 +1,33 @@
 "use client";
 
+import { Mail } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+
 export default function Footer() {
   const { language } = useLanguage();
   const de = language === "de";
-  return (
-    <footer className="border-t border-[#dbe8f6] bg-white/80 mt-auto">
-      <div className="px-6 py-6 max-w-7xl w-full mx-auto">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          {/* Left: copyright + legal */}
-          <div className="space-y-1 min-w-0">
-            <p className="text-xs text-slate-600">
-              © 2026 Orkhan Hajiyev · FISI LabBook · {de ? "Ein Projekt des OrikOS-Ökosystems" : "OrikOS ekosisteminin layihəsi"}
-            </p>
-            <p className="text-[11px] text-slate-500 leading-relaxed max-w-lg">
-              {de ? "FISI LabBook ist ein eigenständiges Praxis- und Portfolio-Projekt innerhalb des OrikOS-Ökosystems." : "FISI LabBook OrikOS ekosistemi çərçivəsində hazırlanmış müstəqil praktika və portfolio layihəsidir."}
-            </p>
-            <p className="text-[11px] text-slate-500 pt-0.5">
-              {de ? "Kontakt:" : "Əlaqə:"}{" "}
-              <a
-                href="mailto:info@oriklab.com"
-                className="hover:text-slate-600 transition-colors"
-              >
-                info@oriklab.com
-              </a>
-              {" · "}
-              {de ? "Support:" : "Dəstək:"}{" "}
-              <a
-                href="mailto:support@oriklab.com"
-                className="hover:text-slate-600 transition-colors"
-              >
-                support@oriklab.com
-              </a>
-            </p>
+  return <footer className="mt-auto border-t border-[#d8e8f7] bg-white/95">
+    <div className="mx-auto w-full max-w-7xl px-5 sm:px-7">
+      <div className="grid gap-6 border-b border-[#e3edf8] py-8 sm:grid-cols-[1fr_auto]">
+        <div className="max-w-xl">
+          <p className="text-lg font-extrabold tracking-tight text-[#173e68]">FISI <span className="text-[#1772cf]">LabBook</span></p>
+          <p className="mt-2 text-sm leading-6 text-[#56738c]">{de ? "Ein eigenständiges IT-Praxis- und Dokumentationsprojekt im Umfeld von OrikLab." : "OrikLab çərçivəsində hazırlanmış, IT praktikası və sənədləşmə üçün müstəqil rəqəmsal layihə."}</p>
+        </div>
+        <div className="sm:min-w-[220px]">
+          <h2 className="text-sm font-extrabold text-[#173e68]">{de ? "Kontakt" : "Əlaqə"}</h2>
+          <div className="mt-3 flex flex-col gap-2 text-sm text-[#58758c]">
+            <a href="mailto:info@oriklab.com" className="inline-flex items-center gap-2 hover:text-blue-700"><Mail size={15} className="text-blue-600"/>info@oriklab.com</a>
+            <a href="mailto:support@oriklab.com" className="inline-flex items-center gap-2 hover:text-blue-700"><Mail size={15} className="text-blue-600"/>support@oriklab.com</a>
           </div>
-
-          {/* Right: nav links */}
-          <nav className="flex items-center gap-4 shrink-0 flex-wrap">
-            <a
-              href="https://www.oriklab.com/de"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-slate-600 hover:text-cyan-700 transition-colors"
-            >
-              OrikLab
-            </a>
-            <span className="text-slate-300 select-none">·</span>
-            <a
-              href="https://www.oriklab.com/de/impressum"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-slate-600 hover:text-slate-700 transition-colors"
-            >
-              {de ? "Impressum" : "Hüquqi məlumat"}
-            </a>
-            <span className="text-slate-300 select-none">·</span>
-            <a
-              href="https://www.oriklab.com/de/datenschutz"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-slate-600 hover:text-slate-700 transition-colors"
-            >
-              {de ? "Datenschutz" : "Məxfilik siyasəti"}
-            </a>
-          </nav>
         </div>
       </div>
-    </footer>
-  );
+      <div className="flex flex-col gap-3 py-4 sm:flex-row sm:justify-between sm:items-center">
+        <span className="text-xs text-[#66829a]">© {new Date().getFullYear()} FISI LabBook · OrikLab</span>
+        <nav aria-label={de ? "Rechtliche Informationen" : "Hüquqi keçidlər"} className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-bold text-[#456b89]">
+          <a href="https://www.oriklab.com/impressum" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">{de ? "Impressum" : "Hüquqi məlumat"}</a>
+          <a href="https://www.oriklab.com/datenschutz" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">{de ? "Datenschutz" : "Məxfilik siyasəti"}</a>
+        </nav>
+      </div>
+    </div>
+  </footer>;
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BookOpen, CheckCircle2, Container, FlaskConical, Layers3, Network, Play, Server, ShieldCheck, Terminal, Wrench } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle2, Container, FlaskConical, Info, Layers3, Network, Play, Server, ShieldCheck, Terminal, Wrench } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import InfrastructureHero, { AnimatedProjectWalkthrough } from "@/components/InfrastructureShowcase";
+import InfrastructureHero from "@/components/InfrastructureShowcase";
 
 const translations = {
   de: {
@@ -13,9 +13,7 @@ const translations = {
     lead: "FISI LabBook verbindet praxisnahe IT-Labore, Systemdokumentation, Admin-Befehle und strukturierte Fehleranalysen in einer übersichtlichen Plattform.",
     trust: ["Praxisnah", "Übersichtlich", "Kostenlos"],
     demo: "Demo eingeschränkt testen", examples: "Ausgefülltes Beispiel ansehen", signup: "Kostenlos registrieren", login: "Anmelden",
-    preview: "Interaktive Plattformvorschau", example: "Beispiel · keine echte Infrastruktur",
-    terminal: "Netzwerk prüfen · Ausgabe dokumentieren",
-    titleChoice: "Drei Wege, FISI LabBook kennenzulernen",
+    titleChoice: "Drei Wege, FISI LabBook kennenzulernen", demoNotice: "Demo und Beispielbereich dienen zum Kennenlernen; es besteht keine Verbindung zu echten Servern.",
     choiceLead: "Du entscheidest, wie du die Plattform entdecken möchtest.",
     items: [
       { title: "Eingeschränkte Demo", subtitle: "Ohne Registrierung", text: "Öffentliche IT-Beispiele und ausgewählte Funktionen ansehen. Eigene Einträge lassen sich hier nicht dauerhaft speichern.", cta: "Demo starten" },
@@ -31,32 +29,25 @@ const translations = {
       ["Docker", "Container, Ports und Compose-Beispiele im Blick behalten."],
       ["Praxisnotizen", "Persönliches IT-Wissen dauerhaft festhalten."],
     ],
-    sampleTitle: "So sieht eine vollständige Dokumentation aus",
-    sampleLead: "Im Beispielbereich siehst du nicht nur leere Formulare, sondern einen zusammenhängenden, ausgefüllten FISI-Fall – inklusive technischer Zusammenhänge.",
-    sampleRows: [["Labor", "Firmennetz mit Windows und Linux"], ["System", "srv-ad01 · DNS / Active Directory"], ["Netzwerk", "192.168.20.0/24 · VLAN 20"], ["Fehleranalyse", "DNS-Auflösung prüfen und beheben"]],
-    sampleLink: "Zum erklärten Beispiel-Workspace",
-    freeEyebrow: "100 % KOSTENLOS", freeTitle: "Alle Funktionen mit deinem eigenen Konto nutzen.",
-    freeText: "Nach der Registrierung und gegebenenfalls der E-Mail-Bestätigung kannst du deinen persönlichen Workspace verwenden. Für die derzeit angebotene App ist kein kostenpflichtiges Abo erforderlich.",
-    freeLink: "Jetzt kostenlos registrieren",
-    caveat: "Demo und Beispielbereich zeigen illustrative Daten. Sie sind keine Verbindung zu echten Servern oder produktiven IT-Systemen.",
+    freeEyebrow: "KOSTENLOS STARTEN", freeTitle: "Dein Wissen verdient einen eigenen IT-Workspace.",
+    freeText: "Registriere dich kostenlos und dokumentiere eigene Labore, Systeme, Befehle und Praxisnotizen an einem Ort. Zur Aktivierung kann eine E-Mail-Bestätigung erforderlich sein.",
+    freeLink: "Kostenloses Konto erstellen", paidNote: "Für die derzeit angebotenen Funktionen ist kein kostenpflichtiges Abo erforderlich.",
   },
   az: {
-    eyebrow: "SİSTEM İNTEQRASİYASI SAHƏSİNİ ÖYRƏNƏNLƏR ÜÇÜN",
+    eyebrow: "İT VƏ SİSTEM İNTEQRASİYASINI ÖYRƏNƏNLƏR ÜÇÜN",
     title1: "Sənin rəqəmsal IT laboratoriyan.",
     title2: "Öyrən. Tətbiq et. Sənədləşdir.",
     lead: "FISI LabBook praktiki IT laboratoriyalarını, sistem sənədlərini, inzibati əmrləri və sistemli xəta təhlilini vahid, aydın platformada birləşdirir.",
-    trust: ["Praktik yönümlü", "Aydın quruluş", "Tam pulsuz"],
+    trust: ["Praktik öyrənmə", "Aydın quruluş", "Pulsuz istifadə"],
     demo: "Məhdud demonu sına", examples: "Doldurulmuş nümunəyə bax", signup: "Pulsuz qeydiyyatdan keç", login: "Daxil ol",
-    preview: "İnteraktiv platforma təqdimatı", example: "Nümunə · real infrastruktur deyil",
-    terminal: "Şəbəkəni yoxla · nəticəni sənədləşdir",
-    titleChoice: "FISI LabBook ilə tanış olmağın üç yolu",
+    titleChoice: "FISI LabBook ilə tanış olmağın üç yolu", demoNotice: "Demo və nümunə bölmələri öyrənmə məqsədlidir; real serverlərə qoşulmur.",
     choiceLead: "Platformanı necə kəşf etmək istədiyini özün seç.",
     items: [
       { title: "Məhdud demo", subtitle: "Qeydiyyatsız", text: "Açıq IT nümunələrinə və seçilmiş funksiyalara bax. Burada şəxsi qeydləri daimi saxlamaq mümkün deyil.", cta: "Demonu aç" },
       { title: "Tam doldurulmuş nümunə iş mühiti", subtitle: "İzahlı tanışlıq", text: "Laboratoriya, sistem, əmrlər, Docker, xəta təhlili və qeydləri əhatə edən, hər bölməsi izah olunmuş nümunə layihəni araşdır.", cta: "Nümunələri kəşf et" },
       { title: "Şəxsi iş mühiti", subtitle: "Qeydiyyatdan sonra pulsuz", text: "Öz laboratoriyalarını və sistemlərini yarat, əmrlərini və praktiki qeydlərini idarə et, mövcud ixrac funksiyalarından istifadə et.", cta: "Pulsuz hesab yarat" },
     ],
-    modulesTitle: "sistem inteqrasiyası praktikası üçün hər şey", modulesLead: "Server quraşdırılmasından xətanın həllinin sənədləşdirilməsinə qədər.",
+    modulesTitle: "Sistem inteqrasiyası praktikası üçün hər şey", modulesLead: "Server quraşdırılmasından xətanın həllinin sənədləşdirilməsinə qədər.",
     modules: [
       ["IT laboratoriyaları", "Tapşırıqları, məqsədləri və nəticələri sistemli qeyd et."],
       ["Sistemlər və xidmətlər", "Serverləri, IP ünvanlarını, rolları və xidmətləri sənədləşdir."],
@@ -65,20 +56,16 @@ const translations = {
       ["Docker", "Konteynerləri, portları və Compose nümunələrini izləməyə kömək edir."],
       ["Praktiki qeydlər", "Şəxsi IT biliklərini bir yerdə saxla."],
     ],
-    sampleTitle: "Tam sənədləşdirilmiş layihə necə görünür?",
-    sampleLead: "Nümunə bölməsində boş formalar deyil, texniki əlaqələri ilə birlikdə hazırlanmış sistem inteqrasiyası üzrə bütöv praktik nümunəni görəcəksən.",
-    sampleRows: [["Laboratoriya", "Windows və Linux ilə müəssisə şəbəkəsi"], ["Sistem", "srv-ad01 · DNS / Active Directory"], ["Şəbəkə", "192.168.20.0/24 · VLAN 20"], ["Xəta təhlili", "DNS ad həllini yoxla və düzəlt"]],
-    sampleLink: "İzahlı nümunə iş mühiti-ə keç",
-    freeEyebrow: "100% PULSUZ", freeTitle: "Şəxsi hesabınla bütün mövcud funksiyalardan istifadə et.",
-    freeText: "Qeydiyyatdan və tələb olunduqda e-poçt təsdiqindən sonra şəxsi iş mühiti-dən istifadə edə bilərsən. Tətbiqin hazırda təqdim olunan funksiyaları üçün ödənişli abunə tələb edilmir.",
-    freeLink: "İndi pulsuz qeydiyyatdan keç",
-    caveat: "Demo və nümunə bölmələrindəki məlumatlar illüstrativdir; real serverlərə və işlək IT infrastrukturuna qoşulmur.",
+    freeEyebrow: "PULSUZ BAŞLA", freeTitle: "Öyrəndiklərini şəxsi IT laboratoriyanda topla.",
+    freeText: "Pulsuz hesab yarat, laboratoriyalarını və sistemlərini sənədləşdir, əmrlərini və praktiki qeydlərini bir məkanda idarə et. Qeydiyyatı tamamlamaq üçün e-poçt təsdiqi tələb oluna bilər.",
+    freeLink: "Pulsuz hesab yarat", paidNote: "Hazırda ödənişli abunə tələb olunmur.",
   },
 } as const;
 
 const moduleIcons = [FlaskConical, Server, Terminal, Wrench, Container, BookOpen];
 const choiceIcons = [Play, Layers3, ShieldCheck];
 const choiceLinks = ["/dashboard", "/beispiele", "/registrieren"];
+const moduleLinks = ["/labore", "/systeme", "/befehle", "/fehleranalyse", "/docker-dienste", "/praxisnotizen"];
 
 export default function LandingPage() {
   const { language } = useLanguage();
@@ -111,21 +98,30 @@ export default function LandingPage() {
           <Link href={choiceLinks[i]} className="flex items-center justify-between text-sm font-bold text-blue-700 hover:text-blue-900 pt-2 border-t border-blue-100">{item.cta}<ArrowRight size={17}/></Link>
         </article>})}
       </div>
+      <p className="mt-5 flex items-start gap-2 text-sm leading-6 text-[#587793]"><Info className="mt-0.5 shrink-0 text-[#2478c8]" size={17}/>{t.demoNotice}</p>
     </section>
 
-    <section className="bg-[#f1f7ff] border-y border-[#deebfa] py-12">
-      <div className="max-w-7xl mx-auto px-5 sm:px-7"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#153b64]">{t.modulesTitle}</h2><p className="mt-2 text-sm text-[#57758f]">{t.modulesLead}</p>
-        <div className="mt-7 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">{t.modules.map(([title,desc],i)=>{const Icon=moduleIcons[i];return <article key={title} className="rounded-2xl bg-white border border-blue-100 p-5 shadow-sm flex gap-4"><span className="w-11 h-11 shrink-0 rounded-xl bg-blue-50 grid place-items-center text-blue-700"><Icon size={22}/></span><div><h3 className="font-bold text-sm text-[#163e68]">{title}</h3><p className="text-xs leading-relaxed mt-2 text-[#637d96]">{desc}</p></div></article>})}</div>
+    <section className="border-y border-[#d8e8f8] bg-gradient-to-b from-[#eef6ff] via-[#f8fbff] to-[#eaf4ff] py-14 sm:py-[70px]" aria-labelledby="modules-title">
+      <div className="max-w-7xl mx-auto px-5 sm:px-7">
+        <p className="text-xs font-extrabold tracking-[.16em] text-blue-700 uppercase">{de ? "DIE MODULE" : "TƏTBİQİN BÖLMƏLƏRİ"}</p>
+        <h2 id="modules-title" className="mt-3 text-[clamp(1.65rem,2.8vw,2.35rem)] font-extrabold tracking-tight leading-tight text-[#14385f]">{t.modulesTitle}</h2>
+        <p className="mt-3 text-base leading-7 text-[#55738e]">{t.modulesLead}</p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {t.modules.map(([title,desc],i)=>{const Icon=moduleIcons[i];return <Link href={moduleLinks[i]} key={title} className="group flex min-h-[172px] flex-col justify-between rounded-[21px] border border-[#c9dff5] bg-white p-6 shadow-[0_18px_34px_-29px_rgba(14,76,140,.38)] transition-all hover:-translate-y-1 hover:border-[#98c5ef] hover:shadow-[0_22px_45px_-30px_rgba(14,76,140,.42)]">
+            <div className="flex items-start justify-between"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-[#e9f4ff] to-[#cfe7ff] text-[#136bc1]"><Icon size={25}/></span><span className="text-xs font-bold text-[#97b8d6]">{String(i+1).padStart(2,"0")}</span></div>
+            <div className="mt-4 flex items-end justify-between gap-3"><div><h3 className="text-lg font-extrabold text-[#173e66]">{title}</h3><p className="mt-2 text-sm leading-6 text-[#55738e]">{desc}</p></div><ArrowRight size={18} className="mb-1 shrink-0 text-[#2478ca] transition-transform group-hover:translate-x-1" aria-hidden="true"/></div>
+          </Link>})}
+        </div>
       </div>
     </section>
 
-    <section className="max-w-7xl mx-auto px-5 sm:px-7 py-14 grid lg:grid-cols-[.86fr_1.14fr] items-center gap-8">
-      <div><p className="uppercase tracking-widest text-xs font-bold text-blue-700">{t.preview}</p><h2 className="mt-3 text-3xl font-extrabold text-[#14395c]">{t.sampleTitle}</h2><p className="mt-4 text-[#57718a] text-sm leading-7">{t.sampleLead}</p><Link href="/beispiele" className="mt-6 inline-flex items-center gap-2 text-blue-700 font-bold text-sm hover:underline">{t.sampleLink}<ArrowRight size={16}/></Link></div>
-      <AnimatedProjectWalkthrough language={language} />
+    <section className="max-w-7xl mx-auto px-5 sm:px-7 pt-14 pb-6" aria-labelledby="signup-title">
+      <div className="relative overflow-hidden rounded-[26px] border border-[#b8d7f6] bg-gradient-to-r from-[#e4f1ff] via-[#eff7ff] to-[#d8ebff] p-7 sm:p-10">
+        <div className="relative grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="max-w-3xl"><p className="text-xs font-extrabold uppercase tracking-widest text-[#176cbd]">{t.freeEyebrow}</p><h2 id="signup-title" className="mt-3 text-2xl sm:text-[30px] font-extrabold leading-tight text-[#123b66]">{t.freeTitle}</h2><p className="mt-3 text-sm sm:text-base leading-7 text-[#50718d]">{t.freeText}</p><p className="mt-3 flex items-center gap-2 text-xs font-semibold text-[#236cae]"><CheckCircle2 size={16}/>{t.paidNote}</p></div>
+          <Link href="/registrieren" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1168c7] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/15 transition-colors hover:bg-[#0956a5]">{t.freeLink}<ArrowRight size={17}/></Link>
+        </div>
+      </div>
     </section>
-
-    <section className="max-w-7xl mx-auto px-5 sm:px-7"><div className="rounded-[24px] p-6 sm:p-9 bg-gradient-to-r from-[#e6f3ff] via-[#eff8ff] to-[#d7ebff] border border-[#bedcf6] grid lg:grid-cols-[1fr_auto] items-center gap-5">
-      <div><p className="text-xs tracking-widest font-black text-blue-700">{t.freeEyebrow}</p><h2 className="mt-2 text-2xl font-extrabold text-[#133c68]">{t.freeTitle}</h2><p className="text-sm text-[#50718e] mt-3 max-w-3xl leading-relaxed">{t.freeText}</p></div><Link href="/registrieren" className="inline-flex justify-center items-center gap-2 px-6 py-3 rounded-xl bg-[#106acb] text-white font-bold text-sm hover:bg-[#0759b2]">{t.freeLink}<ArrowRight size={16}/></Link>
-    </div><p className="mt-5 text-xs text-[#68829a] text-center">{t.caveat}</p></section>
   </div>;
 }

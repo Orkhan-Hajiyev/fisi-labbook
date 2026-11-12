@@ -20,8 +20,8 @@ const copy = {
       {label:"05 · Docker-Dienste",title:"Container mit Parametern erfassen",intro:"Docker-Dokumentation sollte Image, Container, Ports und Startverfahren zusammenhalten.",fields:[["Dienst","Nginx Webserver"],["Host","docker01.lab.test"],["Image","nginx:stable"],["Container","web-lab"],["Portzuordnung","8080:80"],["Start","docker run -d --name web-lab -p 8080:80 nginx:stable"]],detail:"Im Beispiel ist der Webserver über http://192.168.20.30:8080 aus dem Übungsnetz vorgesehen."},
       {label:"06 · Praxisnotizen",title:"Erkenntnisse festhalten",intro:"Persönliche Notizen verbinden Konfiguration, Tests und den nächsten Lernschritt.",fields:[["Titel","DNS und Domänenzugriff überprüfen"],["Bereich","Netzwerk / Windows Server"],["Beobachtung","DNS-Auswahl am Client beeinflusst die AD-Suche."],["Ergebnis","Fehler nach Anpassung des DNS-Servers behoben"],["Nächster Schritt","GPO testen und Benutzerrechte dokumentieren"],["Verknüpftes Labor","LAB-002"]],detail:"Diese Notiz ist nur ein Beispiel. Eigene Notizen lassen sich nach Registrierung speichern."},
     ],
-    footerTitle:"Bereit für deinen eigenen FISI-Workspace?",
-    footerText:"In der kostenlosen Vollversion kannst du eigene Labore, Systeme, Befehle und Notizen anlegen und verwalten.",
+    footerTitle:"Mach aus IT-Wissen dokumentierte Praxis.",
+    footerText:"Erstelle ein Labor, verknüpfe Systeme und dokumentiere eigene Erfahrungen. Zum Start genügt eine kostenlose Registrierung.",
     linkRef:"Zur passenden Demo-Rubrik", smallPrint:"Beispielanzeige: Die ausgefüllten Werte werden nicht an Supabase übertragen und nicht als tatsächliche Kundendaten ausgegeben.",
   },
   az: {
@@ -39,8 +39,8 @@ const copy = {
       {label:"05 · Docker xidmətləri",title:"Konteyneri parametrləri ilə qeyd et",intro:"Docker sənədində image, container, portlar və başlatma üsulu birlikdə saxlanmalıdır.",fields:[["Xidmət","Nginx veb-server"],["Host","docker01.lab.test"],["Image","nginx:stable"],["Konteyner","web-lab"],["Port uyğunluğu","8080:80"],["Başlatma əmri","docker run -d --name web-lab -p 8080:80 nginx:stable"]],detail:"Nümunədə veb-serverin test şəbəkəsindən http://192.168.20.30:8080 vasitəsilə açılması nəzərdə tutulur."},
       {label:"06 · Praktiki qeydlər",title:"Öyrəndiklərini sənədləşdir",intro:"Şəxsi qeydlər konfiqurasiya, test və növbəti öyrənmə addımı arasında əlaqə yaradır.",fields:[["Başlıq","DNS və domen bağlantısının yoxlanması"],["Sahə","Şəbəkə / Windows Server"],["Müşahidə","Klientin DNS seçimi AD axtarışına təsir edir."],["Nəticə","DNS ünvanı düzəldildikdən sonra xəta aradan qalxdı"],["Növbəti addım","GPO testləri və istifadəçi hüquqları"],["Əlaqəli laboratoriya","LAB-002"]],detail:"Bu, yalnız nümunə qeyddir. Öz qeydlərini qeydiyyatdan sonra saxlaya bilərsən."},
     ],
-    footerTitle:"Öz şəxsi IT iş mühitini yaratmağa hazırsan?",
-    footerText:"Pulsuz tam versiyada şəxsi laboratoriyalarını, sistemlərini, əmrlərini və qeydlərini yarada və idarə edə bilərsən.",
+    footerTitle:"Öyrəndiklərini öz IT laboratoriyanda həyata keçir.",
+    footerText:"İlk laboratoriyanı yarat, sistemlərini əlaqələndir və təcrübələrini şəxsi iş mühitində sənədləşdir. Başlamaq üçün pulsuz qeydiyyat kifayətdir.",
     linkRef:"Uyğun demo bölməsinə keç",smallPrint:"Nümunə görünüşü: Bu məlumatlar verilənlər bazasına göndərilmir və real istifadəçi məlumatları kimi təqdim olunmur.",
   }
 } as const;
