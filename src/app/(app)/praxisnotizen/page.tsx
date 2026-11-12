@@ -1,6 +1,7 @@
 "use client";
 
 import { T, useT } from "@/components/TranslatedText";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import { useEffect, useState, useMemo } from "react";
 import {
@@ -76,56 +77,34 @@ interface Notif { type: "success" | "error"; message: string; }
 // ── Public view (unauthenticated) ─────────────────────────────────────────
 
 function PublicView() {
+  const { language } = useLanguage();
+  const de = language === "de";
   return (
-    <div className="space-y-8">
-      <PageHeader
-        icon={StickyNote}
-        title="Praxisnotizen"
-        description="Persönlicher Arbeitsbereich für technische Notizen und FISI-Dokumentation"
-      />
-
-      <div className="rounded-xl border border-slate-200 bg-blue-50 p-6 space-y-4">
-        <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">
-          Praxisnotizen ist als persönlicher Arbeitsbereich für technische Notizen,
-          Tagesaufgaben, Troubleshooting-Ideen, Befehle, Tags und strukturierte
-          FISI-Dokumentation vorgesehen.
+    <div className="space-y-7">
+      <PageHeader icon={StickyNote} title={de ? "Praxisnotizen" : "Praktiki qeydlər"}
+        description={de ? "Persönlicher Bereich für IT-Notizen, Aufgaben und dokumentierte Praxiserfahrung." : "IT qeydləri, tapşırıqlar və praktiki təcrübələrin sənədləşdirilməsi üçün şəxsi bölmə."} />
+      <section className="rounded-2xl border border-[#c7def5] bg-gradient-to-br from-[#e9f4ff] to-white p-6 sm:p-8">
+        <h2 className="text-xl font-extrabold text-[#193e68]">{de ? "Dein Wissen. Strukturiert dokumentiert." : "Öyrəndiklərini sistemli şəkildə sənədləşdir."}</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-[#506f8a]">
+          {de ? "Sammle technische Erkenntnisse, Fehleranalysen, Befehle und Aufgaben in deinem persönlichen Bereich. Eigene Einträge kannst du nach kostenloser Registrierung erstellen und speichern." : "Texniki biliklərini, xəta təhlillərini, əmrləri və tapşırıqlarını şəxsi iş mühitində topla. Öz qeydlərini yaratmaq və saxlamaq üçün pulsuz qeydiyyatdan keç."}
         </p>
-        <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">
-          Zum Erstellen und Verwalten eigener Praxisnotizen ist ein kostenloses
-          OrikOS-Konto erforderlich.
-        </p>
-        <div className="flex flex-wrap gap-3 pt-1">
-          <Link
-            href="/registrieren"
-            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors"
-          >
-            Kostenlos registrieren
-          </Link>
-          <Link
-            href="/login"
-            className="px-4 py-2 rounded-lg border border-slate-200 hover:border-slate-200 text-sm font-medium text-slate-700 hover:text-slate-900 transition-all"
-          ><T>Einloggen</T></Link>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link href="/registrieren" className="rounded-xl bg-[#126acc] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#075aae]">{de ? "Kostenlos registrieren" : "Pulsuz qeydiyyatdan keç"}</Link>
+          <Link href="/beispiele" className="rounded-xl border border-[#b8d6f1] bg-white px-5 py-2.5 text-sm font-bold text-[#1769ae] hover:bg-blue-50">{de ? "Ausgefüllte Beispiele ansehen" : "Doldurulmuş nümunələrə bax"}</Link>
         </div>
-      </div>
-
-      <div>
-        <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">
-          Funktionen
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      </section>
+      <section aria-labelledby="note-features">
+        <h2 id="note-features" className="mb-5 text-sm font-extrabold uppercase tracking-wider text-[#345e86]">{de ? "Geplante und verfügbare Funktionen" : "Mövcud və nəzərdə tutulan imkanlar"}</h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURE_CARDS.map(({ icon: Icon, title, desc, accent }) => (
-            <div key={title} className="rounded-xl border border-slate-200 bg-blue-50 p-5 space-y-3">
-              <div className={`w-8 h-8 rounded-lg border flex items-center justify-center ${accentMap[accent]}`}>
-                <Icon size={14} />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-slate-900 mb-1">{title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{desc}</p>
-              </div>
-            </div>
+            <article key={title} className="rounded-2xl border border-[#d4e5f5] bg-white p-5">
+              <div className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl border ${accentMap[accent]}`}><Icon size={19} /></div>
+              <h3 className="text-sm font-bold text-[#193e68]"><T>{title}</T></h3>
+              <p className="mt-2 text-xs leading-6 text-[#52718c]"><T>{desc}</T></p>
+            </article>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

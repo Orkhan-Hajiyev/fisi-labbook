@@ -300,6 +300,7 @@ const azTranslations: Readonly<Record<string, string>> = {
   "Administrationsbefehle, Beispiele und Anwendungsfälle": "İnzibati əmrlər, nümunələr və istifadə halları",
   "Fehleranalyse und Troubleshooting-Fälle": "Xəta təhlili və diaqnostika nümunələri",
   "Dokumentierte Docker-Container und Dienste": "Sənədləşdirilmiş Docker konteynerləri və xidmətləri",
+
 };
 
 export function translate(de: string, language: "de" | "az"): string {
