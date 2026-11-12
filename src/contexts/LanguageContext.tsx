@@ -1,38 +1,45 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useSyncExternalStore } from "react";
 
 export type Language = "de" | "az";
+type LanguageState = { language: Language; setLanguage: (language: Language) => void };
+const KEY = "fisi-language";
+const EVENT = "fisi-language-updated";
+const LanguageContext = createContext<LanguageState>({ language: "de", setLanguage: () => {} });
 
-type LanguageState = {
-  language: Language;
-  setLanguage: (language: Language) => void;
-};
+function readLanguage(): Language {
+  try {
+    const stored = window.localStorage.getItem(KEY);
+    return stored === "az" ? "az" : "de";
+  } catch {
+    return "de";
+  }
+}
 
-const LanguageContext = createContext<LanguageState>({
-  language: "de",
-  setLanguage: () => {},
-});
+function subscribe(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(EVENT, callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(EVENT, callback);
+  };
+}
+
+function getServerLanguage(): Language {
+  return "de";
+}
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("de");
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("fisi-language");
-      if (stored === "de" || stored === "az") setLanguageState(stored);
-    } catch {
-      // Private browsing may restrict storage; German remains the fallback.
-    }
-  }, []);
+  const language = useSyncExternalStore(subscribe, readLanguage, getServerLanguage);
 
   function setLanguage(next: Language) {
-    setLanguageState(next);
     try {
-      localStorage.setItem("fisi-language", next);
+      window.localStorage.setItem(KEY, next);
     } catch {
-      // Language switching works for the current session without storage.
+      // Language remains German when browser storage is unavailable.
     }
+    window.dispatchEvent(new Event(EVENT));
   }
 
   useEffect(() => {

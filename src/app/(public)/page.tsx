@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, CheckCircle2, Container, FlaskConical, Layers3, Network, Play, Server, ShieldCheck, Terminal, Wrench } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import InfrastructureHero, { AnimatedProjectWalkthrough } from "@/components/InfrastructureShowcase";
 
 const translations = {
   de: {
@@ -40,7 +41,7 @@ const translations = {
     caveat: "Demo und Beispielbereich zeigen illustrative Daten. Sie sind keine Verbindung zu echten Servern oder produktiven IT-Systemen.",
   },
   az: {
-    eyebrow: "SİSTEM İNTEQRASİYASI ÜZRƏ FACHINFORMATIKER ÜÇÜN",
+    eyebrow: "SİSTEM İNTEQRASİYASI SAHƏSİNİ ÖYRƏNƏNLƏR ÜÇÜN",
     title1: "Sənin rəqəmsal IT laboratoriyan.",
     title2: "Öyrən. Tətbiq et. Sənədləşdir.",
     lead: "FISI LabBook praktiki IT laboratoriyalarını, sistem sənədlərini, inzibati əmrləri və sistemli xəta təhlilini vahid, aydın platformada birləşdirir.",
@@ -52,10 +53,10 @@ const translations = {
     choiceLead: "Platformanı necə kəşf etmək istədiyini özün seç.",
     items: [
       { title: "Məhdud demo", subtitle: "Qeydiyyatsız", text: "Açıq IT nümunələrinə və seçilmiş funksiyalara bax. Burada şəxsi qeydləri daimi saxlamaq mümkün deyil.", cta: "Demonu aç" },
-      { title: "Tam doldurulmuş nümunə Workspace", subtitle: "İzahlı tanışlıq", text: "Laboratoriya, sistem, əmrlər, Docker, xəta təhlili və qeydləri əhatə edən, hər bölməsi izah olunmuş nümunə layihəni araşdır.", cta: "Nümunələri kəşf et" },
-      { title: "Şəxsi Workspace", subtitle: "Qeydiyyatdan sonra pulsuz", text: "Öz laboratoriyalarını və sistemlərini yarat, əmrlərini və praktiki qeydlərini idarə et, mövcud ixrac funksiyalarından istifadə et.", cta: "Pulsuz hesab yarat" },
+      { title: "Tam doldurulmuş nümunə iş mühiti", subtitle: "İzahlı tanışlıq", text: "Laboratoriya, sistem, əmrlər, Docker, xəta təhlili və qeydləri əhatə edən, hər bölməsi izah olunmuş nümunə layihəni araşdır.", cta: "Nümunələri kəşf et" },
+      { title: "Şəxsi iş mühiti", subtitle: "Qeydiyyatdan sonra pulsuz", text: "Öz laboratoriyalarını və sistemlərini yarat, əmrlərini və praktiki qeydlərini idarə et, mövcud ixrac funksiyalarından istifadə et.", cta: "Pulsuz hesab yarat" },
     ],
-    modulesTitle: "FISI gündəlik praktikası üçün hər şey", modulesLead: "Server quraşdırılmasından xətanın həllinin sənədləşdirilməsinə qədər.",
+    modulesTitle: "sistem inteqrasiyası praktikası üçün hər şey", modulesLead: "Server quraşdırılmasından xətanın həllinin sənədləşdirilməsinə qədər.",
     modules: [
       ["IT laboratoriyaları", "Tapşırıqları, məqsədləri və nəticələri sistemli qeyd et."],
       ["Sistemlər və xidmətlər", "Serverləri, IP ünvanlarını, rolları və xidmətləri sənədləşdir."],
@@ -65,11 +66,11 @@ const translations = {
       ["Praktiki qeydlər", "Şəxsi IT biliklərini bir yerdə saxla."],
     ],
     sampleTitle: "Tam sənədləşdirilmiş layihə necə görünür?",
-    sampleLead: "Nümunə bölməsində boş formalar deyil, texniki əlaqələri ilə birlikdə hazırlanmış bütöv FISI praktik nümunəsini görəcəksən.",
+    sampleLead: "Nümunə bölməsində boş formalar deyil, texniki əlaqələri ilə birlikdə hazırlanmış sistem inteqrasiyası üzrə bütöv praktik nümunəni görəcəksən.",
     sampleRows: [["Laboratoriya", "Windows və Linux ilə müəssisə şəbəkəsi"], ["Sistem", "srv-ad01 · DNS / Active Directory"], ["Şəbəkə", "192.168.20.0/24 · VLAN 20"], ["Xəta təhlili", "DNS ad həllini yoxla və düzəlt"]],
-    sampleLink: "İzahlı nümunə Workspace-ə keç",
+    sampleLink: "İzahlı nümunə iş mühiti-ə keç",
     freeEyebrow: "100% PULSUZ", freeTitle: "Şəxsi hesabınla bütün mövcud funksiyalardan istifadə et.",
-    freeText: "Qeydiyyatdan və tələb olunduqda e-poçt təsdiqindən sonra şəxsi Workspace-dən istifadə edə bilərsən. Tətbiqin hazırda təqdim olunan funksiyaları üçün ödənişli abunə tələb edilmir.",
+    freeText: "Qeydiyyatdan və tələb olunduqda e-poçt təsdiqindən sonra şəxsi iş mühiti-dən istifadə edə bilərsən. Tətbiqin hazırda təqdim olunan funksiyaları üçün ödənişli abunə tələb edilmir.",
     freeLink: "İndi pulsuz qeydiyyatdan keç",
     caveat: "Demo və nümunə bölmələrindəki məlumatlar illüstrativdir; real serverlərə və işlək IT infrastrukturuna qoşulmur.",
   },
@@ -78,35 +79,6 @@ const translations = {
 const moduleIcons = [FlaskConical, Server, Terminal, Wrench, Container, BookOpen];
 const choiceIcons = [Play, Layers3, ShieldCheck];
 const choiceLinks = ["/dashboard", "/beispiele", "/registrieren"];
-
-function LabIllustration({ de }: { de: boolean }) {
-  return (
-    <div className="relative overflow-hidden rounded-[28px] border border-[#bfdbf6] bg-gradient-to-br from-[#dfeeff] via-[#f2f8ff] to-[#b8d9fb] shadow-[0_30px_70px_-42px_rgba(11,81,163,.4)] min-h-[300px] sm:min-h-[370px]" aria-label={de ? "Illustration einer IT-Laborumgebung" : "IT laboratoriyasının təsviri"} role="img">
-      <div className="absolute inset-0 fisi-tech-grid opacity-70" />
-      <div className="absolute -top-24 -right-20 w-80 h-80 bg-blue-300/40 rounded-full blur-3xl" />
-      <div className="absolute top-9 left-7 flex items-center gap-2 rounded-xl border border-blue-200 bg-white/90 px-3 py-2 shadow-sm text-xs font-bold text-[#225a9a]"><Network size={17} /> {de ? "Netzwerk" : "Şəbəkə"} <span className="w-2 h-2 rounded-full bg-blue-500 motion-safe:animate-pulse" /></div>
-      <div className="absolute top-10 right-8 rounded-xl bg-white/90 border border-blue-200 p-2.5 shadow-sm text-blue-700"><Container size={27} /></div>
-      <div className="absolute left-7 bottom-9 flex gap-3 items-end">
-        {[0, 1, 2].map((n) => <div key={n} className={`relative w-14 sm:w-[70px] ${n === 1 ? "h-44 sm:h-48" : "h-32 sm:h-40"} rounded-xl border border-[#81b4e9] bg-gradient-to-b from-[#1c609f] to-[#112e57] shadow-xl p-2.5 space-y-3`}>
-          {[0, 1, 2, 3].map((i) => <div key={i} className="rounded-md bg-[#1b80cf]/30 border border-[#71bfff]/40 h-4 flex items-center justify-end pr-1.5 gap-1"><span className="w-1 h-1 rounded-full bg-[#68dbff]"/><span className="w-1 h-1 rounded-full bg-[#b3e9ff]"/></div>)}
-        </div>)}
-      </div>
-      <div className="absolute bottom-7 right-6 w-[49%] min-w-[190px] shadow-2xl">
-        <div className="rounded-xl p-2 bg-[#193b6c] border-[5px] border-[#2d659f]">
-          <div className="rounded-md bg-[#0b1b35] text-[#8ce2ff] font-mono text-[10px] sm:text-xs space-y-2 px-3 py-4">
-            <p className="text-[#8febbb]">fisi@lab:~$</p>
-            <p>ip addr show</p><p>docker ps</p><p>nslookup srv-ad01</p>
-            <p className="text-white/50">_</p>
-          </div>
-        </div>
-        <div className="mx-auto w-2/3 h-2 bg-[#74a8de] rounded-b-lg" />
-      </div>
-      <div className="absolute top-[34%] right-[28%] flex items-center gap-2 px-3 py-2 rounded-xl border border-blue-200 bg-white/90 shadow-lg text-blue-700"><Server size={19} /><span className="text-[11px] font-semibold">srv-ad01</span></div>
-      <div className="absolute top-[48%] right-[25%] h-11 border-l-2 border-dashed border-blue-400" />
-      <div className="absolute bottom-2 left-7 text-[10px] text-[#3a6994] font-semibold">{de ? "Nur illustrative Technik – keine Live-Verbindung" : "Yalnız nümunə təsviri — real bağlantı yoxdur"}</div>
-    </div>
-  );
-}
 
 export default function LandingPage() {
   const { language } = useLanguage();
@@ -126,7 +98,7 @@ export default function LandingPage() {
           </div>
           <div className="mt-6 flex flex-wrap gap-5 text-xs font-semibold text-[#4b759a]">{t.trust.map(s=><span key={s} className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-blue-600" />{s}</span>)}</div>
         </div>
-        <LabIllustration de={de} />
+        <InfrastructureHero language={language} />
       </div>
     </section>
 
@@ -149,10 +121,7 @@ export default function LandingPage() {
 
     <section className="max-w-7xl mx-auto px-5 sm:px-7 py-14 grid lg:grid-cols-[.86fr_1.14fr] items-center gap-8">
       <div><p className="uppercase tracking-widest text-xs font-bold text-blue-700">{t.preview}</p><h2 className="mt-3 text-3xl font-extrabold text-[#14395c]">{t.sampleTitle}</h2><p className="mt-4 text-[#57718a] text-sm leading-7">{t.sampleLead}</p><Link href="/beispiele" className="mt-6 inline-flex items-center gap-2 text-blue-700 font-bold text-sm hover:underline">{t.sampleLink}<ArrowRight size={16}/></Link></div>
-      <div className="fisi-card rounded-2xl p-4 sm:p-6">
-        <div className="flex justify-between border-b border-blue-100 pb-3 gap-2"><span className="text-sm font-bold text-[#21517f] flex items-center gap-2"><Layers3 size={18}/>{de?"Unternehmensnetz · Musterfall":"Müəssisə şəbəkəsi · nümunə"}</span><span className="text-[11px] text-blue-500">{t.example}</span></div>
-        <div className="mt-3">{t.sampleRows.map(([label,value])=><div key={label} className="grid grid-cols-[95px_1fr] sm:grid-cols-[125px_1fr] gap-3 py-3 border-b last:border-b-0 border-blue-50"><span className="text-xs font-bold text-[#4077a6]">{label}</span><span className="text-xs sm:text-sm font-medium text-[#234667]">{value}</span></div>)}</div>
-      </div>
+      <AnimatedProjectWalkthrough language={language} />
     </section>
 
     <section className="max-w-7xl mx-auto px-5 sm:px-7"><div className="rounded-[24px] p-6 sm:p-9 bg-gradient-to-r from-[#e6f3ff] via-[#eff8ff] to-[#d7ebff] border border-[#bedcf6] grid lg:grid-cols-[1fr_auto] items-center gap-5">

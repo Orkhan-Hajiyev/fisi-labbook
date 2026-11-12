@@ -25,12 +25,12 @@ const copy = {
     linkRef:"Zur passenden Demo-Rubrik", smallPrint:"Beispielanzeige: Die ausgefüllten Werte werden nicht an Supabase übertragen und nicht als tatsächliche Kundendaten ausgegeben.",
   },
   az: {
-    tag:"TAM DOLDURULMUŞ NÜMUNƏ WORKSPACE · YALNIZ OXU",
-    title:"Bütöv FISI praktik nümunəsi — addım-addım izahla.",
+    tag:"TAM DOLDURULMUŞ NÜMUNƏ İŞ MÜHİTİ · YALNIZ BAXIŞ",
+    title:"Tam hazırlanmış sistem inteqrasiyası nümunəsi — addım-addım izahla.",
     lead:"Bu səhifədə bir şəbəkə laboratoriyasının FISI LabBook-da necə sənədləşdirildiyi əlaqəli, uydurma nümunə məlumatlarla göstərilir. Bütün xanalar izah məqsədilə doldurulub; bu qeydlər sənin hesabına köçürülmür.",
-    back:"Ana səhifəyə qayıt",demo:"Məhdud demonu aç",signup:"Pulsuz şəxsi Workspace yarat",
+    back:"Ana səhifəyə qayıt",demo:"Məhdud demonu aç",signup:"Pulsuz şəxsi iş mühiti yarat",
     project:"Nümunə layihə: Windows, Linux və Docker ilə ofis şəbəkəsi",
-    caution:"Yalnız nümunə məlumatlarıdır: real serverlərə qoşulmur, məhsuldar sistemə nəzarət etmir və həqiqi giriş məlumatları saxlamır.",
+    caution:"Bu səhifədə yalnız nümunə məlumatları göstərilir: real serverlərə qoşulmur, işlək sistemləri izləmir və həqiqi giriş məlumatları saxlamır.",
     sections:[
       {label:"01 · IT laboratoriyası",title:"Şəbəkə laboratoriyasını yarat",intro:"Laboratoriyada başlanğıc vəziyyəti, məqsəd, mühit və nəticə qeyd olunur. Bu, təcrübəni sonradan da anlamağa kömək edir.",fields:[["Laboratoriya ID-si","LAB-002"],["Başlıq","Kiçik müəssisə şəbəkəsinin qurulması"],["Mövzu","Active Directory, DNS, DHCP və VLAN"],["Mühit","Virtual test mühiti (Hyper-V)"],["Məqsəd","VLAN 20-dəki klientlər domen kontrollerini DNS vasitəsilə tapsın."],["Status","Tamamlanıb"]],detail:"Yoxlama: nslookup dc01.lab.test nümunə şəbəkədə 192.168.20.10 ünvanını qaytarır."},
       {label:"02 · Sistemlər",title:"Sistemləri sənədləşdir",intro:"Hər cihazın və xidmətin aydın rolu, ünvanı olur. Göstərilən ünvanlar yalnız bu test nümunəsinə aiddir.",fields:[["Domen kontrolleri","dc01.lab.test · Windows Server · 192.168.20.10"],["Linux server","web01.lab.test · Ubuntu Server · 192.168.20.20"],["Docker host","docker01.lab.test · 192.168.20.30"],["Router / Gateway","192.168.20.1"],["DNS server","192.168.20.10"],["Şəbəkə / VLAN","192.168.20.0/24 · VLAN 20"]],detail:"Əlaqə: Klient daxili DNS serverindən istifadə edərək laboratoriyadakı AD xidmətlərini tapa bilir."},
@@ -39,9 +39,9 @@ const copy = {
       {label:"05 · Docker xidmətləri",title:"Konteyneri parametrləri ilə qeyd et",intro:"Docker sənədində image, container, portlar və başlatma üsulu birlikdə saxlanmalıdır.",fields:[["Xidmət","Nginx veb-server"],["Host","docker01.lab.test"],["Image","nginx:stable"],["Konteyner","web-lab"],["Port uyğunluğu","8080:80"],["Başlatma əmri","docker run -d --name web-lab -p 8080:80 nginx:stable"]],detail:"Nümunədə veb-serverin test şəbəkəsindən http://192.168.20.30:8080 vasitəsilə açılması nəzərdə tutulur."},
       {label:"06 · Praktiki qeydlər",title:"Öyrəndiklərini sənədləşdir",intro:"Şəxsi qeydlər konfiqurasiya, test və növbəti öyrənmə addımı arasında əlaqə yaradır.",fields:[["Başlıq","DNS və domen bağlantısının yoxlanması"],["Sahə","Şəbəkə / Windows Server"],["Müşahidə","Klientin DNS seçimi AD axtarışına təsir edir."],["Nəticə","DNS ünvanı düzəldildikdən sonra xəta aradan qalxdı"],["Növbəti addım","GPO testləri və istifadəçi hüquqları"],["Əlaqəli laboratoriya","LAB-002"]],detail:"Bu, yalnız nümunə qeyddir. Öz qeydlərini qeydiyyatdan sonra saxlaya bilərsən."},
     ],
-    footerTitle:"Öz FISI Workspace-inə hazırsan?",
+    footerTitle:"Öz şəxsi IT iş mühitini yaratmağa hazırsan?",
     footerText:"Pulsuz tam versiyada şəxsi laboratoriyalarını, sistemlərini, əmrlərini və qeydlərini yarada və idarə edə bilərsən.",
-    linkRef:"Uyğun demo bölməsinə keç",smallPrint:"Nümunə görünüşü: Bu məlumatlar Supabase-ə göndərilmir və real müştəri məlumatı kimi təqdim olunmur.",
+    linkRef:"Uyğun demo bölməsinə keç",smallPrint:"Nümunə görünüşü: Bu məlumatlar verilənlər bazasına göndərilmir və real istifadəçi məlumatları kimi təqdim olunmur.",
   }
 } as const;
 
