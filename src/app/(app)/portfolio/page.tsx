@@ -1,3 +1,5 @@
+"use client";
+
 import { useT } from "@/components/TranslatedText";
 import { FolderKanban, Target, Database, Layers, Briefcase, Rocket, CheckCircle2 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
