@@ -228,17 +228,17 @@ export default function DashboardPage() {
       {/* Quick links */}
       <div>
         <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">
-          Schnellzugriff
+          <T>Schnellzugriff</T>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {[
-            { href: "/labore", label: translateUI("Labore"), desc: "Dokumentierte IT-Laborumgebungen", icon: FlaskConical },
-            { href: "/systeme", label: translateUI("Systeme"), desc: "Infrastruktur- und Systemdokumentation", icon: Server },
-            { href: "/befehle", label: translateUI("Befehle"), desc: "Admin-Befehlsreferenz mit Beispielen", icon: Terminal },
-            { href: "/fehleranalyse", label: translateUI("Fehleranalyse"), desc: "Troubleshooting-Fälle strukturiert", icon: Bug },
-            { href: "/docker-dienste", label: translateUI("Docker-Dienste"), desc: "Container-Dienste und Compose-Snippets", icon: Container },
-            { href: "/praxisnotizen", label: translateUI("Praxisnotizen"), desc: "Persönlicher Notiz- und Aufgabenbereich", icon: StickyNote },
-            { href: "/portfolio", label: translateUI("Portfolio"), desc: "Projektzusammenfassung und Technologien", icon: BookOpen },
+            { href: "/labore", label: translateUI("Labore"), desc: translateUI("Dokumentierte IT-Laborumgebungen"), icon: FlaskConical },
+            { href: "/systeme", label: translateUI("Systeme"), desc: translateUI("Infrastruktur- und Systemdokumentation"), icon: Server },
+            { href: "/befehle", label: translateUI("Befehle"), desc: translateUI("Admin-Befehlsreferenz mit Beispielen"), icon: Terminal },
+            { href: "/fehleranalyse", label: translateUI("Fehleranalyse"), desc: translateUI("Troubleshooting-Fälle strukturiert"), icon: Bug },
+            { href: "/docker-dienste", label: translateUI("Docker-Dienste"), desc: translateUI("Container-Dienste und Compose-Snippets"), icon: Container },
+            { href: "/praxisnotizen", label: translateUI("Praxisnotizen"), desc: translateUI("Persönlicher Notiz- und Aufgabenbereich"), icon: StickyNote },
+            { href: "/portfolio", label: translateUI("Portfolio"), desc: translateUI("Projektzusammenfassung und Technologien"), icon: BookOpen },
           ].map(({ href, label, desc, icon: Icon }) => (
             <Link
               key={href}

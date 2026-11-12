@@ -46,3 +46,20 @@ test("guest experience has a single auth area and Azerbaijani sample-workspace l
   assert.ok(navigation.includes('Nümunə iş mühiti'));
   assert.ok(banner.includes('Nümunə iş mühiti'));
 });
+
+
+test("guest search and workspace screens have localized entry requirements", () => {
+  const search = read("src/app/(app)/suche/page.tsx");
+  const workspace = read("src/app/(app)/workspace/page.tsx");
+  const dictionary = read("src/components/TranslatedText.tsx");
+  const dashboard = read("src/app/(app)/dashboard/page.tsx");
+  assert.ok(search.includes("<T>Die globale Suche ist für angemeldete Benutzer verfügbar.</T>"));
+  assert.ok(workspace.includes("<T>Der persönliche Workspace ist nur für angemeldete Benutzer verfügbar.</T>"));
+  assert.ok(search.includes("<T>Kostenlos registrieren</T>"));
+  assert.ok(workspace.includes("<T>Kostenlos registrieren</T>"));
+  assert.ok(workspace.includes('description={translateUI("Persönliche Gesamtübersicht aller Inhalte und Verknüpfungen")}'));
+  assert.ok(dashboard.includes("<T>Schnellzugriff</T>"));
+  for (const term of ["Schnellzugriff", "Suchen", "Kostenlos registrieren", "Die globale Suche ist für angemeldete Benutzer verfügbar.", "Der persönliche Workspace ist nur für angemeldete Benutzer verfügbar."]) {
+    assert.ok(dictionary.includes(JSON.stringify(term) + ":"), "Missing AZ UI translation: " + term);
+  }
+});

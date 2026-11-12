@@ -301,6 +301,12 @@ const azTranslations: Readonly<Record<string, string>> = {
   "Fehleranalyse und Troubleshooting-Fälle": "Xəta təhlili və diaqnostika nümunələri",
   "Dokumentierte Docker-Container und Dienste": "Sənədləşdirilmiş Docker konteynerləri və xidmətləri",
 
+  "Schnellzugriff": "Sürətli keçidlər",
+  "Persönliche Gesamtübersicht aller Inhalte und Verknüpfungen": "Bütün şəxsi qeydlərinə və əlaqələrinə ümumi baxış",
+  "Der persönliche Workspace ist nur für angemeldete Benutzer verfügbar.": "Şəxsi iş mühiti yalnız hesabına daxil olmuş istifadəçilər üçün əlçatandır.",
+  "Die globale Suche ist für angemeldete Benutzer verfügbar.": "Ümumi axtarışdan istifadə etmək üçün hesabına daxil olmalısan.",
+  "Suchen": "Axtar",
+  "Ergebnisse für": "Axtarış nəticələri:",
 };
 
 export function translate(de: string, language: "de" | "az"): string {

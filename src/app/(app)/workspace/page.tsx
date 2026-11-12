@@ -478,7 +478,7 @@ export default function WorkspacePage() {
         <PageHeader
           icon={LayoutGrid}
           title={translateUI("Workspace")}
-          description="Persönliche Gesamtübersicht aller Inhalte und Verknüpfungen"
+          description={translateUI("Persönliche Gesamtübersicht aller Inhalte und Verknüpfungen")}
         />
         {user && data && !isEmpty && (
           <div className="flex items-center gap-2 mt-6">
@@ -518,12 +518,12 @@ export default function WorkspacePage() {
           </div>
           <h3 className="text-sm font-semibold text-slate-900 mb-2"><T>Anmeldung erforderlich</T></h3>
           <p className="text-xs text-slate-600 max-w-sm mx-auto mb-5">
-            Der persönliche Workspace ist nur für angemeldete Benutzer verfügbar.
+            <T>Der persönliche Workspace ist nur für angemeldete Benutzer verfügbar.</T>
           </p>
           <div className="flex items-center justify-center gap-3">
             <Link href="/login" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors"><T>Einloggen</T></Link>
             <Link href="/registrieren" className="px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
-              Kostenlos registrieren
+              <T>Kostenlos registrieren</T>
             </Link>
           </div>
         </div>

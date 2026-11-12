@@ -186,12 +186,12 @@ export default function SuchePage() {
           </div>
           <h3 className="text-sm font-semibold text-slate-900 mb-2"><T>Anmeldung erforderlich</T></h3>
           <p className="text-xs text-slate-600 max-w-sm mx-auto mb-5">
-            Die globale Suche ist für angemeldete Benutzer verfügbar.
+            <T>Die globale Suche ist für angemeldete Benutzer verfügbar.</T>
           </p>
           <div className="flex items-center justify-center gap-3">
             <Link href="/login" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors"><T>Einloggen</T></Link>
             <Link href="/registrieren" className="px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
-              Kostenlos registrieren
+              <T>Kostenlos registrieren</T>
             </Link>
           </div>
         </div>
@@ -222,7 +222,7 @@ export default function SuchePage() {
                 disabled={!query.trim()}
                 className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold text-white transition-colors"
               >
-                Suchen
+                <T>Suchen</T>
               </button>
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function SuchePage() {
             <div className="space-y-6">
               <p className="text-xs text-slate-600">
                 <span className="text-slate-900 font-semibold">{total}</span>{" "}
-                Ergebnisse für{" "}
+                <T>Ergebnisse für</T>{" "}
                 <span className="text-blue-700">&bdquo;{searchedTerm}&ldquo;</span>
               </p>
 
