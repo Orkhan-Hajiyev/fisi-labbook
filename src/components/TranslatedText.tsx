@@ -215,7 +215,6 @@ const azTranslations: Readonly<Record<string, string>> = {
   "Alle Status": "Bütün vəziyyətlər",
   "Domain Controller": "Domen kontrolleri",
   "Referenz": "Nümunə məlumat",
-  "Speichern": "Yadda saxla",
   "Wird gespeichert…": "Yadda saxlanılır…",
   "Kopiert": "Kopyalandı",
   "Kopieren": "Kopyala",
@@ -246,7 +245,6 @@ const azTranslations: Readonly<Record<string, string>> = {
   "de-DE": "az-AZ",
   "Allgemein": "Ümumi",
   "Labor": "Laboratoriya",
-  "Befehl": "Əmr",
   "Netzwerk": "Şəbəkə",
   "Praktikum": "Təcrübə",
   "Idee": "İdeya",
@@ -259,7 +257,6 @@ const azTranslations: Readonly<Record<string, string>> = {
   "Zurück": "Geri",
   "Jetzt anmelden": "İndi daxil ol",
   "Alle anzeigen": "Hamısına bax",
-  "FISI LabBook / Workspace": "FISI LabBook / İş mühiti",
   "Bitte geben Sie Ihren Namen ein.": "Adını daxil et.",
   "n8n (optional, Automatisierung)": "n8n (istəyə bağlı avtomatlaşdırma)",
   "Windows Server und Active Directory": "Windows Server və Active Directory",
@@ -276,7 +273,6 @@ const azTranslations: Readonly<Record<string, string>> = {
   "In Vorbereitung": "Hazırlıq mərhələsində",
   "Dieser Bereich wird in einer zukünftigen Version für persönliche Daten verfügbar sein.": "Bu bölmədə şəxsi məlumatlarla işləmək imkanı gələcək versiyalarda əlavə olunacaq.",
   "Persönlicher Arbeitsbereich": "Şəxsi iş mühiti",
-  "Hilfen & Vorlagen": "Kömək və şablonlar",
 };
 
 export function translate(de: string, language: "de" | "az"): string {
