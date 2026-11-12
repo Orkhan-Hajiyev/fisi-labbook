@@ -1,3 +1,4 @@
+import { T } from "@/components/TranslatedText";
 import { AlertTriangle } from "lucide-react";
 
 interface ErrorStateProps {
@@ -12,8 +13,8 @@ export default function ErrorState({
       <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
         <AlertTriangle size={22} className="text-red-700" />
       </div>
-      <p className="text-sm text-red-700 font-medium mb-1">Fehler beim Laden</p>
-      <p className="text-xs text-slate-600 max-w-sm text-center">{message}</p>
+      <p className="text-sm text-red-700 font-medium mb-1"><T>Fehler beim Laden</T></p>
+      <p className="text-xs text-slate-600 max-w-sm text-center"><T>{message}</T></p>
     </div>
   );
 }

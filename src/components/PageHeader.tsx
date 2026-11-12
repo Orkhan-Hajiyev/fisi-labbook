@@ -1,3 +1,4 @@
+import { T } from "@/components/TranslatedText";
 import { LucideIcon } from "lucide-react";
 
 interface PageHeaderProps {
@@ -13,9 +14,9 @@ export default function PageHeader({ icon: Icon, title, description }: PageHeade
           <Icon size={22} className="text-[#1665a8]" />
         </div>
         <div className="pt-0.5">
-          <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-blue-600 mb-1">FISI LabBook / Workspace</p>
-          <h1 className="text-2xl sm:text-[27px] font-extrabold tracking-tight text-[#183954] leading-tight">{title}</h1>
-          {description && <p className="text-slate-600 text-sm mt-1.5">{description}</p>}
+          <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-blue-600 mb-1"><T>FISI LabBook / Workspace</T></p>
+          <h1 className="text-2xl sm:text-[27px] font-extrabold tracking-tight text-[#183954] leading-tight"><T>{title}</T></h1>
+          {description && <p className="text-slate-600 text-sm mt-1.5"><T>{description}</T></p>}
         </div>
     </div>
   );

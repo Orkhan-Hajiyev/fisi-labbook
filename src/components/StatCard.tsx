@@ -1,3 +1,4 @@
+import { T } from "@/components/TranslatedText";
 import { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
@@ -29,7 +30,7 @@ export default function StatCard({ label, value, icon: Icon, href, accent = "blu
       <div className={`absolute top-0 inset-x-0 h-1 ${classes.bar}`} />
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.08em] mb-3">{label}</p>
+          <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.08em] mb-3"><T>{label}</T></p>
           <p className="text-3xl font-extrabold tracking-tight text-[#183954] tabular-nums">{value}</p>
         </div>
         <div className={`w-11 h-11 rounded-xl border flex items-center justify-center ${classes.icon}`}>

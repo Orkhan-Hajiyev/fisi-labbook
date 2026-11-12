@@ -1,5 +1,7 @@
 "use client";
 
+import { T } from "@/components/TranslatedText";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import { Edit2, Trash2, Tag, Calendar, MapPin, AlertCircle } from "lucide-react";
 import type { FisiUserNote } from "@/lib/types";
@@ -32,6 +34,7 @@ interface Props {
 }
 
 export default function NoteCard({ note, onEdit, onDelete }: Props) {
+  const { language } = useLanguage();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -50,10 +53,10 @@ export default function NoteCard({ note, onEdit, onDelete }: Props) {
       {/* Status + Priority row */}
       <div className="flex items-center justify-between gap-2">
         <span className={`inline-flex items-center text-[11px] font-medium px-2.5 py-1 rounded-full border ${status.cls}`}>
-          {status.label}
+          <T>{status.label}</T>
         </span>
         <span className={`inline-flex items-center text-[11px] font-medium px-2.5 py-1 rounded-full border ${priority.cls}`}>
-          {priority.label}
+          <T>{priority.label}</T>
         </span>
       </div>
 
@@ -99,14 +102,14 @@ export default function NoteCard({ note, onEdit, onDelete }: Props) {
       <div className="flex items-center justify-between pt-2 border-t border-slate-200 mt-auto">
         <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
           <Calendar size={10} />
-          <span>{formatDate(note.updated_at)}</span>
+          <span>{new Date(note.updated_at).toLocaleDateString(language === "az" ? "az-AZ" : "de-DE")}</span>
         </div>
 
         {confirmDelete ? (
           <div className="flex items-center gap-2">
             <span className="flex items-center gap-1 text-[11px] text-red-700">
               <AlertCircle size={10} />
-              Wirklich löschen?
+              <T>Wirklich löschen?</T>
             </span>
             <button
               onClick={handleDelete}
@@ -119,7 +122,7 @@ export default function NoteCard({ note, onEdit, onDelete }: Props) {
               onClick={() => setConfirmDelete(false)}
               className="text-[11px] text-slate-600 hover:text-slate-700 transition-colors"
             >
-              Nein
+              <T>Nein</T>
             </button>
           </div>
         ) : (
@@ -129,14 +132,14 @@ export default function NoteCard({ note, onEdit, onDelete }: Props) {
               className="flex items-center gap-1.5 text-[11px] text-slate-600 hover:text-blue-700 px-2 py-1 rounded-lg hover:bg-blue-500/10 transition-all"
             >
               <Edit2 size={11} />
-              Bearbeiten
+              <T>Bearbeiten</T>
             </button>
             <button
               onClick={() => setConfirmDelete(true)}
               className="flex items-center gap-1.5 text-[11px] text-slate-600 hover:text-red-700 px-2 py-1 rounded-lg hover:bg-red-500/10 transition-all"
             >
               <Trash2 size={11} />
-              Löschen
+              <T>Löschen</T>
             </button>
           </div>
         )}

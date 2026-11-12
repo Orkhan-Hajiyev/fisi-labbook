@@ -1,3 +1,4 @@
+import { T } from "@/components/TranslatedText";
 interface Props {
   title: string;
 }
@@ -6,14 +7,14 @@ export default function PersonalSection({ title }: Props) {
   return (
     <div className="mt-10">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider">{title}</h2>
+        <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider"><T>{title}</T></h2>
         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-amber-500/20 bg-amber-500/5 text-amber-700/70">
-          In Vorbereitung
+          <T>In Vorbereitung</T>
         </span>
       </div>
       <div className="rounded-xl border border-slate-200 bg-blue-50 p-6 text-center">
         <p className="text-sm text-slate-500 leading-relaxed">
-          Dieser Bereich wird in einer zukünftigen Version für persönliche Daten verfügbar sein.
+          <T>Dieser Bereich wird in einer zukünftigen Version für persönliche Daten verfügbar sein.</T>
         </p>
       </div>
     </div>

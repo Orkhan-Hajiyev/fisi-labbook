@@ -1,6 +1,7 @@
 "use client";
 
 import { T, useT } from "@/components/TranslatedText";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import { useEffect, useState } from "react";
 import {
@@ -33,6 +34,7 @@ interface PersonalStats {
 
 export default function DashboardPage() {
   const translateUI = useT();
+  const { language } = useLanguage();
   const { user } = useAuth();
   const userId = user?.id;
 
@@ -116,24 +118,24 @@ export default function DashboardPage() {
         <section className="fisi-hero rounded-[24px] p-6 sm:p-8">
           <div className="grid md:grid-cols-[1fr_auto] items-center gap-5">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[.14em] text-blue-700 mb-2">FISI LabBook · Persönlicher Workspace</p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#153a5c]">Willkommen zurück{user.user_metadata?.name ? `, ${String(user.user_metadata.name).split(" ")[0]}` : ""}!</h1>
-              <p className="mt-2 text-sm text-[#50718b] max-w-xl">Deine IT-Dokumentation, eigenen Labore und Praxisnotizen an einem Ort. Die nachfolgenden Kennzahlen beziehen sich auf deinen eigenen Account.</p>
+              <p className="text-[11px] font-bold uppercase tracking-[.14em] text-blue-700 mb-2"><T>FISI LabBook · Persönlicher Workspace</T></p>
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#153a5c]">{language === "de" ? "Willkommen zurück" : "Yenidən xoş gəlmisən"}{user.user_metadata?.name ? `, ${String(user.user_metadata.name).split(" ")[0]}` : ""}!</h1>
+              <p className="mt-2 text-sm text-[#50718b] max-w-xl">{language === "de" ? "Deine IT-Dokumentation, eigenen Labore und Praxisnotizen an einem Ort. Die nachfolgenden Kennzahlen beziehen sich auf deinen eigenen Account." : "IT sənədlərin, şəxsi laboratoriyaların və praktiki qeydlərin bir yerdədir. Aşağıdakı göstəricilər yalnız sənin hesabına aiddir."}</p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Link href="/workspace" className="px-4 py-2.5 rounded-xl bg-[#176cba] text-white font-bold text-sm hover:bg-[#0b599f]"><T>Mein Workspace</T><ArrowRight size={15} className="inline ml-1" /></Link>
-              <Link href="/beispiele" className="px-4 py-2.5 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-50">Beispiele ansehen</Link>
+              <Link href="/beispiele" className="px-4 py-2.5 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-50"><T>Beispiele ansehen</T></Link>
             </div>
           </div>
         </section>
       ) : (
         <section className="fisi-hero fisi-tech-grid rounded-[24px] p-6 sm:p-8">
-          <p className="text-[11px] text-blue-700 font-bold uppercase tracking-[.14em] mb-2">FISI LabBook · Eingeschränkte Demo</p>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#153a5c]">IT-Labore und Beispiele entdecken</h1>
-          <p className="text-sm text-[#50718b] mt-3 max-w-2xl">Ohne Registrierung kannst du öffentlich freigegebene Beispiele ansehen. Für eigene Labore, Notizen und vollständige Workspace-Funktionen ist ein kostenloses Konto erforderlich.</p>
+          <p className="text-[11px] text-blue-700 font-bold uppercase tracking-[.14em] mb-2"><T>FISI LabBook · Eingeschränkte Demo</T></p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#153a5c]"><T>IT-Labore und Beispiele entdecken</T></h1>
+          <p className="text-sm text-[#50718b] mt-3 max-w-2xl">{language === "de" ? "Ohne Registrierung kannst du öffentlich freigegebene Beispiele ansehen. Für eigene Labore, Notizen und vollständige Workspace-Funktionen ist ein kostenloses Konto erforderlich." : "Qeydiyyatsız açıq nümunələrə baxa bilərsən. Şəxsi laboratoriyalar, qeydlər və bütün iş mühiti funksiyaları üçün pulsuz hesab lazımdır."}</p>
           <div className="flex flex-wrap gap-3 mt-5">
-            <Link href="/beispiele" className="px-4 py-2.5 rounded-xl bg-[#176cba] text-white text-sm font-bold">Gefüllten Beispiel-Workspace ansehen →</Link>
-            <Link href="/registrieren" className="px-4 py-2.5 rounded-xl bg-white border border-blue-200 text-blue-800 text-sm font-bold">Kostenlos registrieren</Link>
+            <Link href="/beispiele" className="px-4 py-2.5 rounded-xl bg-[#176cba] text-white text-sm font-bold"><T>Gefüllten Beispiel-Workspace ansehen →</T></Link>
+            <Link href="/registrieren" className="px-4 py-2.5 rounded-xl bg-white border border-blue-200 text-blue-800 text-sm font-bold"><T>Kostenlos registrieren</T></Link>
           </div>
         </section>
       )}
@@ -143,7 +145,7 @@ export default function DashboardPage() {
       {/* Demo stats */}
       <div>
         <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">
-          Dokumentationsübersicht
+          <T>Dokumentationsübersicht</T>
         </h2>
         {demoLoading && <LoadingState />}
         {demoError && <ErrorState />}
@@ -163,7 +165,7 @@ export default function DashboardPage() {
       {user && (
         <div>
           <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">
-            Persönlicher Arbeitsbereich
+            <T>Persönlicher Arbeitsbereich</T>
           </h2>
 
           {personalStatsLoading && <LoadingState />}
@@ -174,23 +176,22 @@ export default function DashboardPage() {
               <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mx-auto mb-4">
                 <FlaskConical size={20} className="text-blue-700" />
               </div>
-              <h3 className="text-sm font-semibold text-slate-900 mb-2">Willkommen in Ihrem Arbeitsbereich</h3>
+              <h3 className="text-sm font-semibold text-slate-900 mb-2"><T>Willkommen in Ihrem Arbeitsbereich</T></h3>
               <p className="text-xs text-slate-600 leading-relaxed max-w-sm mx-auto mb-6">
-                Starten Sie Ihre persönliche Dokumentation. Erstellen Sie Labore, dokumentieren Sie Systeme,
-                sammeln Sie Befehle und halten Sie Troubleshooting-Erfahrungen fest.
+                {language === "de" ? "Starte deine persönliche Dokumentation. Erstelle Labore, dokumentiere Systeme, sammle Befehle und halte Erfahrungen aus der Fehleranalyse fest." : "Şəxsi sənədləşdirməyə başla. Laboratoriyalar yarat, sistemləri sənədləşdir, əmrləri topla və xəta təhlili təcrübələrini qeyd et."}
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
                 <Link href="/labore"
                   className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors">
-                  <Plus size={14} />Erstes Labor erstellen
+                  <Plus size={14} /><T>Erstes Labor erstellen</T>
                 </Link>
                 <Link href="/praxisnotizen"
                   className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm font-medium text-slate-700 transition-colors">
-                  <Plus size={14} />Praxisnotiz erstellen
+                  <Plus size={14} /><T>Praxisnotiz erstellen</T>
                 </Link>
                 <Link href="/labore"
                   className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-700 transition-colors">
-                  Beispielinhalte ansehen →
+                  <T>Beispielinhalte ansehen →</T>
                 </Link>
               </div>
             </div>
@@ -216,11 +217,9 @@ export default function DashboardPage() {
             <Info size={15} className="text-blue-700" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-slate-900 mb-2">Über diese Plattform</h2>
+            <h2 className="text-sm font-semibold text-slate-900 mb-2"><T>Über diese Plattform</T></h2>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Diese Plattform dient der strukturierten Dokumentation praktischer IT-Laborumgebungen,
-              technischer Systeme, administrativer Befehle und typischer Fehleranalysen im Bereich
-              Systemintegration.
+              {language === "de" ? "Diese Plattform dient der strukturierten Dokumentation praktischer IT-Laborumgebungen, technischer Systeme, administrativer Befehle und typischer Fehleranalysen im Bereich Systemintegration." : "Bu platforma sistem inteqrasiyası üzrə praktiki IT laboratoriyalarını, texniki sistemləri, inzibati əmrləri və tipik xəta halları haqqında məlumatları ardıcıl sənədləşdirmək üçün nəzərdə tutulub."}
             </p>
           </div>
         </div>

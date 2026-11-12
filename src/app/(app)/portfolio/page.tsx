@@ -1,8 +1,9 @@
 "use client";
 
-import { useT } from "@/components/TranslatedText";
+import { T, useT } from "@/components/TranslatedText";
 import { FolderKanban, Target, Database, Layers, Briefcase, Rocket, CheckCircle2 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const techStack = [
   "Next.js 16 (App Router)",
@@ -70,7 +71,7 @@ function BulletList({ items }: { items: string[] }) {
       {items.map((item) => (
         <li key={item} className="flex items-start gap-2.5 text-sm text-slate-600">
           <CheckCircle2 size={13} className="text-blue-700 shrink-0 mt-0.5" />
-          <span>{item}</span>
+          <span><T>{item}</T></span>
         </li>
       ))}
     </ul>
@@ -79,6 +80,7 @@ function BulletList({ items }: { items: string[] }) {
 
 export default function PortfolioPage() {
   const translateUI = useT();
+  const { language } = useLanguage();
   return (
     <div>
       <PageHeader
@@ -91,10 +93,9 @@ export default function PortfolioPage() {
         {/* Ziel */}
         <Section icon={Target} title={translateUI("Ziel des Projekts")} accent="blue">
           <p className="text-sm text-slate-600 leading-relaxed">
-            FISI LabBook wurde entwickelt, um praktische IT-Labore, Systeme, Befehle, Docker-Dienste und
-            Fehleranalysen strukturiert zu dokumentieren. Der Fokus liegt auf praxisnaher
-            Systemintegration, nachvollziehbarer technischer Dokumentation und professioneller
-            Fehleranalyse.
+            {language === "de"
+              ? "FISI LabBook wurde entwickelt, um praktische IT-Labore, Systeme, Befehle, Docker-Dienste und Fehleranalysen strukturiert zu dokumentieren. Der Fokus liegt auf praxisnaher Systemintegration, nachvollziehbarer technischer Dokumentation und professioneller Fehleranalyse."
+              : "FISI LabBook praktiki IT laboratoriyalarını, sistemləri, əmrləri, Docker xidmətlərini və xəta təhlillərini sistemli şəkildə sənədləşdirmək üçün hazırlanıb. Əsas məqsəd sistem inteqrasiyası üzrə praktiki bacarıqları, aydın texniki sənədləşməni və peşəkar diaqnostikanı dəstəkləməkdir."}
           </p>
         </Section>
 
@@ -111,7 +112,7 @@ export default function PortfolioPage() {
                 key={tech}
                 className="text-xs bg-blue-50 border border-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium"
               >
-                {tech}
+                <T>{tech}</T>
               </span>
             ))}
           </div>
@@ -120,10 +121,9 @@ export default function PortfolioPage() {
         {/* Nutzen im Praktikum */}
         <Section icon={Briefcase} title={translateUI("Nutzen im Praktikum")} accent="emerald">
           <p className="text-sm text-slate-600 leading-relaxed">
-            Die Plattform zeigt eine strukturierte Arbeitsweise, technisches Verständnis,
-            Dokumentationsfähigkeit und praxisorientierte Problemlösung im Bereich Fachinformatiker für
-            Systemintegration. Sie eignet sich als Portfolio-Nachweis für Bewerbungsgespräche und
-            Praktikumspräsentationen.
+            {language === "de"
+              ? "Die Plattform zeigt eine strukturierte Arbeitsweise, technisches Verständnis, Dokumentationsfähigkeit und praxisorientierte Problemlösung im Bereich Fachinformatiker für Systemintegration. Sie eignet sich als Portfolio-Nachweis für Bewerbungsgespräche und Praktikumspräsentationen."
+              : "Platforma sistem inteqrasiyası sahəsində sistemli iş üsulunu, texniki anlayışı, sənədləşdirmə bacarığını və praktiki problemlərin həllini nümayiş etdirir. Bu layihə iş müsahibələrində və təcrübə təqdimatlarında portfolio nümunəsi kimi istifadə oluna bilər."}
           </p>
         </Section>
 

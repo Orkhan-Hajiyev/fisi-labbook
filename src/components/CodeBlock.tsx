@@ -1,3 +1,6 @@
+"use client";
+
+import { useT } from "@/components/TranslatedText";
 import { Copy, Check } from "lucide-react";
 import { useState } from "react";
 
@@ -7,6 +10,7 @@ interface CodeBlockProps {
 }
 
 export default function CodeBlock({ code, label }: CodeBlockProps) {
+  const translateUI = useT();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -25,13 +29,13 @@ export default function CodeBlock({ code, label }: CodeBlockProps) {
             className="flex items-center gap-1.5 text-[11px] text-[#a8cee9] hover:text-white transition-colors"
           >
             {copied ? <Check size={12} className="text-emerald-700" /> : <Copy size={12} />}
-            {copied ? "Kopiert" : "Kopieren"}
+            {copied ? translateUI("Kopiert") : translateUI("Kopieren")}
           </button>
         </div>
       )}
       {!label && (
         <div className="absolute top-2 right-2">
-          <button onClick={handleCopy} aria-label="Code kopieren" className="text-[#a8cee9] hover:text-white transition-colors p-1">
+          <button onClick={handleCopy} aria-label={translateUI("Code kopieren")} className="text-[#a8cee9] hover:text-white transition-colors p-1">
             {copied ? <Check size={12} className="text-emerald-700" /> : <Copy size={12} />}
           </button>
         </div>

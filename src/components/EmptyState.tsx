@@ -1,3 +1,4 @@
+import { T } from "@/components/TranslatedText";
 import { Inbox } from "lucide-react";
 
 interface EmptyStateProps {
@@ -14,8 +15,8 @@ export default function EmptyState({
       <div className="w-12 h-12 rounded-full bg-blue-50 border border-slate-200 flex items-center justify-center mb-4">
         <Inbox size={22} className="text-slate-500" />
       </div>
-      <p className="text-sm text-slate-600 font-medium mb-1">{title}</p>
-      <p className="text-xs text-slate-500 max-w-sm text-center">{description}</p>
+      <p className="text-sm text-slate-600 font-medium mb-1"><T>{title}</T></p>
+      <p className="text-xs text-slate-500 max-w-sm text-center"><T>{description}</T></p>
     </div>
   );
 }
