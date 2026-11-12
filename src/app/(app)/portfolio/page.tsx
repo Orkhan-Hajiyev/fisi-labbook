@@ -1,3 +1,4 @@
+import { useT } from "@/components/TranslatedText";
 import { FolderKanban, Target, Database, Layers, Briefcase, Rocket, CheckCircle2 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 
@@ -75,17 +76,18 @@ function BulletList({ items }: { items: string[] }) {
 }
 
 export default function PortfolioPage() {
+  const translateUI = useT();
   return (
     <div>
       <PageHeader
         icon={FolderKanban}
-        title="Portfolio"
-        description="Projektzusammenfassung, Technologien und Ausblick"
+        title={translateUI("Portfolio")}
+        description={translateUI("Projektzusammenfassung, Technologien und Ausblick")}
       />
 
       <div className="space-y-5">
         {/* Ziel */}
-        <Section icon={Target} title="Ziel des Projekts" accent="blue">
+        <Section icon={Target} title={translateUI("Ziel des Projekts")} accent="blue">
           <p className="text-sm text-slate-600 leading-relaxed">
             FISI LabBook wurde entwickelt, um praktische IT-Labore, Systeme, Befehle, Docker-Dienste und
             Fehleranalysen strukturiert zu dokumentieren. Der Fokus liegt auf praxisnaher
@@ -95,12 +97,12 @@ export default function PortfolioPage() {
         </Section>
 
         {/* Dokumentierte Bereiche */}
-        <Section icon={Database} title="Dokumentierte Bereiche" accent="cyan">
+        <Section icon={Database} title={translateUI("Dokumentierte Bereiche")} accent="cyan">
           <BulletList items={areas} />
         </Section>
 
         {/* Technologien */}
-        <Section icon={Layers} title="Technologien" accent="violet">
+        <Section icon={Layers} title={translateUI("Technologien")} accent="violet">
           <div className="flex flex-wrap gap-2">
             {techStack.map((tech) => (
               <span
@@ -114,7 +116,7 @@ export default function PortfolioPage() {
         </Section>
 
         {/* Nutzen im Praktikum */}
-        <Section icon={Briefcase} title="Nutzen im Praktikum" accent="emerald">
+        <Section icon={Briefcase} title={translateUI("Nutzen im Praktikum")} accent="emerald">
           <p className="text-sm text-slate-600 leading-relaxed">
             Die Plattform zeigt eine strukturierte Arbeitsweise, technisches Verständnis,
             Dokumentationsfähigkeit und praxisorientierte Problemlösung im Bereich Fachinformatiker für
@@ -124,7 +126,7 @@ export default function PortfolioPage() {
         </Section>
 
         {/* Weiterentwicklung */}
-        <Section icon={Rocket} title="Weiterentwicklung" accent="amber">
+        <Section icon={Rocket} title={translateUI("Weiterentwicklung")} accent="amber">
           <BulletList items={future} />
         </Section>
       </div>

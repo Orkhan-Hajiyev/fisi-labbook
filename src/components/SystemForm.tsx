@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useState } from "react";
 import { X } from "lucide-react";
 import type { FisiUserSystem, FisiUserLab } from "@/lib/types";
@@ -28,6 +30,7 @@ const inputCls = "w-full px-3 py-2 rounded-lg bg-[#f3f8ff] border border-slate-2
 const labelCls = "block text-xs font-medium text-slate-600 mb-1.5";
 
 export default function SystemForm({ system, userLabs, onSave, onCancel }: Props) {
+  const translateUI = useT();
   const [hostname,   setHostname]   = useState(system?.hostname    ?? "");
   const [os,         setOs]         = useState(system?.os          ?? "");
   const [role,       setRole]       = useState(system?.role        ?? "");
@@ -58,7 +61,7 @@ export default function SystemForm({ system, userLabs, onSave, onCancel }: Props
     <div className="rounded-xl border border-blue-500/15 bg-white p-6 space-y-5">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-900">{system ? "System bearbeiten" : "Neues System erstellen"}</h3>
-        <button type="button" onClick={onCancel} aria-label="Schließen"
+        <button type="button" onClick={onCancel} aria-label={translateUI("Schließen")}
           className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
           <X size={16} />
         </button>
@@ -73,12 +76,12 @@ export default function SystemForm({ system, userLabs, onSave, onCancel }: Props
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className={labelCls}>Hostname</label>
+            <label className={labelCls}><T>Hostname</T></label>
             <input type="text" value={hostname} onChange={(e) => setHostname(e.target.value)}
               placeholder="srv-dc01" className={inputCls + " font-mono"} required />
           </div>
           <div>
-            <label className={labelCls}>Betriebssystem</label>
+            <label className={labelCls}><T>Betriebssystem</T></label>
             <input type="text" value={os} onChange={(e) => setOs(e.target.value)}
               placeholder="Windows Server 2022" className={inputCls} />
           </div>
@@ -86,15 +89,15 @@ export default function SystemForm({ system, userLabs, onSave, onCancel }: Props
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className={labelCls}>Rolle</label>
+            <label className={labelCls}><T>Rolle</T></label>
             <input type="text" value={role} onChange={(e) => setRole(e.target.value)}
-              placeholder="Domain Controller" className={inputCls} />
+              placeholder={translateUI("Domain Controller")} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>Zugehöriges Labor</label>
+            <label className={labelCls}><T>Zugehöriges Labor</T></label>
             <select value={labId} onChange={(e) => setLabId(e.target.value)}
               className={inputCls + " cursor-pointer"}>
-              <option value="">Kein Labor</option>
+              <option value=""><T>Kein Labor</T></option>
               {userLabs.map((lab) => (
                 <option key={lab.id} value={lab.id}>{lab.title}</option>
               ))}
@@ -104,7 +107,7 @@ export default function SystemForm({ system, userLabs, onSave, onCancel }: Props
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className={labelCls}>IP-Adresse</label>
+            <label className={labelCls}><T>IP-Adresse</T></label>
             <input type="text" value={ipAddress} onChange={(e) => setIpAddress(e.target.value)}
               placeholder="192.168.1.10" className={inputCls + " font-mono"} />
           </div>
@@ -122,29 +125,27 @@ export default function SystemForm({ system, userLabs, onSave, onCancel }: Props
               placeholder="192.168.1.10" className={inputCls + " font-mono"} />
           </div>
           <div>
-            <label className={labelCls}>Domäne</label>
+            <label className={labelCls}><T>Domäne</T></label>
             <input type="text" value={domainName} onChange={(e) => setDomainName(e.target.value)}
               placeholder="firma.local" className={inputCls + " font-mono"} />
           </div>
         </div>
 
         <div>
-          <label className={labelCls}>Dienste (kommagetrennt)</label>
+          <label className={labelCls}><T>Dienste (kommagetrennt)</T></label>
           <input type="text" value={services} onChange={(e) => setServices(e.target.value)}
             placeholder="DNS, DHCP, AD DS" className={inputCls} />
         </div>
 
         <div>
-          <label className={labelCls}>Notizen</label>
+          <label className={labelCls}><T>Notizen</T></label>
           <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
-            placeholder="Notizen oder Besonderheiten…" rows={3} className={inputCls + " resize-none"} />
+            placeholder={translateUI("Notizen oder Besonderheiten…")} rows={3} className={inputCls + " resize-none"} />
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-200">
           <button type="button" onClick={onCancel}
-            className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
-            Abbrechen
-          </button>
+            className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors"><T>Abbrechen</T></button>
           <button type="submit" disabled={loading}
             className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold text-white transition-colors">
             {loading ? "Wird gespeichert…" : "Speichern"}

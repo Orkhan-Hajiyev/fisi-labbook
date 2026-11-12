@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useEffect, useState, useMemo } from "react";
 import {
   Terminal, Search, Monitor, Tag, Plus, Pencil, Trash2,
@@ -61,15 +63,11 @@ function UserCommandCard({
         <div className="flex items-center gap-1 shrink-0">
           {confirmDelete ? (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-red-700">Löschen?</span>
+              <span className="text-xs text-red-700"><T>Löschen?</T></span>
               <button onClick={() => onDelete(cmd.id)}
-                className="px-2.5 py-1 rounded-lg bg-red-500/15 text-red-700 hover:bg-red-500/25 text-xs font-medium transition-colors">
-                Ja
-              </button>
+                className="px-2.5 py-1 rounded-lg bg-red-500/15 text-red-700 hover:bg-red-500/25 text-xs font-medium transition-colors"><T>Ja</T></button>
               <button onClick={() => setConfirmDelete(false)}
-                className="px-2.5 py-1 rounded-lg bg-blue-50 text-slate-600 hover:bg-blue-50 text-xs font-medium transition-colors">
-                Nein
-              </button>
+                className="px-2.5 py-1 rounded-lg bg-blue-50 text-slate-600 hover:bg-blue-50 text-xs font-medium transition-colors"><T>Nein</T></button>
             </div>
           ) : (
             <>
@@ -92,7 +90,7 @@ function UserCommandCard({
 
       {cmd.example && (
         <div className="space-y-1.5">
-          <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider">Beispiel</p>
+          <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider"><T>Beispiel</T></p>
           <InlineCode>{cmd.example}</InlineCode>
         </div>
       )}
@@ -100,13 +98,13 @@ function UserCommandCard({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {cmd.typical_use_case && (
           <div>
-            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1">Typischer Anwendungsfall</p>
+            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1"><T>Typischer Anwendungsfall</T></p>
             <p className="text-xs text-slate-600 leading-relaxed">{cmd.typical_use_case}</p>
           </div>
         )}
         {cmd.notes && (
           <div>
-            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1">Notizen</p>
+            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1"><T>Notizen</T></p>
             <p className="text-xs text-slate-600 leading-relaxed">{cmd.notes}</p>
           </div>
         )}
@@ -161,20 +159,20 @@ function DemoCommandCard({ cmd, user, onCopied }: {
       {cmd.purpose && <p className="text-sm text-slate-700 leading-relaxed">{cmd.purpose}</p>}
       {cmd.example && (
         <div className="space-y-1.5">
-          <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider">Beispiel</p>
+          <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider"><T>Beispiel</T></p>
           <InlineCode>{cmd.example}</InlineCode>
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {cmd.typical_use_case && (
           <div>
-            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1">Typischer Anwendungsfall</p>
+            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1"><T>Typischer Anwendungsfall</T></p>
             <p className="text-xs text-slate-600 leading-relaxed">{cmd.typical_use_case}</p>
           </div>
         )}
         {cmd.notes && (
           <div>
-            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1">Notizen</p>
+            <p className="text-[11px] font-medium text-slate-600 uppercase tracking-wider mb-1"><T>Notizen</T></p>
             <p className="text-xs text-slate-600 leading-relaxed">{cmd.notes}</p>
           </div>
         )}
@@ -189,9 +187,7 @@ function DemoCommandCard({ cmd, user, onCopied }: {
           </button>
         ) : (
           <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
-            <Lock size={11} />
-            Anmeldung erforderlich
-          </button>
+            <Lock size={11} /><T>Anmeldung erforderlich</T></button>
         )}
       </div>
     </div>
@@ -333,13 +329,11 @@ function CommandHelper({ onSelect }: { onSelect: (s: CommandSuggestion) => void 
           onClick={() => setOpen(true)}
           className="flex items-center gap-2 px-3 py-2 rounded-lg border border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 text-xs font-medium text-blue-700 hover:text-blue-800 transition-all"
         >
-          <Terminal size={13} />
-          Befehl vorschlagen
-        </button>
+          <Terminal size={13} /><T>Befehl vorschlagen</T></button>
       ) : (
         <div className="rounded-xl border border-blue-500/15 bg-[#edf5ff] p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-semibold text-blue-700 uppercase tracking-wider">Befehl vorschlagen</h3>
+            <h3 className="text-xs font-semibold text-blue-700 uppercase tracking-wider"><T>Befehl vorschlagen</T></h3>
             <button onClick={() => setOpen(false)} className="text-slate-600 hover:text-slate-700 transition-colors">
               <Plus size={14} className="rotate-45" />
             </button>
@@ -347,7 +341,7 @@ function CommandHelper({ onSelect }: { onSelect: (s: CommandSuggestion) => void 
 
           <div className="flex flex-wrap gap-2">
             <div className="flex flex-col gap-1">
-              <label className="text-[10px] text-slate-600 uppercase tracking-wider">Plattform</label>
+              <label className="text-[10px] text-slate-600 uppercase tracking-wider"><T>Plattform</T></label>
               <div className="flex flex-wrap gap-1.5">
                 {platforms.map((p) => (
                   <button key={p} onClick={() => { setPlatform(p); setCategory(""); }}
@@ -364,7 +358,7 @@ function CommandHelper({ onSelect }: { onSelect: (s: CommandSuggestion) => void 
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-[10px] text-slate-600 uppercase tracking-wider">Kategorie</label>
+            <label className="text-[10px] text-slate-600 uppercase tracking-wider"><T>Kategorie</T></label>
             <div className="flex flex-wrap gap-1.5">
               {categories.map((c) => (
                 <button key={c} onClick={() => setCategory(c)}
@@ -381,7 +375,7 @@ function CommandHelper({ onSelect }: { onSelect: (s: CommandSuggestion) => void 
 
           {suggestions.length > 0 && (
             <div className="space-y-2">
-              <p className="text-[10px] text-slate-600 uppercase tracking-wider">Vorschläge – klicken zum Übernehmen</p>
+              <p className="text-[10px] text-slate-600 uppercase tracking-wider"><T>Vorschläge – klicken zum Übernehmen</T></p>
               {suggestions.map((s, i) => (
                 <button key={i} onClick={() => { onSelect(s); setOpen(false); }}
                   className="w-full text-left px-4 py-3 rounded-lg bg-blue-50 border border-slate-200 hover:border-blue-500/20 hover:bg-blue-500/5 transition-all group">
@@ -398,6 +392,7 @@ function CommandHelper({ onSelect }: { onSelect: (s: CommandSuggestion) => void 
 }
 
 export default function BefehlePageContent() {
+  const translateUI = useT();
   const { user } = useAuth();
 
   const [commands, setCommands] = useState<FisiCommand[]>([]);
@@ -525,15 +520,15 @@ export default function BefehlePageContent() {
 
       <PageHeader
         icon={Terminal}
-        title="Befehle"
-        description="Administrativer Befehlsreferenz mit Beispielen und Anwendungsfällen"
+        title={translateUI("Befehle")}
+        description={translateUI("Administrativer Befehlsreferenz mit Beispielen und Anwendungsfällen")}
       />
 
       {/* Personal workspace */}
       {user && (
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Meine Befehle</h2>
+            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider"><T>Meine Befehle</T></h2>
             {!showCreateForm && (
               <button onClick={() => setShowCreateForm(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors">
@@ -564,21 +559,21 @@ export default function BefehlePageContent() {
                     type="text"
                     value={userQuery}
                     onChange={(e) => setUserQuery(e.target.value)}
-                    placeholder="Befehl, Plattform oder Kategorie suchen..."
+                    placeholder={translateUI("Befehl, Plattform oder Kategorie suchen...")}
                     className="w-full max-w-xl pl-10 pr-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 transition-all"
                   />
                 </div>
               )}
               {userCommands.length === 0 && !showCreateForm && (
                 <EmptyPersonalState
-                  title="Noch keine Befehle"
-                  description="Fügen Sie Ihren ersten Befehl hinzu – mit Plattform, Beispiel und Anwendungsfall."
+                  title={translateUI("Noch keine Befehle")}
+                  description={translateUI("Fügen Sie Ihren ersten Befehl hinzu – mit Plattform, Beispiel und Anwendungsfall.")}
                   buttonLabel="Befehl hinzufügen"
                   onAction={() => setShowCreateForm(true)}
                 />
               )}
               {userCommands.length > 0 && filteredUserCommands.length === 0 && (
-                <EmptyState title="Keine Treffer" description={`Kein Befehl gefunden für "${userQuery}".`} />
+                <EmptyState title={translateUI("Keine Treffer")} description={`Kein Befehl gefunden für "${userQuery}".`} />
               )}
               {filteredUserCommands.length > 0 && (
                 <div className="space-y-4">
@@ -605,14 +600,14 @@ export default function BefehlePageContent() {
       )}
 
       {/* Reference section */}
-      <ReferenceSection title="Referenz-Befehle">
+      <ReferenceSection title={translateUI("Referenz-Befehle")}>
         <div className="mb-5 relative">
           <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
           <input
             type="text"
             value={demoQuery}
             onChange={(e) => setDemoQuery(e.target.value)}
-            placeholder="Befehl, Plattform oder Kategorie suchen..."
+            placeholder={translateUI("Befehl, Plattform oder Kategorie suchen...")}
             className="w-full max-w-xl pl-10 pr-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
           />
           {demoQuery && (
@@ -625,10 +620,10 @@ export default function BefehlePageContent() {
         {demoLoading && <LoadingState />}
         {demoError && <ErrorState />}
         {!demoLoading && !demoError && commands.length === 0 && (
-          <EmptyState title="Keine Befehle vorhanden" description="Es wurden noch keine Befehle angelegt." />
+          <EmptyState title={translateUI("Keine Befehle vorhanden")} description={translateUI("Es wurden noch keine Befehle angelegt.")} />
         )}
         {!demoLoading && !demoError && commands.length > 0 && filteredDemo.length === 0 && (
-          <EmptyState title="Keine Treffer" description={`Kein Befehl gefunden für "${demoQuery}".`} />
+          <EmptyState title={translateUI("Keine Treffer")} description={`Kein Befehl gefunden für "${demoQuery}".`} />
         )}
         {!demoLoading && !demoError && filteredDemo.length > 0 && (
           <div className="space-y-4">

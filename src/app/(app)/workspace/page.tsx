@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useEffect, useState, useCallback } from "react";
 import {
   LayoutGrid, FlaskConical, Server, Terminal, Bug, Container, StickyNote,
@@ -286,7 +288,7 @@ function LabGroup({
         <div className="px-5 pb-4 space-y-3 border-t border-slate-200">
           {linked.systems.length > 0 && (
             <div className="pt-3">
-              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Systeme</p>
+              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2"><T>Systeme</T></p>
               <div className="space-y-1">
                 {linked.systems.map((s) => (
                   <div key={s.id} className="flex items-center gap-2 text-xs text-slate-600">
@@ -300,7 +302,7 @@ function LabGroup({
           )}
           {linked.commands.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Befehle</p>
+              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2"><T>Befehle</T></p>
               <div className="space-y-1">
                 {linked.commands.map((c) => (
                   <div key={c.id} className="flex items-center gap-2 text-xs text-slate-600">
@@ -313,7 +315,7 @@ function LabGroup({
           )}
           {linked.troubleshooting.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Fehleranalysen</p>
+              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2"><T>Fehleranalysen</T></p>
               <div className="space-y-1">
                 {linked.troubleshooting.map((t) => (
                   <div key={t.id} className="flex items-center gap-2 text-xs text-slate-600">
@@ -326,7 +328,7 @@ function LabGroup({
           )}
           {linked.docker.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Docker-Dienste</p>
+              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2"><T>Docker-Dienste</T></p>
               <div className="space-y-1">
                 {linked.docker.map((d) => (
                   <div key={d.id} className="flex items-center gap-2 text-xs text-slate-600">
@@ -340,7 +342,7 @@ function LabGroup({
           )}
           {linked.notes.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Praxisnotizen</p>
+              <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-2"><T>Praxisnotizen</T></p>
               <div className="space-y-1">
                 {linked.notes.map((n) => (
                   <div key={n.id} className="flex items-center gap-2 text-xs text-slate-600">
@@ -352,7 +354,7 @@ function LabGroup({
             </div>
           )}
           {total === 0 && (
-            <p className="text-[11px] text-slate-500 pt-2">Noch keine verknüpften Inhalte.</p>
+            <p className="text-[11px] text-slate-500 pt-2"><T>Noch keine verknüpften Inhalte.</T></p>
           )}
           <div className="pt-3 border-t border-slate-200 flex flex-wrap items-center gap-2">
             <button
@@ -380,6 +382,7 @@ function LabGroup({
 // ── Page ─────────────────────────────────────────────────────────────────
 
 export default function WorkspacePage() {
+  const translateUI = useT();
   const { user } = useAuth();
   const [data, setData] = useState<WorkspaceData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -474,7 +477,7 @@ export default function WorkspacePage() {
       <div className="flex flex-wrap items-start justify-between gap-4 mb-6 print:hidden">
         <PageHeader
           icon={LayoutGrid}
-          title="Workspace"
+          title={translateUI("Workspace")}
           description="Persönliche Gesamtübersicht aller Inhalte und Verknüpfungen"
         />
         {user && data && !isEmpty && (
@@ -513,14 +516,12 @@ export default function WorkspacePage() {
           <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mx-auto mb-4">
             <Lock size={20} className="text-blue-700" />
           </div>
-          <h3 className="text-sm font-semibold text-slate-900 mb-2">Anmeldung erforderlich</h3>
+          <h3 className="text-sm font-semibold text-slate-900 mb-2"><T>Anmeldung erforderlich</T></h3>
           <p className="text-xs text-slate-600 max-w-sm mx-auto mb-5">
             Der persönliche Workspace ist nur für angemeldete Benutzer verfügbar.
           </p>
           <div className="flex items-center justify-center gap-3">
-            <Link href="/login" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors">
-              Einloggen
-            </Link>
+            <Link href="/login" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors"><T>Einloggen</T></Link>
             <Link href="/registrieren" className="px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
               Kostenlos registrieren
             </Link>
@@ -566,21 +567,21 @@ export default function WorkspacePage() {
         <div className="space-y-8">
           {/* Summary cards */}
           <div>
-            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Übersicht</h2>
+            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3"><T>Übersicht</T></h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              <StatCard label="Labore"          value={data.labs.length}            icon={FlaskConical} href="/labore"         accent="blue" />
-              <StatCard label="Systeme"         value={data.systems.length}         icon={Server}       href="/systeme"        accent="cyan" />
-              <StatCard label="Befehle"         value={data.commands.length}        icon={Terminal}     href="/befehle"        accent="violet" />
-              <StatCard label="Fehleranalysen"  value={data.troubleshooting.length} icon={Bug}          href="/fehleranalyse"  accent="amber" />
-              <StatCard label="Docker-Dienste"  value={data.docker.length}          icon={Container}    href="/docker-dienste" accent="emerald" />
-              <StatCard label="Praxisnotizen"   value={data.notes.length}           icon={StickyNote}   href="/praxisnotizen"  accent="slate" />
+              <StatCard label={translateUI("Labore")}          value={data.labs.length}            icon={FlaskConical} href="/labore"         accent="blue" />
+              <StatCard label={translateUI("Systeme")}         value={data.systems.length}         icon={Server}       href="/systeme"        accent="cyan" />
+              <StatCard label={translateUI("Befehle")}         value={data.commands.length}        icon={Terminal}     href="/befehle"        accent="violet" />
+              <StatCard label={translateUI("Fehleranalysen")}  value={data.troubleshooting.length} icon={Bug}          href="/fehleranalyse"  accent="amber" />
+              <StatCard label={translateUI("Docker-Dienste")}  value={data.docker.length}          icon={Container}    href="/docker-dienste" accent="emerald" />
+              <StatCard label={translateUI("Praxisnotizen")}   value={data.notes.length}           icon={StickyNote}   href="/praxisnotizen"  accent="slate" />
             </div>
           </div>
 
           {/* Lab-based structure */}
           {data.labs.length > 0 && (
             <div>
-              <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Labore und verknüpfte Inhalte</h2>
+              <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3"><T>Labore und verknüpfte Inhalte</T></h2>
               <div className="space-y-3">
                 {data.labs.map((lab) => (
                   <LabGroup
@@ -600,7 +601,7 @@ export default function WorkspacePage() {
           {/* Unlinked systems */}
           {unlinkedSystems.length > 0 && (
             <div>
-              <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Systeme – Nicht zugeordnet</h2>
+              <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3"><T>Systeme – Nicht zugeordnet</T></h2>
               <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                 {unlinkedSystems.map((s) => (
                   <div key={s.id} className="flex items-center gap-2 text-xs text-slate-600">
@@ -619,7 +620,7 @@ export default function WorkspacePage() {
             <div className="space-y-6">
               {data.systems.length > 0 && (
                 <div>
-                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Meine Systeme</h2>
+                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3"><T>Meine Systeme</T></h2>
                   <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                     {data.systems.map((s) => (
                       <div key={s.id} className="flex items-center gap-2 text-xs text-slate-600">
@@ -633,7 +634,7 @@ export default function WorkspacePage() {
               )}
               {data.commands.length > 0 && (
                 <div>
-                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Meine Befehle</h2>
+                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3"><T>Meine Befehle</T></h2>
                   <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                     {data.commands.map((c) => (
                       <div key={c.id} className="flex items-center gap-2 text-xs text-slate-600">
@@ -647,7 +648,7 @@ export default function WorkspacePage() {
               )}
               {data.troubleshooting.length > 0 && (
                 <div>
-                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Meine Fehleranalysen</h2>
+                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3"><T>Meine Fehleranalysen</T></h2>
                   <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                     {data.troubleshooting.map((t) => (
                       <div key={t.id} className="flex items-center gap-2 text-xs text-slate-600">
@@ -661,7 +662,7 @@ export default function WorkspacePage() {
               )}
               {data.docker.length > 0 && (
                 <div>
-                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Meine Docker-Dienste</h2>
+                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3"><T>Meine Docker-Dienste</T></h2>
                   <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                     {data.docker.map((d) => (
                       <div key={d.id} className="flex items-center gap-2 text-xs text-slate-600">
@@ -675,7 +676,7 @@ export default function WorkspacePage() {
               )}
               {data.notes.length > 0 && (
                 <div>
-                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Meine Praxisnotizen</h2>
+                  <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3"><T>Meine Praxisnotizen</T></h2>
                   <div className="rounded-xl border border-slate-200 bg-blue-50 p-4 space-y-2">
                     {data.notes.map((n) => (
                       <div key={n.id} className="flex items-center gap-2 text-xs text-slate-600">

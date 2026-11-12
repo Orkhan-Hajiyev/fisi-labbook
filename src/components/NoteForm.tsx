@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useState } from "react";
 import { X } from "lucide-react";
 import type { FisiUserNote } from "@/lib/types";
@@ -47,6 +49,7 @@ const inputCls =
 const labelCls = "block text-xs font-medium text-slate-600 mb-1.5";
 
 export default function NoteForm({ note, onSave, onCancel }: Props) {
+  const translateUI = useT();
   const [title,       setTitle]       = useState(note?.title       ?? "");
   const [content,     setContent]     = useState(note?.content     ?? "");
   const [category,    setCategory]    = useState(note?.category    ?? "");
@@ -97,7 +100,7 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
         <button
           type="button"
           onClick={onCancel}
-          aria-label="Schließen"
+          aria-label={translateUI("Schließen")}
           className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors"
         >
           <X size={16} />
@@ -113,12 +116,12 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Titel */}
         <div>
-          <label className={labelCls}>Titel</label>
+          <label className={labelCls}><T>Titel</T></label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Titel der Notiz"
+            placeholder={translateUI("Titel der Notiz")}
             className={inputCls}
             required
           />
@@ -126,11 +129,11 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
 
         {/* Inhalt */}
         <div>
-          <label className={labelCls}>Inhalt</label>
+          <label className={labelCls}><T>Inhalt</T></label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Inhalt, Beschreibung oder Notizen…"
+            placeholder={translateUI("Inhalt, Beschreibung oder Notizen…")}
             rows={5}
             className={inputCls + " resize-none"}
           />
@@ -139,20 +142,20 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
         {/* Kategorie / Priorität / Status */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label className={labelCls}>Kategorie</label>
+            <label className={labelCls}><T>Kategorie</T></label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               className={inputCls + " cursor-pointer"}
             >
-              <option value="">Keine</option>
+              <option value=""><T>Keine</T></option>
               {CATEGORIES.map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
           </div>
           <div>
-            <label className={labelCls}>Priorität</label>
+            <label className={labelCls}><T>Priorität</T></label>
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
@@ -164,7 +167,7 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
             </select>
           </div>
           <div>
-            <label className={labelCls}>Status</label>
+            <label className={labelCls}><T>Status</T></label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
@@ -180,20 +183,20 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
         {/* Bereich / Tags */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className={labelCls}>Bereich</label>
+            <label className={labelCls}><T>Bereich</T></label>
             <select
               value={relatedArea}
               onChange={(e) => setRelatedArea(e.target.value)}
               className={inputCls + " cursor-pointer"}
             >
-              <option value="">Keiner</option>
+              <option value=""><T>Keiner</T></option>
               {RELATED_AREAS.map((a) => (
                 <option key={a} value={a}>{a}</option>
               ))}
             </select>
           </div>
           <div>
-            <label className={labelCls}>Tags (kommagetrennt)</label>
+            <label className={labelCls}><T>Tags (kommagetrennt)</T></label>
             <input
               type="text"
               value={tagsInput}
@@ -210,9 +213,7 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
             type="button"
             onClick={onCancel}
             className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors"
-          >
-            Abbrechen
-          </button>
+          ><T>Abbrechen</T></button>
           <button
             type="submit"
             disabled={loading}

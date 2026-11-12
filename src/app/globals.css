@@ -112,3 +112,23 @@ body {
     text-decoration: none;
   }
 }
+
+/* Systemintegration diagrams: restrained interaction, accessible reduced motion */
+@keyframes fisi-packet-flow {
+  0% { stroke-dashoffset: 28; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes fisi-step-appear {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fisi-infra-line {
+  stroke-dasharray: 11 7;
+  animation: fisi-packet-flow 2.8s linear infinite;
+}
+.fisi-step-enter {
+  animation: fisi-step-appear .35s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fisi-infra-line, .fisi-step-enter { animation: none !important; }
+}

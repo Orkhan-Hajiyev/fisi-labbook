@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useEffect, useState, useMemo } from "react";
 import {
   Container, CheckCircle2, XCircle, Clock, ExternalLink, Search,
@@ -32,22 +34,19 @@ function StatusBadge({ status }: { status: string | null }) {
   if (s === "running" || s === "aktiv" || s === "up") {
     return (
       <span className="inline-flex items-center gap-1.5 text-[11px] bg-emerald-500/15 text-emerald-700 border border-emerald-500/20 px-2.5 py-1 rounded-full">
-        <CheckCircle2 size={10} /> Aktiv
-      </span>
+        <CheckCircle2 size={10} /><T>Aktiv</T></span>
     );
   }
   if (s === "stopped" || s === "inaktiv" || s === "down") {
     return (
       <span className="inline-flex items-center gap-1.5 text-[11px] bg-red-500/15 text-red-700 border border-red-500/20 px-2.5 py-1 rounded-full">
-        <XCircle size={10} /> Inaktiv
-      </span>
+        <XCircle size={10} /><T>Inaktiv</T></span>
     );
   }
   if (s === "geplant") {
     return (
       <span className="inline-flex items-center gap-1.5 text-[11px] bg-slate-500/15 text-slate-600 border border-slate-500/20 px-2.5 py-1 rounded-full">
-        <Clock size={10} /> Geplant
-      </span>
+        <Clock size={10} /><T>Geplant</T></span>
     );
   }
   return (
@@ -103,15 +102,11 @@ function UserDockerCard({
           <StatusBadge status={svc.status} />
           {confirmDelete ? (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-red-700">Löschen?</span>
+              <span className="text-xs text-red-700"><T>Löschen?</T></span>
               <button onClick={() => onDelete(svc.id)}
-                className="px-2.5 py-1 rounded-lg bg-red-500/15 text-red-700 hover:bg-red-500/25 text-xs font-medium transition-colors">
-                Ja
-              </button>
+                className="px-2.5 py-1 rounded-lg bg-red-500/15 text-red-700 hover:bg-red-500/25 text-xs font-medium transition-colors"><T>Ja</T></button>
               <button onClick={() => setConfirmDelete(false)}
-                className="px-2.5 py-1 rounded-lg bg-blue-50 text-slate-600 hover:bg-blue-50 text-xs font-medium transition-colors">
-                Nein
-              </button>
+                className="px-2.5 py-1 rounded-lg bg-blue-50 text-slate-600 hover:bg-blue-50 text-xs font-medium transition-colors"><T>Nein</T></button>
             </div>
           ) : (
             <>
@@ -221,9 +216,7 @@ function DemoDockerCard({ svc, user, onCopied }: {
           </button>
         ) : (
           <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
-            <Lock size={11} />
-            Anmeldung erforderlich
-          </button>
+            <Lock size={11} /><T>Anmeldung erforderlich</T></button>
         )}
       </div>
     </div>
@@ -231,6 +224,7 @@ function DemoDockerCard({ svc, user, onCopied }: {
 }
 
 export default function DockerDienstePage() {
+  const translateUI = useT();
   const { user } = useAuth();
 
   const [services, setServices] = useState<FisiDockerService[]>([]);
@@ -346,15 +340,15 @@ export default function DockerDienstePage() {
 
       <PageHeader
         icon={Container}
-        title="Docker-Dienste"
-        description="Dokumentierte Container-Dienste mit Images, Ports und Compose-Snippets"
+        title={translateUI("Docker-Dienste")}
+        description={translateUI("Dokumentierte Container-Dienste mit Images, Ports und Compose-Snippets")}
       />
 
       {/* Personal workspace */}
       {user && (
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Meine Docker-Dienste</h2>
+            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider"><T>Meine Docker-Dienste</T></h2>
             {!showCreateForm && (
               <button onClick={() => setShowCreateForm(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors">
@@ -380,21 +374,21 @@ export default function DockerDienstePage() {
                     type="text"
                     value={userQuery}
                     onChange={(e) => setUserQuery(e.target.value)}
-                    placeholder="Name, Image, Port oder Typ suchen..."
+                    placeholder={translateUI("Name, Image, Port oder Typ suchen...")}
                     className="w-full max-w-xl pl-10 pr-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 transition-all"
                   />
                 </div>
               )}
               {userServices.length === 0 && !showCreateForm && (
                 <EmptyPersonalState
-                  title="Noch keine Docker-Dienste"
-                  description="Dokumentieren Sie Ihre Container-Dienste mit Images, Ports und Compose-Snippets."
+                  title={translateUI("Noch keine Docker-Dienste")}
+                  description={translateUI("Dokumentieren Sie Ihre Container-Dienste mit Images, Ports und Compose-Snippets.")}
                   buttonLabel="Dienst hinzufügen"
                   onAction={() => setShowCreateForm(true)}
                 />
               )}
               {userServices.length > 0 && filteredUserServices.length === 0 && (
-                <EmptyState title="Keine Treffer" description={`Kein Dienst gefunden für "${userQuery}".`} />
+                <EmptyState title={translateUI("Keine Treffer")} description={`Kein Dienst gefunden für "${userQuery}".`} />
               )}
               {filteredUserServices.length > 0 && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -409,11 +403,11 @@ export default function DockerDienstePage() {
       )}
 
       {/* Reference section */}
-      <ReferenceSection title="Referenz-Dienste">
+      <ReferenceSection title={translateUI("Referenz-Dienste")}>
         {demoLoading && <LoadingState />}
         {demoError && <ErrorState />}
         {!demoLoading && !demoError && services.length === 0 && (
-          <EmptyState title="Keine Docker-Dienste vorhanden" description="Es wurden noch keine Dienste dokumentiert." />
+          <EmptyState title={translateUI("Keine Docker-Dienste vorhanden")} description={translateUI("Es wurden noch keine Dienste dokumentiert.")} />
         )}
         {!demoLoading && !demoError && services.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

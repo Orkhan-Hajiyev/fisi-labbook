@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useState } from "react";
 import { X } from "lucide-react";
 import type { FisiUserDockerService } from "@/lib/types";
@@ -36,6 +38,7 @@ const SERVICE_TYPES = [
 ];
 
 export default function DockerServiceForm({ service, onSave, onCancel }: Props) {
+  const translateUI = useT();
   const [name,           setName]          = useState(service?.name            ?? "");
   const [image,          setImage]         = useState(service?.image           ?? "");
   const [port,           setPort]          = useState(service?.port            ?? "");
@@ -66,7 +69,7 @@ export default function DockerServiceForm({ service, onSave, onCancel }: Props) 
         <h3 className="text-sm font-semibold text-slate-900">
           {service ? "Docker-Dienst bearbeiten" : "Neuen Docker-Dienst erstellen"}
         </h3>
-        <button type="button" onClick={onCancel} aria-label="Schließen"
+        <button type="button" onClick={onCancel} aria-label={translateUI("Schließen")}
           className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
           <X size={16} />
         </button>
@@ -81,7 +84,7 @@ export default function DockerServiceForm({ service, onSave, onCancel }: Props) 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className={labelCls}>Dienst</label>
+            <label className={labelCls}><T>Dienst</T></label>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)}
               placeholder="nginx, postgres, gitea…" className={inputCls} required />
           </div>
@@ -94,20 +97,20 @@ export default function DockerServiceForm({ service, onSave, onCancel }: Props) 
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label className={labelCls}>Port</label>
+            <label className={labelCls}><T>Port</T></label>
             <input type="text" value={port} onChange={(e) => setPort(e.target.value)}
               placeholder="8080:80" className={inputCls + " font-mono"} />
           </div>
           <div>
-            <label className={labelCls}>Typ</label>
+            <label className={labelCls}><T>Typ</T></label>
             <select value={serviceType} onChange={(e) => setServiceType(e.target.value)}
               className={inputCls + " cursor-pointer"}>
-              <option value="">Keiner</option>
+              <option value=""><T>Keiner</T></option>
               {SERVICE_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
           </div>
           <div>
-            <label className={labelCls}>Status</label>
+            <label className={labelCls}><T>Status</T></label>
             <select value={status} onChange={(e) => setStatus(e.target.value)}
               className={inputCls + " cursor-pointer"}>
               {STATUS_OPTIONS.map(({ value, label }) => (
@@ -118,29 +121,27 @@ export default function DockerServiceForm({ service, onSave, onCancel }: Props) 
         </div>
 
         <div>
-          <label className={labelCls}>Zweck</label>
+          <label className={labelCls}><T>Zweck</T></label>
           <input type="text" value={purpose} onChange={(e) => setPurpose(e.target.value)}
-            placeholder="Wofür wird dieser Dienst eingesetzt?" className={inputCls} />
+            placeholder={translateUI("Wofür wird dieser Dienst eingesetzt?")} className={inputCls} />
         </div>
 
         <div>
-          <label className={labelCls}>Docker-Compose-Ausschnitt</label>
+          <label className={labelCls}><T>Docker-Compose-Ausschnitt</T></label>
           <textarea value={composeSnippet} onChange={(e) => setComposeSnippet(e.target.value)}
             placeholder={"services:\n  nginx:\n    image: nginx:alpine\n    ports:\n      - '8080:80'"}
             rows={6} className={inputCls + " resize-none font-mono text-xs"} />
         </div>
 
         <div>
-          <label className={labelCls}>Notizen</label>
+          <label className={labelCls}><T>Notizen</T></label>
           <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
-            placeholder="Hinweise, Abhängigkeiten…" rows={2} className={inputCls + " resize-none"} />
+            placeholder={translateUI("Hinweise, Abhängigkeiten…")} rows={2} className={inputCls + " resize-none"} />
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-200">
           <button type="button" onClick={onCancel}
-            className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
-            Abbrechen
-          </button>
+            className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors"><T>Abbrechen</T></button>
           <button type="submit" disabled={loading}
             className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold text-white transition-colors">
             {loading ? "Wird gespeichert…" : "Speichern"}

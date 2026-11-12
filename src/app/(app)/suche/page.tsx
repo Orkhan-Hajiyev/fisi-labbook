@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useState, useCallback, useRef } from "react";
 import {
   Search, FlaskConical, Server, Terminal, Bug, Container, StickyNote,
@@ -82,6 +84,7 @@ function ResultSection<T extends { id: string }>({
 }
 
 export default function SuchePage() {
+  const translateUI = useT();
   const { user } = useAuth();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResults | null>(null);
@@ -172,8 +175,8 @@ export default function SuchePage() {
     <div>
       <PageHeader
         icon={Search}
-        title="Globale Suche"
-        description="Gesamten persönlichen Workspace durchsuchen"
+        title={translateUI("Globale Suche")}
+        description={translateUI("Gesamten persönlichen Workspace durchsuchen")}
       />
 
       {!user ? (
@@ -181,14 +184,12 @@ export default function SuchePage() {
           <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mx-auto mb-4">
             <Lock size={20} className="text-blue-700" />
           </div>
-          <h3 className="text-sm font-semibold text-slate-900 mb-2">Anmeldung erforderlich</h3>
+          <h3 className="text-sm font-semibold text-slate-900 mb-2"><T>Anmeldung erforderlich</T></h3>
           <p className="text-xs text-slate-600 max-w-sm mx-auto mb-5">
             Die globale Suche ist für angemeldete Benutzer verfügbar.
           </p>
           <div className="flex items-center justify-center gap-3">
-            <Link href="/login" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors">
-              Einloggen
-            </Link>
+            <Link href="/login" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors"><T>Einloggen</T></Link>
             <Link href="/registrieren" className="px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
               Kostenlos registrieren
             </Link>
@@ -201,18 +202,18 @@ export default function SuchePage() {
             <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
             <input
               type="text"
-              aria-label="Persönlichen Workspace durchsuchen"
+              aria-label={translateUI("Persönlichen Workspace durchsuchen")}
               maxLength={120}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Gesamten Workspace durchsuchen…"
+              placeholder={translateUI("Gesamten Workspace durchsuchen…")}
               className="w-full pl-11 pr-24 py-3 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
               autoFocus
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
               {query && (
-                <button onClick={clearSearch} aria-label="Suche löschen" className="p-1 text-slate-500 hover:text-slate-600 transition-colors">
+                <button onClick={clearSearch} aria-label={translateUI("Suche löschen")} className="p-1 text-slate-500 hover:text-slate-600 transition-colors">
                   <X size={14} />
                 </button>
               )}
@@ -233,8 +234,8 @@ export default function SuchePage() {
           {!loading && visibleSearched && total === 0 && (
             <div className="rounded-xl border border-slate-200 bg-blue-50 p-10 text-center">
               <Search size={28} className="text-slate-500 mx-auto mb-3" />
-              <p className="text-sm text-slate-600">Keine Ergebnisse gefunden.</p>
-              <p className="text-xs text-slate-500 mt-1">Versuchen Sie einen anderen Suchbegriff.</p>
+              <p className="text-sm text-slate-600"><T>Keine Ergebnisse gefunden.</T></p>
+              <p className="text-xs text-slate-500 mt-1"><T>Versuchen Sie einen anderen Suchbegriff.</T></p>
 
             </div>
           )}
@@ -248,7 +249,7 @@ export default function SuchePage() {
               </p>
 
               <ResultSection
-                icon={FlaskConical} title="Labore" items={visibleResults!.labs} href="/labore" accent="blue"
+                icon={FlaskConical} title={translateUI("Labore")} items={visibleResults!.labs} href="/labore" accent="blue"
                 renderItem={(lab) => (
                   <div>
                     <p className="text-sm font-medium text-slate-900">{highlight(lab.title, searchedTerm)}</p>
@@ -259,7 +260,7 @@ export default function SuchePage() {
               />
 
               <ResultSection
-                icon={Server} title="Systeme" items={visibleResults!.systems} href="/systeme" accent="cyan"
+                icon={Server} title={translateUI("Systeme")} items={visibleResults!.systems} href="/systeme" accent="cyan"
                 renderItem={(sys) => (
                   <div>
                     <p className="text-sm font-medium text-slate-900 font-mono">{highlight(sys.hostname, searchedTerm)}</p>
@@ -273,7 +274,7 @@ export default function SuchePage() {
               />
 
               <ResultSection
-                icon={Terminal} title="Befehle" items={visibleResults!.commands} href="/befehle" accent="violet"
+                icon={Terminal} title={translateUI("Befehle")} items={visibleResults!.commands} href="/befehle" accent="violet"
                 renderItem={(cmd) => (
                   <div>
                     <code className="text-sm font-mono text-violet-800">{highlight(cmd.command, searchedTerm)}</code>
@@ -284,7 +285,7 @@ export default function SuchePage() {
               />
 
               <ResultSection
-                icon={Bug} title="Fehleranalysen" items={visibleResults!.troubleshooting} href="/fehleranalyse" accent="amber"
+                icon={Bug} title={translateUI("Fehleranalysen")} items={visibleResults!.troubleshooting} href="/fehleranalyse" accent="amber"
                 renderItem={(t) => (
                   <div>
                     <p className="text-sm font-medium text-slate-900">{highlight(t.title, searchedTerm)}</p>
@@ -295,7 +296,7 @@ export default function SuchePage() {
               />
 
               <ResultSection
-                icon={Container} title="Docker-Dienste" items={visibleResults!.docker} href="/docker-dienste" accent="emerald"
+                icon={Container} title={translateUI("Docker-Dienste")} items={visibleResults!.docker} href="/docker-dienste" accent="emerald"
                 renderItem={(d) => (
                   <div>
                     <p className="text-sm font-medium text-slate-900">{highlight(d.name, searchedTerm)}</p>
@@ -306,7 +307,7 @@ export default function SuchePage() {
               />
 
               <ResultSection
-                icon={StickyNote} title="Praxisnotizen" items={visibleResults!.notes} href="/praxisnotizen" accent="slate"
+                icon={StickyNote} title={translateUI("Praxisnotizen")} items={visibleResults!.notes} href="/praxisnotizen" accent="slate"
                 renderItem={(n) => (
                   <div>
                     <p className="text-sm font-medium text-slate-900">{highlight(n.title, searchedTerm)}</p>

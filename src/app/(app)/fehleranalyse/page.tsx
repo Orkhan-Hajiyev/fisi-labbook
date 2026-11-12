@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useEffect, useState, useMemo } from "react";
 import {
   Bug, AlertCircle, Search as SearchIcon, Lightbulb, Target, Tag,
@@ -93,15 +95,11 @@ function UserTroubleshootingCard({
           )}
           {confirmDelete ? (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-red-700">Löschen?</span>
+              <span className="text-xs text-red-700"><T>Löschen?</T></span>
               <button onClick={() => onDelete(item.id)}
-                className="px-2.5 py-1 rounded-lg bg-red-500/15 text-red-700 hover:bg-red-500/25 text-xs font-medium transition-colors">
-                Ja
-              </button>
+                className="px-2.5 py-1 rounded-lg bg-red-500/15 text-red-700 hover:bg-red-500/25 text-xs font-medium transition-colors"><T>Ja</T></button>
               <button onClick={() => setConfirmDelete(false)}
-                className="px-2.5 py-1 rounded-lg bg-blue-50 text-slate-600 hover:bg-blue-50 text-xs font-medium transition-colors">
-                Nein
-              </button>
+                className="px-2.5 py-1 rounded-lg bg-blue-50 text-slate-600 hover:bg-blue-50 text-xs font-medium transition-colors"><T>Nein</T></button>
             </div>
           ) : (
             <>
@@ -127,7 +125,7 @@ function UserTroubleshootingCard({
 
       {item.result && (
         <div className="rounded-lg bg-emerald-500/5 border border-emerald-500/15 px-4 py-3">
-          <p className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider mb-1">Ergebnis</p>
+          <p className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider mb-1"><T>Ergebnis</T></p>
           <p className="text-xs text-emerald-800 leading-relaxed">{item.result}</p>
         </div>
       )}
@@ -189,7 +187,7 @@ function DemoCaseCard({ c, user, onCopied }: {
       </div>
       {c.result && (
         <div className="rounded-lg bg-emerald-500/5 border border-emerald-500/15 px-4 py-3">
-          <p className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider mb-1">Ergebnis</p>
+          <p className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider mb-1"><T>Ergebnis</T></p>
           <p className="text-xs text-emerald-800 leading-relaxed">{c.result}</p>
         </div>
       )}
@@ -203,9 +201,7 @@ function DemoCaseCard({ c, user, onCopied }: {
           </button>
         ) : (
           <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
-            <Lock size={11} />
-            Anmeldung erforderlich
-          </button>
+            <Lock size={11} /><T>Anmeldung erforderlich</T></button>
         )}
       </div>
     </div>
@@ -347,14 +343,14 @@ function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }
       ) : (
         <div className="rounded-xl border border-amber-500/15 bg-[#fff7ed] p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Troubleshooting-Checkliste</h3>
+            <h3 className="text-xs font-semibold text-amber-700 uppercase tracking-wider"><T>Troubleshooting-Checkliste</T></h3>
             <button onClick={() => { setOpen(false); setSelected(null); }} className="text-slate-600 hover:text-slate-700 transition-colors">
               <Plus size={14} className="rotate-45" />
             </button>
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-[10px] text-slate-600 uppercase tracking-wider">Problemtyp auswählen</label>
+            <label className="text-[10px] text-slate-600 uppercase tracking-wider"><T>Problemtyp auswählen</T></label>
             <div className="flex flex-wrap gap-1.5">
               {types.map((t) => (
                 <button key={t} onClick={() => setSelected(t)}
@@ -391,6 +387,7 @@ function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }
 }
 
 export default function FehleranalysePage() {
+  const translateUI = useT();
   const { user } = useAuth();
 
   const [cases, setCases] = useState<FisiTroubleshootingCase[]>([]);
@@ -505,15 +502,15 @@ export default function FehleranalysePage() {
 
       <PageHeader
         icon={Bug}
-        title="Fehleranalyse"
-        description="Strukturierte Troubleshooting-Fälle: Problem, Prüfung, Ursache, Lösung"
+        title={translateUI("Fehleranalyse")}
+        description={translateUI("Strukturierte Troubleshooting-Fälle: Problem, Prüfung, Ursache, Lösung")}
       />
 
       {/* Personal workspace */}
       {user && (
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Meine Fehleranalysen</h2>
+            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider"><T>Meine Fehleranalysen</T></h2>
             {!showCreateForm && (
               <button onClick={() => setShowCreateForm(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors">
@@ -544,21 +541,21 @@ export default function FehleranalysePage() {
                     type="text"
                     value={userQuery}
                     onChange={(e) => setUserQuery(e.target.value)}
-                    placeholder="Titel, Kategorie oder Schwierigkeit suchen..."
+                    placeholder={translateUI("Titel, Kategorie oder Schwierigkeit suchen...")}
                     className="w-full max-w-xl pl-10 pr-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 transition-all"
                   />
                 </div>
               )}
               {userCases.length === 0 && !showCreateForm && (
                 <EmptyPersonalState
-                  title="Noch keine Fehleranalysen"
-                  description="Dokumentieren Sie Troubleshooting-Fälle strukturiert mit Symptomen, Prüfschritten, Ursache und Lösung."
+                  title={translateUI("Noch keine Fehleranalysen")}
+                  description={translateUI("Dokumentieren Sie Troubleshooting-Fälle strukturiert mit Symptomen, Prüfschritten, Ursache und Lösung.")}
                   buttonLabel="Fehleranalyse hinzufügen"
                   onAction={() => setShowCreateForm(true)}
                 />
               )}
               {userCases.length > 0 && filteredUserCases.length === 0 && (
-                <EmptyState title="Keine Treffer" description={`Kein Fall gefunden für "${userQuery}".`} />
+                <EmptyState title={translateUI("Keine Treffer")} description={`Kein Fall gefunden für "${userQuery}".`} />
               )}
               {filteredUserCases.length > 0 && (
                 <div className="space-y-5">
@@ -585,11 +582,11 @@ export default function FehleranalysePage() {
       )}
 
       {/* Reference section */}
-      <ReferenceSection title="Referenz-Fehleranalysen">
+      <ReferenceSection title={translateUI("Referenz-Fehleranalysen")}>
         {demoLoading && <LoadingState />}
         {demoError && <ErrorState />}
         {!demoLoading && !demoError && cases.length === 0 && (
-          <EmptyState title="Keine Fehleranalysen vorhanden" description="Es wurden noch keine Troubleshooting-Fälle angelegt." />
+          <EmptyState title={translateUI("Keine Fehleranalysen vorhanden")} description={translateUI("Es wurden noch keine Troubleshooting-Fälle angelegt.")} />
         )}
         {!demoLoading && !demoError && cases.length > 0 && (
           <div className="space-y-5">

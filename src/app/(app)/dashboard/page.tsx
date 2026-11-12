@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useEffect, useState } from "react";
 import {
   FlaskConical, Server, Terminal, Bug, Container, BookOpen,
@@ -30,6 +32,7 @@ interface PersonalStats {
 }
 
 export default function DashboardPage() {
+  const translateUI = useT();
   const { user } = useAuth();
   const userId = user?.id;
 
@@ -118,7 +121,7 @@ export default function DashboardPage() {
               <p className="mt-2 text-sm text-[#50718b] max-w-xl">Deine IT-Dokumentation, eigenen Labore und Praxisnotizen an einem Ort. Die nachfolgenden Kennzahlen beziehen sich auf deinen eigenen Account.</p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Link href="/workspace" className="px-4 py-2.5 rounded-xl bg-[#176cba] text-white font-bold text-sm hover:bg-[#0b599f]">Mein Workspace <ArrowRight size={15} className="inline ml-1" /></Link>
+              <Link href="/workspace" className="px-4 py-2.5 rounded-xl bg-[#176cba] text-white font-bold text-sm hover:bg-[#0b599f]"><T>Mein Workspace</T><ArrowRight size={15} className="inline ml-1" /></Link>
               <Link href="/beispiele" className="px-4 py-2.5 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-50">Beispiele ansehen</Link>
             </div>
           </div>
@@ -146,11 +149,11 @@ export default function DashboardPage() {
         {demoError && <ErrorState />}
         {!demoLoading && !demoError && demoStats && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            <StatCard label="Labore" value={demoStats.labore} icon={FlaskConical} href="/labore" accent="blue" />
-            <StatCard label="Systeme" value={demoStats.systeme} icon={Server} href="/systeme" accent="cyan" />
-            <StatCard label="Befehle" value={demoStats.befehle} icon={Terminal} href="/befehle" accent="violet" />
-            <StatCard label="Fehleranalysen" value={demoStats.fehleranalysen} icon={Bug} href="/fehleranalyse" accent="amber" />
-            <StatCard label="Docker-Dienste" value={demoStats.dockerDienste} icon={Container} href="/docker-dienste" accent="emerald" />
+            <StatCard label={translateUI("Labore")} value={demoStats.labore} icon={FlaskConical} href="/labore" accent="blue" />
+            <StatCard label={translateUI("Systeme")} value={demoStats.systeme} icon={Server} href="/systeme" accent="cyan" />
+            <StatCard label={translateUI("Befehle")} value={demoStats.befehle} icon={Terminal} href="/befehle" accent="violet" />
+            <StatCard label={translateUI("Fehleranalysen")} value={demoStats.fehleranalysen} icon={Bug} href="/fehleranalyse" accent="amber" />
+            <StatCard label={translateUI("Docker-Dienste")} value={demoStats.dockerDienste} icon={Container} href="/docker-dienste" accent="emerald" />
           </div>
         )}
       </div>
@@ -195,12 +198,12 @@ export default function DashboardPage() {
 
           {!personalStatsLoading && !personalStatsError && personalStats && !personalIsEmpty && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              <StatCard label="Meine Labore" value={personalStats.labore} icon={FlaskConical} href="/labore" accent="blue" />
-              <StatCard label="Meine Systeme" value={personalStats.systeme} icon={Server} href="/systeme" accent="cyan" />
-              <StatCard label="Meine Befehle" value={personalStats.befehle} icon={Terminal} href="/befehle" accent="violet" />
-              <StatCard label="Fehleranalysen" value={personalStats.fehleranalysen} icon={Bug} href="/fehleranalyse" accent="amber" />
-              <StatCard label="Docker-Dienste" value={personalStats.dockerDienste} icon={Container} href="/docker-dienste" accent="emerald" />
-              <StatCard label="Notizen" value={personalStats.notizen} icon={StickyNote} href="/praxisnotizen" accent="blue" />
+              <StatCard label={translateUI("Meine Labore")} value={personalStats.labore} icon={FlaskConical} href="/labore" accent="blue" />
+              <StatCard label={translateUI("Meine Systeme")} value={personalStats.systeme} icon={Server} href="/systeme" accent="cyan" />
+              <StatCard label={translateUI("Meine Befehle")} value={personalStats.befehle} icon={Terminal} href="/befehle" accent="violet" />
+              <StatCard label={translateUI("Fehleranalysen")} value={personalStats.fehleranalysen} icon={Bug} href="/fehleranalyse" accent="amber" />
+              <StatCard label={translateUI("Docker-Dienste")} value={personalStats.dockerDienste} icon={Container} href="/docker-dienste" accent="emerald" />
+              <StatCard label={translateUI("Notizen")} value={personalStats.notizen} icon={StickyNote} href="/praxisnotizen" accent="blue" />
             </div>
           )}
         </div>
@@ -230,13 +233,13 @@ export default function DashboardPage() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {[
-            { href: "/labore", label: "Labore", desc: "Dokumentierte IT-Laborumgebungen", icon: FlaskConical },
-            { href: "/systeme", label: "Systeme", desc: "Infrastruktur- und Systemdokumentation", icon: Server },
-            { href: "/befehle", label: "Befehle", desc: "Admin-Befehlsreferenz mit Beispielen", icon: Terminal },
-            { href: "/fehleranalyse", label: "Fehleranalyse", desc: "Troubleshooting-Fälle strukturiert", icon: Bug },
-            { href: "/docker-dienste", label: "Docker-Dienste", desc: "Container-Dienste und Compose-Snippets", icon: Container },
-            { href: "/praxisnotizen", label: "Praxisnotizen", desc: "Persönlicher Notiz- und Aufgabenbereich", icon: StickyNote },
-            { href: "/portfolio", label: "Portfolio", desc: "Projektzusammenfassung und Technologien", icon: BookOpen },
+            { href: "/labore", label: translateUI("Labore"), desc: "Dokumentierte IT-Laborumgebungen", icon: FlaskConical },
+            { href: "/systeme", label: translateUI("Systeme"), desc: "Infrastruktur- und Systemdokumentation", icon: Server },
+            { href: "/befehle", label: translateUI("Befehle"), desc: "Admin-Befehlsreferenz mit Beispielen", icon: Terminal },
+            { href: "/fehleranalyse", label: translateUI("Fehleranalyse"), desc: "Troubleshooting-Fälle strukturiert", icon: Bug },
+            { href: "/docker-dienste", label: translateUI("Docker-Dienste"), desc: "Container-Dienste und Compose-Snippets", icon: Container },
+            { href: "/praxisnotizen", label: translateUI("Praxisnotizen"), desc: "Persönlicher Notiz- und Aufgabenbereich", icon: StickyNote },
+            { href: "/portfolio", label: translateUI("Portfolio"), desc: "Projektzusammenfassung und Technologien", icon: BookOpen },
           ].map(({ href, label, desc, icon: Icon }) => (
             <Link
               key={href}

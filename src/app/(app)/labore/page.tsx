@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useEffect, useState, useMemo } from "react";
 import {
   FlaskConical, Calendar, CheckCircle2, Clock, Archive, Circle,
@@ -94,24 +96,22 @@ function UserLabCard({
       <div className="flex items-center justify-end pt-2 border-t border-slate-200 mt-auto">
         {confirmDelete ? (
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1 text-[11px] text-red-700"><AlertCircle size={10} />Wirklich löschen?</span>
+            <span className="flex items-center gap-1 text-[11px] text-red-700"><AlertCircle size={10} /><T>Wirklich löschen?</T></span>
             <button onClick={handleDelete} disabled={deleting}
               className="text-[11px] font-semibold text-red-700 hover:text-red-800 transition-colors disabled:opacity-50">
               {deleting ? "…" : "Ja"}
             </button>
             <button onClick={() => setConfirmDelete(false)}
-              className="text-[11px] text-slate-600 hover:text-slate-700 transition-colors">Nein</button>
+              className="text-[11px] text-slate-600 hover:text-slate-700 transition-colors"><T>Nein</T></button>
           </div>
         ) : (
           <div className="flex items-center gap-0.5">
             <button onClick={() => onEdit(lab)}
               className="flex items-center gap-1.5 text-[11px] text-slate-600 hover:text-blue-700 px-2 py-1 rounded-lg hover:bg-blue-500/10 transition-all">
-              <Edit2 size={11} />Bearbeiten
-            </button>
+              <Edit2 size={11} /><T>Bearbeiten</T></button>
             <button onClick={() => setConfirmDelete(true)}
               className="flex items-center gap-1.5 text-[11px] text-slate-600 hover:text-red-700 px-2 py-1 rounded-lg hover:bg-red-500/10 transition-all">
-              <Trash2 size={11} />Löschen
-            </button>
+              <Trash2 size={11} /><T>Löschen</T></button>
           </div>
         )}
       </div>
@@ -169,9 +169,7 @@ function DemoLabCard({ lab, user, onCopied }: { lab: FisiLab; user: ReturnType<t
           </button>
         ) : (
           <button disabled className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 cursor-not-allowed">
-            <Lock size={11} />
-            Anmeldung erforderlich
-          </button>
+            <Lock size={11} /><T>Anmeldung erforderlich</T></button>
         )}
       </div>
     </div>
@@ -181,6 +179,7 @@ function DemoLabCard({ lab, user, onCopied }: { lab: FisiLab; user: ReturnType<t
 // ── Page ─────────────────────────────────────────────────────────────────
 
 export default function LaborePage() {
+  const translateUI = useT();
   const { user } = useAuth();
 
   const [labs,      setLabs]      = useState<FisiLab[]>([]);
@@ -275,20 +274,19 @@ export default function LaborePage() {
         </div>
       )}
 
-      <PageHeader icon={FlaskConical} title="Labore" description="IT-Laborumgebungen dokumentieren und verwalten" />
+      <PageHeader icon={FlaskConical} title={translateUI("Labore")} description={translateUI("IT-Laborumgebungen dokumentieren und verwalten")} />
 
       {/* User workspace */}
       {user && (
         <div>
           {/* Header row */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Meine Labore</h2>
+            <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider"><T>Meine Labore</T></h2>
             <button
               onClick={() => { setShowCreateForm(true); setEditLab(null); }}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors"
             >
-              <Plus size={13} />Neues Labor
-            </button>
+              <Plus size={13} /><T>Neues Labor</T></button>
           </div>
 
           {/* Search + filter */}
@@ -297,7 +295,7 @@ export default function LaborePage() {
               <div className="relative flex-1 min-w-0">
                 <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
                 <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Labore durchsuchen…"
+                  placeholder={translateUI("Labore durchsuchen…")}
                   className="w-full pl-8 pr-7 py-1.5 rounded-lg bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 transition-all" />
                 {searchQuery && (
                   <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-600">
@@ -306,11 +304,11 @@ export default function LaborePage() {
                 )}
               </div>
               <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className={selectCls}>
-                <option value="">Alle Status</option>
-                <option value="planned">Geplant</option>
-                <option value="in_progress">In Bearbeitung</option>
-                <option value="completed">Abgeschlossen</option>
-                <option value="archived">Archiviert</option>
+                <option value=""><T>Alle Status</T></option>
+                <option value="planned"><T>Geplant</T></option>
+                <option value="in_progress"><T>In Bearbeitung</T></option>
+                <option value="completed"><T>Abgeschlossen</T></option>
+                <option value="archived"><T>Archiviert</T></option>
               </select>
             </div>
           )}
@@ -326,19 +324,19 @@ export default function LaborePage() {
           {userLabsLoading && <LoadingState text="Meine Labore werden geladen…" />}
           {!userLabsLoading && userLabsError && (
             <div className="rounded-xl bg-red-500/5 border border-red-500/15 p-5 text-center mb-6">
-              <p className="text-sm text-red-700">Fehler beim Laden der Labore.</p>
+              <p className="text-sm text-red-700"><T>Fehler beim Laden der Labore.</T></p>
             </div>
           )}
           {!userLabsLoading && !userLabsError && userLabs !== null && userLabs.length === 0 && !showCreateForm && (
             <EmptyPersonalState
               title="Noch keine eigenen Labore vorhanden"
-              description="Erstellen Sie Ihr erstes Labor, um Ihre Systemintegration-Praxis zu dokumentieren."
+              description={translateUI("Erstellen Sie Ihr erstes Labor, um Ihre Systemintegration-Praxis zu dokumentieren.")}
               buttonLabel="Erstes Labor erstellen"
               onAction={() => setShowCreateForm(true)}
             />
           )}
           {!userLabsLoading && !userLabsError && filteredUserLabs.length === 0 && (userLabs?.length ?? 0) > 0 && (
-            <EmptyState title="Keine Treffer" description="Kein Labor entspricht den aktuellen Suchkriterien." />
+            <EmptyState title={translateUI("Keine Treffer")} description={translateUI("Kein Labor entspricht den aktuellen Suchkriterien.")} />
           )}
           {!userLabsLoading && !userLabsError && filteredUserLabs.length > 0 && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-2">
@@ -354,11 +352,11 @@ export default function LaborePage() {
       )}
 
       {/* Reference section */}
-      <ReferenceSection title="Demo-Labore">
+      <ReferenceSection title={translateUI("Demo-Labore")}>
         {loading && <LoadingState />}
         {error && <ErrorState />}
         {!loading && !error && labs.length === 0 && (
-          <EmptyState title="Keine Demo-Labore vorhanden" description="Es wurden noch keine Beispiel-Labore angelegt." />
+          <EmptyState title={translateUI("Keine Demo-Labore vorhanden")} description={translateUI("Es wurden noch keine Beispiel-Labore angelegt.")} />
         )}
         {!loading && !error && labs.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

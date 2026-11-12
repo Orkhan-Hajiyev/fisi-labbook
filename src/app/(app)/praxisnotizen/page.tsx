@@ -1,5 +1,7 @@
 "use client";
 
+import { T, useT } from "@/components/TranslatedText";
+
 import { useEffect, useState, useMemo } from "react";
 import {
   StickyNote,
@@ -102,9 +104,7 @@ function PublicView() {
           <Link
             href="/login"
             className="px-4 py-2 rounded-lg border border-slate-200 hover:border-slate-200 text-sm font-medium text-slate-700 hover:text-slate-900 transition-all"
-          >
-            Einloggen
-          </Link>
+          ><T>Einloggen</T></Link>
         </div>
       </div>
 
@@ -133,6 +133,7 @@ function PublicView() {
 // ── Main page ─────────────────────────────────────────────────────────────
 
 export default function PraxisNotizenPage() {
+  const translateUI = useT();
   const { user, loading: authLoading } = useAuth();
 
   // Notes — null means "not yet fetched"; avoids synchronous setState in effects
@@ -281,7 +282,7 @@ export default function PraxisNotizenPage() {
 
       <PageHeader
         icon={StickyNote}
-        title="Praxisnotizen"
+        title={translateUI("Praxisnotizen")}
         description="Ihr persönlicher Arbeitsbereich für technische Notizen, Tagesaufgaben, Troubleshooting-Ideen, Befehle, Tags und strukturierte FISI-Dokumentation."
       />
 
@@ -293,7 +294,7 @@ export default function PraxisNotizenPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Notizen durchsuchen…"
+            placeholder={translateUI("Notizen durchsuchen…")}
             className="w-full pl-9 pr-8 py-2 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
           />
           {searchQuery && (
@@ -309,23 +310,21 @@ export default function PraxisNotizenPage() {
           onClick={() => { setShowCreateForm(true); setEditNote(null); }}
           className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors shrink-0"
         >
-          <Plus size={15} />
-          Neue Notiz
-        </button>
+          <Plus size={15} /><T>Neue Notiz</T></button>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
         <select value={filterStatus}   onChange={(e) => setFilterStatus(e.target.value)}   className={selectCls}>
-          <option value="">Status</option>
+          <option value=""><T>Status</T></option>
           {STATUS_OPTS.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
         </select>
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className={selectCls}>
-          <option value="">Kategorie</option>
+          <option value=""><T>Kategorie</T></option>
           {CATEGORY_OPTS.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
         <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className={selectCls}>
-          <option value="">Priorität</option>
+          <option value=""><T>Priorität</T></option>
           {PRIORITY_OPTS.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
         </select>
         {hasActiveFilters && (
@@ -355,23 +354,23 @@ export default function PraxisNotizenPage() {
       {!notesLoading && notesError && (
         <div className="flex justify-center py-16">
           <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-5 max-w-sm text-center">
-            <p className="text-sm text-red-700 font-medium mb-1">Fehler beim Laden</p>
-            <p className="text-xs text-red-700/70">Praxisnotizen konnten nicht geladen werden.</p>
+            <p className="text-sm text-red-700 font-medium mb-1"><T>Fehler beim Laden</T></p>
+            <p className="text-xs text-red-700/70"><T>Praxisnotizen konnten nicht geladen werden.</T></p>
           </div>
         </div>
       )}
 
       {!notesLoading && !notesError && notes !== null && notes.length === 0 && !showCreateForm && (
         <EmptyState
-          title="Noch keine Praxisnotizen vorhanden"
-          description="Erstellen Sie Ihre erste Notiz, um technische Aufgaben, Ideen oder Fehleranalysen strukturiert festzuhalten."
+          title={translateUI("Noch keine Praxisnotizen vorhanden")}
+          description={translateUI("Erstellen Sie Ihre erste Notiz, um technische Aufgaben, Ideen oder Fehleranalysen strukturiert festzuhalten.")}
         />
       )}
 
       {!notesLoading && !notesError && filteredNotes.length === 0 && (notes?.length ?? 0) > 0 && (
         <EmptyState
-          title="Keine Treffer"
-          description="Keine Notiz entspricht den aktuellen Such- und Filterkriterien."
+          title={translateUI("Keine Treffer")}
+          description={translateUI("Keine Notiz entspricht den aktuellen Such- und Filterkriterien.")}
         />
       )}
 

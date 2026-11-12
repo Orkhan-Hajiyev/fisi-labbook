@@ -1,16 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Cloud, Container, Network, Router, Server, ShieldCheck, Terminal } from "lucide-react";
+import { Network, Server, ShieldCheck, Terminal } from "lucide-react";
 import type { Language } from "@/contexts/LanguageContext";
 
-const deviceLabels = {
-  de: ["Gateway", "Switch", "Windows Server", "Linux", "Docker", "Clients"],
-  az: ["Şəbəkə keçidi", "Kommutator", "Windows Server", "Linux", "Docker", "Klientlər"],
-} as const;
-
 export default function InfrastructureHero({ language }: { language: Language }) {
-  const t = deviceLabels[language];
   return (
     <div className="fisi-infra-hero relative isolate overflow-hidden rounded-[28px] border border-[#bbd8f7] min-h-[350px] sm:min-h-[420px] bg-gradient-to-br from-[#e7f3ff] via-[#eaf6ff] to-[#b8d9fa] shadow-[0_32px_75px_-38px_rgba(10,83,176,.32)]" aria-label={language==="de"?"Illustration eines IT-Labors mit vernetzten Diensten":"Bir-birinə qoşulmuş IT xidmətləri olan laboratoriya təsviri"} role="img">
       <div className="absolute inset-0 fisi-tech-grid opacity-60" aria-hidden="true" />
