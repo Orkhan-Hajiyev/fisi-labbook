@@ -1,206 +1,91 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { supabase, supabaseConfigMissing } from "@/lib/supabase";
 import SupabaseMissingBanner from "@/components/SupabaseMissingBanner";
-import { CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-function mapSignUpError(message: string): string {
-  if (message.includes("User already registered"))
-    return "Diese E-Mail-Adresse ist bereits registriert.";
-  if (message.includes("Password should be at least"))
-    return "Das Passwort muss mindestens 6 Zeichen lang sein.";
-  if (message.includes("Unable to validate email address") || message.includes("invalid format"))
-    return "Ungültige E-Mail-Adresse.";
-  if (message.includes("Signup is disabled"))
-    return "Die Registrierung ist zurzeit deaktiviert.";
-  if (message.includes("email rate limit"))
-    return "Zu viele Anfragen. Bitte warten Sie kurz und versuchen Sie es erneut.";
-  return "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.";
+function translateSignUpError(error: { message: string; code?: string }, de: boolean) {
+  const message = error.message.toLowerCase();
+  if (message.includes("already registered") || error.code === "user_already_exists")
+    return de ? "Für diese E-Mail-Adresse besteht bereits ein Konto. Bitte melde dich an oder setze dein Passwort zurück." : "Bu e-poçt ünvanı üçün hesab artıq mövcuddur. Daxil ol və ya şifrəni yenilə.";
+  if (message.includes("signup is disabled"))
+    return de ? "Neue Registrierungen sind derzeit vom Administrator deaktiviert." : "Yeni qeydiyyatlar hazırda administrator tərəfindən deaktiv edilib.";
+  if (message.includes("rate limit") || message.includes("too many"))
+    return de ? "Zu viele Anfragen. Bitte versuche es später erneut." : "Həddindən artıq sorğu göndərilib. Bir qədər sonra yenidən cəhd et.";
+  if (message.includes("email") && (message.includes("sending") || message.includes("smtp")))
+    return de ? "Die Bestätigungs-E-Mail konnte nicht versendet werden. Der E-Mail-Dienst muss geprüft werden." : "Təsdiq e-poçtu göndərilə bilmədi. Poçt xidməti yoxlanmalıdır.";
+  if (message.includes("invalid") || message.includes("password"))
+    return de ? "Bitte überprüfe die E-Mail-Adresse und die Passwortanforderungen." : "E-poçt ünvanını və şifrə tələblərini yoxla.";
+  return de ? "Registrierung fehlgeschlagen. Bitte versuche es erneut." : "Qeydiyyat alınmadı. Yenidən cəhd et.";
 }
 
-export default function RegistrierenPage() {
+export default function RegistrationPage() {
   const { language } = useLanguage();
   const de = language === "de";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [showPasswords, setShowPasswords] = useState(false);
+  const [privacy, setPrivacy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState<"confirmation" | "signedin" | null>(null);
   const [loading, setLoading] = useState(false);
 
-  if (supabaseConfigMissing) {
-    return (
-      <div className="max-w-md mx-auto px-6 py-20">
-        <SupabaseMissingBanner />
-      </div>
-    );
-  }
+  if (supabaseConfigMissing) return <div className="max-w-md mx-auto px-6 py-20"><SupabaseMissingBanner /></div>;
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (loading) return;
     setError(null);
-
-    if (!name.trim()) {
-      setError(de ? "Bitte gib deinen Namen ein." : "Adını daxil et.");
-      return;
-    }
-    if (password.length < 6) {
-      setError(de ? "Das Passwort muss mindestens 6 Zeichen lang sein." : "Şifrə ən azı 6 simvoldan ibarət olmalıdır.");
-      return;
-    }
-    if (password !== passwordConfirm) {
-      setError(de ? "Die Passwörter stimmen nicht überein." : "Şifrələr uyğun gəlmir.");
-      return;
-    }
-
+    if (name.trim().length < 2) { setError(de ? "Bitte gib einen gültigen Namen ein." : "Düzgün ad daxil et."); return; }
+    if (password.length < 8) { setError(de ? "Das Passwort muss mindestens 8 Zeichen enthalten." : "Şifrə ən azı 8 simvol olmalıdır."); return; }
+    if (password !== passwordConfirm) { setError(de ? "Die Passwörter stimmen nicht überein." : "Şifrələr uyğun gəlmir."); return; }
+    if (!privacy) { setError(de ? "Bitte bestätige, dass du die Datenschutzhinweise gelesen hast." : "Məxfilik məlumatları ilə tanış olduğunu təsdiqlə."); return; }
     setLoading(true);
-
     try {
-      const { error: authError } = await supabase!.auth.signUp({
-        email,
-        password,
-        options: { data: { name: name.trim() } },
+      const {data, error: authError} = await supabase!.auth.signUp({
+        email: email.trim().toLowerCase(), password,
+        options: {
+          data: {name: name.trim()},
+          emailRedirectTo: `${window.location.origin}/login?confirmed=1`,
+        },
       });
-      if (authError) {
-        setError(de ? mapSignUpError(authError.message) : "Qeydiyyat alınmadı. Məlumatları yoxlayıb yenidən cəhd et.");
-        return;
-      }
-      setSuccess(true);
+      if (authError) { setError(translateSignUpError(authError, de)); return; }
+      setSuccess(data.session ? "signedin" : "confirmation");
     } catch {
-      setError(de ? "Verbindung fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut." : "Bağlantı alınmadı. İnternet bağlantını yoxlayıb yenidən cəhd et.");
-    } finally {
-      setLoading(false);
-    }
+      setError(de ? "Die Verbindung ist fehlgeschlagen. Versuche es erneut." : "Bağlantı alınmadı. Yenidən cəhd et.");
+    } finally { setLoading(false); }
   }
 
-  if (success) {
-    return (
-      <div className="flex flex-col items-center justify-center px-4 py-20 min-h-[calc(100vh-130px)]">
-        <div className="w-full max-w-md">
-          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-8 text-center">
-            <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 size={22} className="text-emerald-700" />
-            </div>
-            <h2 className="text-lg font-bold text-slate-900 mb-3">{de ? "Registrierung erfolgreich" : "Qeydiyyat uğurlu oldu"}</h2>
-            <p className="text-sm text-slate-600 leading-relaxed mb-2">
-              {de ? "Bitte prüfe dein E-Mail-Postfach und bestätige deine E-Mail-Adresse über den Bestätigungslink. Danach kannst du dich anmelden." : "E-poçtunu yoxla və göndərilən keçidlə ünvanını təsdiqlə. Bundan sonra hesabına daxil ola bilərsən."}
-            </p>
-            <p className="text-xs text-slate-500 leading-relaxed mb-6">
-              {de ? "Falls die E-Mail nicht ankommt, prüfe bitte auch deinen Spam-Ordner." : "Məktub gəlməsə, spam qovluğunu da yoxla."}
-            </p>
-            <Link
-              href="/login"
-              className="inline-block px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors"
-            >
-              {de ? "Zum Login" : "Girişə keç"}
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col items-center justify-center px-4 py-20 min-h-[calc(100vh-130px)]">
-      <div className="w-full max-w-md">
-        {/* Logo link */}
-        <Link href="/" className="flex items-center gap-2.5 mb-8 w-fit">
-          <div className="w-8 h-8 rounded-lg bg-[#e8f2ff] border border-slate-200 flex items-center justify-center shrink-0">
-            <span className="text-[11px] font-black bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent select-none">
-              FL
-            </span>
-          </div>
-          <span className="text-sm font-bold text-slate-900">FISI LabBook</span>
-        </Link>
-
-        <div className="rounded-2xl border border-slate-200 bg-blue-50 p-8">
-          <h1 className="text-xl font-bold text-slate-900 mb-1">{de ? "Kostenloses FISI-LabBook-Konto erstellen" : "Pulsuz FISI LabBook hesabı yarat"}</h1>
-          <p className="text-sm text-slate-600 mb-7">
-            {de ? "Registriere dich kostenlos und nutze deinen persönlichen IT-Workspace. Für die derzeit angebotenen Funktionen ist kein kostenpflichtiges Abo erforderlich." : "Pulsuz qeydiyyatdan keç və şəxsi IT iş sahəndən istifadə et. Hazırda təqdim olunan funksiyalar üçün ödənişli abunə tələb olunmur."}
-          </p>
-
-          {error && (
-            <div role="alert" className="mb-5 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="register-name" className="block text-xs font-medium text-slate-600 mb-1.5">{de ? "Name" : "Ad"}</label>
-              <input
-                id="register-name"
-                type="text"
-                autoComplete="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                placeholder={de ? "Max Mustermann" : "Ad Soyad"}
-                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
-              />
-            </div>
-            <div>
-              <label htmlFor="register-email" className="block text-xs font-medium text-slate-600 mb-1.5">{de ? "E-Mail" : "E-poçt"}</label>
-              <input
-                id="register-email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="name@beispiel.de"
-                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
-              />
-            </div>
-            <div>
-              <label htmlFor="register-password" className="block text-xs font-medium text-slate-600 mb-1.5">{de ? "Passwort" : "Şifrə"}</label>
-              <input
-                id="register-password"
-                type="password"
-                autoComplete="new-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder={de ? "Mind. 6 Zeichen" : "Ən azı 6 simvol"}
-                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
-              />
-            </div>
-            <div>
-              <label htmlFor="register-password-confirm" className="block text-xs font-medium text-slate-600 mb-1.5">
-                {de ? "Passwort bestätigen" : "Şifrəni təsdiqlə"}
-              </label>
-              <input
-                id="register-password-confirm"
-                type="password"
-                autoComplete="new-password"
-                value={passwordConfirm}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
-                required
-                placeholder={de ? "Passwort wiederholen" : "Şifrəni təkrar yaz"}
-                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold text-white transition-colors"
-            >
-              {loading ? (de ? "Bitte warten…" : "Gözləyin…") : (de ? "Kostenlos registrieren" : "Pulsuz qeydiyyatdan keç")}
-            </button>
+  return <main className="min-h-[calc(100vh-130px)] flex items-center justify-center bg-gradient-to-b from-[#f1f7ff] to-white px-4 py-14">
+    <div className="w-full max-w-[510px]">
+      <Link href="/" className="inline-flex items-center gap-2 mb-5 text-sm font-semibold text-blue-700 hover:underline">← FISI LabBook</Link>
+      <div className="rounded-[24px] border border-[#cbdff3] bg-white p-6 sm:p-9 shadow-[0_20px_45px_-26px_rgba(14,70,140,.3)]">
+        {success ? <>
+          <div className="text-4xl text-blue-700 mb-3" aria-hidden="true">✓</div>
+          <h1 className="text-2xl font-extrabold text-[#153b68]">{de ? "Registrierung abgeschlossen" : "Qeydiyyat tamamlandı"}</h1>
+          <p className="mt-4 text-sm leading-7 text-slate-600">{success === "signedin" ? (de ? "Dein Konto ist aktiv. Du kannst deinen persönlichen Bereich öffnen." : "Hesabın aktivdir. Şəxsi iş mühitinə keçə bilərsən.") : (de ? "Falls für dein Konto eine E-Mail-Bestätigung erforderlich ist, prüfe dein Postfach und den Spam-Ordner. Der Bestätigungslink muss für diese Website freigegeben sein." : "Hesabın e-poçt təsdiqi tələb edirsə, gələn məktubları və spam qovluğunu yoxla. Təsdiq keçidi bu sayt üçün düzgün konfiqurasiya edilməlidir.")}</p>
+          <Link href={success === "signedin" ? "/dashboard" : "/login"} className="mt-6 inline-flex rounded-xl bg-blue-700 px-6 py-3 text-sm font-bold text-white">{success === "signedin" ? (de ? "Zum Workspace" : "İş mühitinə keç") : (de ? "Zur Anmeldung" : "Daxil ol")}</Link>
+        </> : <>
+          <p className="text-xs font-extrabold tracking-widest text-blue-700">{de ? "KOSTENLOS STARTEN" : "PULSUZ BAŞLA"}</p>
+          <h1 className="mt-2 text-2xl font-extrabold text-[#153b68]">{de ? "Dein FISI-LabBook-Konto" : "FISI LabBook hesabını yarat"}</h1>
+          <p className="mt-2 text-sm leading-6 text-[#59738f]">{de ? "Dokumentiere eigene Labore, Systeme und IT-Erfahrungen. Kein kostenpflichtiges Abo für die aktuellen Funktionen." : "Laboratoriyalarını, sistemlərini və IT təcrübələrini sənədləşdir. Hazırkı funksiyalar üçün ödənişli abunə yoxdur."}</p>
+          {error && <p role="alert" className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
+          <form onSubmit={submit} className="mt-6 space-y-4">
+            <label className="block text-sm font-semibold text-[#24466c]">{de ? "Name" : "Ad və soyad"}<input required autoComplete="name" maxLength={100} value={name} onChange={e=>setName(e.target.value)} placeholder={de ? "Max Mustermann" : "Ad Soyad"} className="mt-2 w-full rounded-xl border border-[#c8d9ea] px-4 py-3 outline-none focus:border-blue-500"/></label>
+            <label className="block text-sm font-semibold text-[#24466c]">{de ? "E-Mail-Adresse" : "E-poçt ünvanı"}<input required type="email" autoComplete="email" maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} placeholder="ad@example.com" className="mt-2 w-full rounded-xl border border-[#c8d9ea] px-4 py-3 outline-none focus:border-blue-500"/></label>
+            <label className="block text-sm font-semibold text-[#24466c]">{de ? "Passwort" : "Şifrə"}<input required minLength={8} maxLength={128} type={showPasswords?"text":"password"} autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} className="mt-2 w-full rounded-xl border border-[#c8d9ea] px-4 py-3 outline-none focus:border-blue-500"/></label>
+            <label className="block text-sm font-semibold text-[#24466c]">{de ? "Passwort bestätigen" : "Şifrəni təsdiqlə"}<input required minLength={8} maxLength={128} type={showPasswords?"text":"password"} autoComplete="new-password" value={passwordConfirm} onChange={e=>setPasswordConfirm(e.target.value)} className="mt-2 w-full rounded-xl border border-[#c8d9ea] px-4 py-3 outline-none focus:border-blue-500"/></label>
+            <label className="flex gap-2 items-center text-xs text-[#526d87]"><input type="checkbox" checked={showPasswords} onChange={e=>setShowPasswords(e.target.checked)}/>{de ? "Passwörter anzeigen" : "Şifrələri göstər"}</label>
+            <label className="flex items-start gap-2 text-sm text-[#526d87]"><input required type="checkbox" className="mt-1" checked={privacy} onChange={e=>setPrivacy(e.target.checked)}/><span>{de ? "Ich habe die " : ""}<Link href="/datenschutz" target="_blank" className="font-semibold text-blue-700 underline">{de ? "Datenschutzhinweise" : "Məxfilik məlumatları"}</Link>{de ? " gelesen." : " ilə tanış oldum."}</span></label>
+            <button disabled={loading} type="submit" className="w-full rounded-xl bg-blue-700 px-5 py-3 font-bold text-white disabled:opacity-60">{loading ? (de?"Registrierung läuft…":"Qeydiyyat aparılır…") : (de?"Kostenlos registrieren":"Pulsuz qeydiyyatdan keç")}</button>
           </form>
-
-          <p className="text-xs text-slate-600 text-center mt-6">
-            {de ? "Bereits registriert?" : "Artıq hesabın var?"}{" "}
-            <Link href="/login" className="text-blue-700 hover:text-blue-800 transition-colors">
-              {de ? "Einloggen" : "Daxil ol"}
-            </Link>
-          </p>
-        </div>
+          <p className="mt-6 text-center text-sm text-[#5d7894]">{de ? "Bereits registriert?" : "Artıq hesabın var?"} <Link className="font-bold text-blue-700" href="/login">{de ? "Anmelden" : "Daxil ol"}</Link></p>
+        </>}
       </div>
     </div>
-  );
+  </main>;
 }

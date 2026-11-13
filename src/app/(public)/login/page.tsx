@@ -1,134 +1,54 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase, supabaseConfigMissing } from "@/lib/supabase";
 import SupabaseMissingBanner from "@/components/SupabaseMissingBanner";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-function mapLoginError(message: string): string {
-  if (message.includes("Invalid login credentials"))
-    return "E-Mail oder Passwort ist falsch.";
-  if (message.includes("Email not confirmed"))
-    return "Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse über den Link in Ihrem Postfach.";
-  if (message.includes("Too many requests"))
-    return "Zu viele Anmeldeversuche. Bitte warten Sie kurz und versuchen Sie es erneut.";
-  return "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.";
-}
-
 export default function LoginPage() {
-  const router = useRouter();
-  const { language } = useLanguage();
-  const de = language === "de";
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  if (supabaseConfigMissing) {
-    return (
-      <div className="max-w-md mx-auto px-6 py-20">
-        <SupabaseMissingBanner />
-      </div>
-    );
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
+  const router=useRouter();
+  const {language}=useLanguage();
+  const de=language==="de";
+  const [email,setEmail]=useState("");
+  const [password,setPassword]=useState("");
+  const [visible,setVisible]=useState(false);
+  const [loading,setLoading]=useState(false);
+  const [error,setError]=useState<string|null>(null);
+  if(supabaseConfigMissing) return <div className="max-w-md mx-auto px-6 py-20"><SupabaseMissingBanner/></div>;
+  async function submit(e:FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
-
+    if(loading)return;
+    setError(null);setLoading(true);
     try {
-      const { error: authError } = await supabase!.auth.signInWithPassword({ email, password });
-      if (authError) {
-        setError(de ? mapLoginError(authError.message) : "Giriş alınmadı. E-poçt ünvanını, şifrəni və hesab təsdiqini yoxla.");
+      const {error:authError}=await supabase!.auth.signInWithPassword({email:email.trim().toLowerCase(),password});
+      if(authError) {
+        if(authError.message.toLowerCase().includes("email not confirmed")) setError(de?"Bitte bestätige zuerst deine E-Mail-Adresse.":"Əvvəlcə e-poçt ünvanını təsdiqlə.");
+        else if(authError.message.toLowerCase().includes("rate limit"))setError(de?"Zu viele Versuche. Bitte später erneut probieren.":"Həddindən artıq cəhd edilib. Bir qədər sonra yenidən yoxla.");
+        else setError(de?"E-Mail oder Passwort ist falsch.":"E-poçt ünvanı və ya şifrə yanlışdır.");
         return;
       }
-      router.push("/dashboard");
-    } catch {
-      setError(de ? "Verbindung fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut." : "Bağlantı alınmadı. İnternet bağlantını yoxla və yenidən cəhd et.");
-    } finally {
-      setLoading(false);
-    }
+      router.replace("/dashboard");router.refresh();
+    } catch {setError(de?"Anmeldung nicht möglich. Prüfe deine Verbindung.":"Bağlantı alınmadı. İnternetini yoxla.");}
+    finally {setLoading(false);}
   }
-
-  return (
-    <div className="flex flex-col items-center justify-center px-4 py-20 min-h-[calc(100vh-130px)]">
-      <div className="w-full max-w-md">
-        {/* Logo link */}
-        <Link href="/" className="flex items-center gap-2.5 mb-8 w-fit">
-          <div className="w-8 h-8 rounded-lg bg-[#e8f2ff] border border-slate-200 flex items-center justify-center shrink-0">
-            <span className="text-[11px] font-black bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent select-none">
-              FL
-            </span>
-          </div>
-          <span className="text-sm font-bold text-slate-900">FISI LabBook</span>
-        </Link>
-
-        <div className="rounded-2xl border border-slate-200 bg-blue-50 p-8">
-          <h1 className="text-xl font-bold text-slate-900 mb-1">{de ? "Mit deinem Konto anmelden" : "Hesabına daxil ol"}</h1>
-          <p className="text-sm text-slate-600 mb-7">
-            {de ? "Melde dich an, um deinen persönlichen FISI-Workspace zu öffnen." : "Şəxsi FISI Workspace-inə keçmək üçün daxil ol."}
-          </p>
-
-          {error && (
-            <div role="alert" className="mb-5 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="login-email" className="block text-xs font-medium text-slate-600 mb-1.5">
-                {de ? "E-Mail" : "E-poçt"}
-              </label>
-              <input
-                id="login-email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="name@beispiel.de"
-                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
-              />
-            </div>
-            <div>
-              <label htmlFor="login-password" className="block text-xs font-medium text-slate-600 mb-1.5">
-                {de ? "Passwort" : "Şifrə"}
-              </label>
-              <input
-                id="login-password"
-                type="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="••••••••"
-                className="w-full px-4 py-2.5 rounded-xl bg-blue-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500/40 focus:bg-blue-50 transition-all"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold text-white transition-colors"
-            >
-              {loading ? (de ? "Bitte warten…" : "Gözləyin…") : (de ? "Einloggen" : "Daxil ol")}
-            </button>
-          </form>
-
-          <p className="text-xs text-slate-600 text-center mt-6">
-            {de ? "Noch kein Konto?" : "Hələ hesabın yoxdur?"}{" "}
-            <Link
-              href="/registrieren"
-              className="text-blue-700 hover:text-blue-800 transition-colors"
-            >
-              {de ? "Kostenlos registrieren" : "Pulsuz qeydiyyat"}
-            </Link>
-          </p>
-        </div>
+  return <main className="min-h-[calc(100vh-130px)] flex items-center justify-center bg-gradient-to-b from-[#f1f7ff] to-white px-4 py-14">
+    <div className="w-full max-w-[480px]">
+      <Link href="/" className="inline-flex mb-5 text-sm font-semibold text-blue-700">← FISI LabBook</Link>
+      <div className="rounded-[24px] border border-[#cbdff3] bg-white p-6 sm:p-9 shadow-[0_20px_45px_-26px_rgba(14,70,140,.3)]">
+        <p className="text-xs font-extrabold tracking-widest text-blue-700">{de?"DEIN KONTO":"ŞƏXSİ HESABIN"}</p>
+        <h1 className="mt-2 text-2xl font-extrabold text-[#153b68]">{de?"Willkommen zurück":"Yenidən xoş gəlmisən"}</h1>
+        <p className="mt-2 text-sm text-[#59738f]">{de?"Öffne deinen persönlichen IT-Workspace.":"Şəxsi IT iş mühitinə daxil ol."}</p>
+        {error&&<p className="mt-5 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800" role="alert">{error}</p>}
+        <form onSubmit={submit} className="mt-6 space-y-4">
+          <label className="block text-sm font-semibold text-[#24466c]">{de?"E-Mail-Adresse":"E-poçt ünvanı"}<input required type="email" autoComplete="username" maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} className="mt-2 w-full rounded-xl border border-[#c8d9ea] px-4 py-3 outline-none focus:border-blue-500"/></label>
+          <label className="block text-sm font-semibold text-[#24466c]">{de?"Passwort":"Şifrə"}<input required type={visible?"text":"password"} autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} className="mt-2 w-full rounded-xl border border-[#c8d9ea] px-4 py-3 outline-none focus:border-blue-500"/></label>
+          <div className="flex items-center justify-between gap-3 text-xs"><label className="flex items-center gap-2 text-[#59738f]"><input type="checkbox" checked={visible} onChange={e=>setVisible(e.target.checked)}/>{de?"Passwort anzeigen":"Şifrəni göstər"}</label><Link href="/passwort-vergessen" className="font-semibold text-blue-700 hover:underline">{de?"Passwort vergessen?":"Şifrəni unutmusan?"}</Link></div>
+          <button disabled={loading} className="w-full rounded-xl bg-blue-700 px-5 py-3 font-bold text-white disabled:opacity-60">{loading?(de?"Anmeldung läuft…":"Giriş yoxlanılır…"):(de?"Anmelden":"Daxil ol")}</button>
+        </form>
+        <p className="mt-6 text-center text-sm text-[#59738f]">{de?"Noch kein Konto?":"Hesabın yoxdur?"} <Link className="font-bold text-blue-700" href="/registrieren">{de?"Kostenlos registrieren":"Pulsuz qeydiyyat"}</Link></p>
       </div>
     </div>
-  );
+  </main>;
 }
