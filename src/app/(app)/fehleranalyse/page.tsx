@@ -78,6 +78,7 @@ function UserTroubleshootingCard({
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const diff = getDifficultyConfig(item.difficulty);
+  const translateUI = useT();
 
   return (
     <div className="rounded-xl border border-blue-500/10 bg-white p-5 space-y-4">
