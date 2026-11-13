@@ -18,14 +18,14 @@ export default function ForgotPasswordPage(){
   }catch{setError(de?"Verbindung fehlgeschlagen.":"Bağlantı alınmadı.");}
   finally{setLoading(false);}
  }
- return <main className="min-h-[calc(100vh-130px)] flex items-center justify-center bg-gradient-to-b from-[#f1f7ff] to-white px-4 py-14"><div className="w-full max-w-md rounded-[24px] border border-[#cbdff3] bg-white p-7 sm:p-9">
+ return <section className="flex-1 min-h-0 flex items-center justify-center bg-gradient-to-b from-[#f1f7ff] to-white px-4 py-2.5 sm:py-4"><div className="w-full max-w-md rounded-[24px] border border-[#cbdff3] bg-white p-5 sm:p-6">
   <Link href="/login" className="text-sm font-semibold text-blue-700">← {de?"Zur Anmeldung":"Girişə qayıt"}</Link>
-  <h1 className="mt-6 text-2xl font-extrabold text-[#153b68]">{de?"Passwort zurücksetzen":"Şifrəni bərpa et"}</h1>
-  <p className="mt-3 text-sm leading-7 text-[#56718d]">{sent ? (de?"Falls ein Konto existiert und der Mailversand funktioniert, erhältst du einen Link. Prüfe auch den Spam-Ordner.":"Bu ünvana bağlı hesab varsa və poçt xidməti işləyirsə, bərpa keçidi göndəriləcək. Spam qovluğunu da yoxla."):(de?"Gib deine E-Mail-Adresse ein. Wir senden dir einen Link, mit dem du ein neues Passwort festlegen kannst.":"E-poçt ünvanını yaz. Yeni şifrə təyin etmək üçün bərpa keçidi göndəriləcək.")}</p>
-  {!sent&&<form onSubmit={submit} className="mt-6 space-y-4">
-   <label className="block text-sm font-semibold text-[#24466c]">{de?"E-Mail-Adresse":"E-poçt ünvanı"}<input type="email" required autoComplete="email" maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} className="mt-2 w-full rounded-xl border border-[#c8d9ea] px-4 py-3"/></label>
+  <h1 className="mt-4 text-2xl font-extrabold text-[#153b68]">{de?"Passwort zurücksetzen":"Şifrəni bərpa et"}</h1>
+  <p className="mt-3 text-sm leading-6 text-[#56718d]">{sent ? (de?"Falls ein Konto existiert und der Mailversand funktioniert, erhältst du einen Link. Prüfe auch den Spam-Ordner.":"Bu ünvana bağlı hesab varsa və poçt xidməti işləyirsə, bərpa keçidi göndəriləcək. Spam qovluğunu da yoxla."):(de?"Gib deine E-Mail-Adresse ein. Wir senden dir einen Link, mit dem du ein neues Passwort festlegen kannst.":"E-poçt ünvanını yaz. Yeni şifrə təyin etmək üçün bərpa keçidi göndəriləcək.")}</p>
+  {!sent&&<form onSubmit={submit} className="mt-4 space-y-3">
+   <label className="block text-sm font-semibold text-[#24466c]">{de?"E-Mail-Adresse":"E-poçt ünvanı"}<input type="email" required autoComplete="email" maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} className="mt-1.5 w-full rounded-xl border border-[#c8d9ea] px-4 py-2.5"/></label>
    {error&&<p role="alert" className="rounded-xl bg-red-50 border border-red-200 p-3 text-sm text-red-800">{error}</p>}
    <button disabled={loading} type="submit" className="w-full rounded-xl bg-blue-700 px-5 py-3 font-bold text-white disabled:opacity-60">{loading?(de?"Wird gesendet…":"Göndərilir…"):(de?"Link anfordern":"Bərpa keçidi göndər")}</button>
   </form>}
- </div></main>;
+ </div></section>;
 }
