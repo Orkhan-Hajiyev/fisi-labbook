@@ -11,6 +11,7 @@ export default function Footer() {
   const compactAuthFooter = ["/login", "/registrieren", "/passwort-vergessen", "/passwort-zuruecksetzen"].includes(pathname);
   return <footer className="mt-auto border-t border-[#d8e8f7] bg-white/95">
     <div className="mx-auto w-full max-w-7xl px-5 sm:px-7">
+      {!compactAuthFooter && (
       <div className={`grid border-b border-[#e3edf8] sm:grid-cols-[1fr_auto] ${compactAuthFooter ? "gap-2 py-2 sm:py-3" : "gap-6 py-8"}`}>
         <div className="max-w-xl">
           <p className="text-lg font-extrabold tracking-tight text-[#173e68]">FISI <span className="text-[#1772cf]">LabBook</span></p>
@@ -24,6 +25,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      )}
       <div className={`flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center ${compactAuthFooter ? "py-2" : "py-4"}`}>
         <span className="text-xs text-[#66829a]">© {new Date().getFullYear()} FISI LabBook · OrikLab</span>
         <nav aria-label={de ? "Rechtliche Informationen" : "Hüquqi keçidlər"} className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-bold text-[#456b89]">
