@@ -37,5 +37,5 @@ test("troubleshooting has full 11-topic Azerbaijani checklist", () => {
   const source = read("src/app/(app)/fehleranalyse/page.tsx");
   assert.ok(source.includes("CHECKLISTS_AZ"));
   assert.ok(source.includes('language === "az" ? CHECKLISTS_AZ[selected]'));
-  assert.ok(source.includes("Yoxlama addımları"));
+  assert.ok(source.includes("IP konfiqurasiyasını ipconfig /all ilə yoxla"));
 });
