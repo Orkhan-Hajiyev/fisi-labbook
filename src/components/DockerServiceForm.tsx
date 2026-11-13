@@ -67,7 +67,7 @@ export default function DockerServiceForm({ service, onSave, onCancel }: Props) 
     <div className="rounded-xl border border-blue-500/15 bg-white p-6 space-y-5">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-900">
-          {service ? "Docker-Dienst bearbeiten" : "Neuen Docker-Dienst erstellen"}
+          {service ? translateUI("Docker-Dienst bearbeiten") : translateUI("Neuen Docker-Dienst erstellen")}
         </h3>
         <button type="button" onClick={onCancel} aria-label={translateUI("Schließen")}
           className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
@@ -77,7 +77,7 @@ export default function DockerServiceForm({ service, onSave, onCancel }: Props) 
 
       {error && (
         <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-          <p className="text-sm text-red-700">{error}</p>
+          <p className="text-sm text-red-700">{translateUI(error)}</p>
         </div>
       )}
 
@@ -106,7 +106,7 @@ export default function DockerServiceForm({ service, onSave, onCancel }: Props) 
             <select value={serviceType} onChange={(e) => setServiceType(e.target.value)}
               className={inputCls + " cursor-pointer"}>
               <option value=""><T>Keiner</T></option>
-              {SERVICE_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+              {SERVICE_TYPES.map((t) => <option key={t} value={t}>{translateUI(t)}</option>)}
             </select>
           </div>
           <div>

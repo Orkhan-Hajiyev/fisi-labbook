@@ -296,15 +296,15 @@ export default function PraxisNotizenPage() {
       <div className="flex flex-wrap items-center gap-2">
         <select value={filterStatus}   onChange={(e) => setFilterStatus(e.target.value)}   className={selectCls}>
           <option value=""><T>Status</T></option>
-          {STATUS_OPTS.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
+          {STATUS_OPTS.map(({ value, label }) => <option key={value} value={value}>{translateUI(label)}</option>)}
         </select>
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className={selectCls}>
           <option value=""><T>Kategorie</T></option>
-          {CATEGORY_OPTS.map((c) => <option key={c} value={c}>{c}</option>)}
+          {CATEGORY_OPTS.map((c) => <option key={c} value={c}>{translateUI(c)}</option>)}
         </select>
         <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className={selectCls}>
           <option value=""><T>Priorität</T></option>
-          {PRIORITY_OPTS.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
+          {PRIORITY_OPTS.map(({ value, label }) => <option key={value} value={value}>{translateUI(label)}</option>)}
         </select>
         {hasActiveFilters && (
           <button
@@ -312,12 +312,12 @@ export default function PraxisNotizenPage() {
             className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-700 px-2.5 py-1.5 rounded-lg hover:bg-blue-50 transition-all"
           >
             <X size={11} />
-            Filter zurücksetzen
+            <T>Filter zurücksetzen</T>
           </button>
         )}
         {notes !== null && notes.length > 0 && (
           <span className="ml-auto text-[11px] text-slate-500">
-            {filteredNotes.length} / {notes.length} Notizen
+            {filteredNotes.length} / {notes.length} <T>Notizen</T>
           </span>
         )}
       </div>

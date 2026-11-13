@@ -63,7 +63,7 @@ function UserLabCard({
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-sm font-semibold text-slate-900 leading-snug">{lab.title}</h3>
         <span className={`shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${status.cls}`}>
-          {status.icon}{status.label}
+          {status.icon}<T>{status.label}</T>
         </span>
       </div>
 
@@ -85,12 +85,12 @@ function UserLabCard({
         <div className="flex flex-wrap gap-4">
           {lab.started_at && (
             <div className="flex items-center gap-1.5 text-xs text-slate-600">
-              <Calendar size={11} />Start: {formatDate(lab.started_at)}
+              <Calendar size={11} /><T>Start</T>: {formatDate(lab.started_at)}
             </div>
           )}
           {lab.completed_at && (
             <div className="flex items-center gap-1.5 text-xs text-slate-600">
-              <CheckCircle2 size={11} />Abschluss: {formatDate(lab.completed_at)}
+              <CheckCircle2 size={11} /><T>Abschluss</T>: {formatDate(lab.completed_at)}
             </div>
           )}
         </div>

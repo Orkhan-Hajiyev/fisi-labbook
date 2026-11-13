@@ -57,7 +57,7 @@ export default function CommandForm({ command, prefill, onSave, onCancel }: Prop
   return (
     <div className="rounded-xl border border-blue-500/15 bg-white p-6 space-y-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-slate-900">{command ? "Befehl bearbeiten" : "Neuen Befehl erstellen"}</h3>
+        <h3 className="text-sm font-semibold text-slate-900">{command ? translateUI("Befehl bearbeiten") : translateUI("Neuen Befehl erstellen")}</h3>
         <button type="button" onClick={onCancel} aria-label={translateUI("Schließen")}
           className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
           <X size={16} />
@@ -66,7 +66,7 @@ export default function CommandForm({ command, prefill, onSave, onCancel }: Prop
 
       {error && (
         <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-          <p className="text-sm text-red-700">{error}</p>
+          <p className="text-sm text-red-700">{translateUI(error)}</p>
         </div>
       )}
 
@@ -83,7 +83,7 @@ export default function CommandForm({ command, prefill, onSave, onCancel }: Prop
             <select value={platform} onChange={(e) => setPlatform(e.target.value)}
               className={inputCls + " cursor-pointer"}>
               <option value=""><T>Keine</T></option>
-              {PLATFORMS.map((p) => <option key={p} value={p}>{p}</option>)}
+              {PLATFORMS.map((p) => <option key={p} value={p}>{translateUI(p)}</option>)}
             </select>
           </div>
           <div>
@@ -91,7 +91,7 @@ export default function CommandForm({ command, prefill, onSave, onCancel }: Prop
             <select value={category} onChange={(e) => setCategory(e.target.value)}
               className={inputCls + " cursor-pointer"}>
               <option value=""><T>Keine</T></option>
-              {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              {CATEGORIES.map((c) => <option key={c} value={c}>{translateUI(c)}</option>)}
             </select>
           </div>
         </div>

@@ -60,7 +60,7 @@ function Step({
         <Icon size={13} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider mb-1">{label}</p>
+        <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider mb-1"><T>{label}</T></p>
         <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-line">{value}</p>
       </div>
     </div>
@@ -93,7 +93,7 @@ function UserTroubleshootingCard({
         <div className="flex items-center gap-2">
           {item.difficulty && (
             <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full border ${diff.className}`}>
-              {diff.label}
+              {translateUI(diff.label)}
             </span>
           )}
           {confirmDelete ? (
@@ -328,6 +328,7 @@ const CHECKLISTS: Record<string, string[]> = {
 };
 
 function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }) {
+  const translateUI = useT();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -363,7 +364,7 @@ function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }
                       ? "bg-amber-600/80 text-slate-900"
                       : "bg-blue-50 text-slate-600 hover:bg-blue-50 hover:text-slate-800"
                   }`}>
-                  {t}
+                  {translateUI(t)}
                 </button>
               ))}
             </div>
@@ -576,7 +577,7 @@ export default function FehleranalysePage() {
       {/* Hilfen & Vorlagen */}
       {user && (
         <div className="mb-10">
-          <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">Hilfen &amp; Vorlagen</h2>
+          <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4"><T>Hilfen & Vorlagen</T></h2>
           <ChecklistHelper onInsert={(cl) => {
             setChecklistPrefill(cl);
             setShowCreateForm(true);
