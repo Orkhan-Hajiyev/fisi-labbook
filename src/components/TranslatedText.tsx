@@ -356,6 +356,13 @@ const azTranslations: Readonly<Record<string, string>> = {
   "Abschluss": "Tamamlanma",
   "Start": "Başlama",
   "Fehler beim Speichern": "Yadda saxlama xətası",
+  "Starten Sie mit einem Labor, einem System oder einer Praxisnotiz.": "İlk laboratoriya, sistem və ya praktiki qeyd yaradaraq başla.",
+  "Neue Praxisnotiz erstellen": "Yeni praktiki qeyd yarat",
+  "Zur Befehlsbibliothek →": "Əmr kitabxanasına keç →",
+  "Markdown-Export wurde heruntergeladen.": "Markdown faylı endirildi.",
+  "Keine Daten vorhanden": "Məlumat yoxdur",
+  "Das Kopieren hat nicht funktioniert.": "Kopyalama alınmadı.",
+  "Hier beginnt deine IT-Dokumentation.": "IT sənədləşmən burada başlayır.",
 };
 
 export function translate(de: string, language: "de" | "az"): string {
