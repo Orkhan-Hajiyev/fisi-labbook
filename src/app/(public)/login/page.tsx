@@ -17,7 +17,10 @@ export default function LoginPage() {
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState<string|null>(null);
   const [confirmed,setConfirmed]=useState(false);
-  useEffect(()=>{setConfirmed(new URLSearchParams(window.location.search).get("confirmed")==="1");},[]);
+  useEffect(()=>{
+    const frame=window.requestAnimationFrame(()=>setConfirmed(new URLSearchParams(window.location.search).get("confirmed")==="1"));
+    return ()=>window.cancelAnimationFrame(frame);
+  },[]);
   if(supabaseConfigMissing) return <div className="max-w-md mx-auto px-6 py-20"><SupabaseMissingBanner/></div>;
   async function submit(e:FormEvent<HTMLFormElement>) {
     e.preventDefault();
