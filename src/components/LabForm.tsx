@@ -62,7 +62,7 @@ export default function LabForm({ lab, onSave, onCancel }: Props) {
   return (
     <div className="rounded-xl border border-blue-500/15 bg-white p-6 space-y-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-slate-900">{lab ? "Labor bearbeiten" : "Neues Labor erstellen"}</h3>
+        <h3 className="text-sm font-semibold text-slate-900">{lab ? translateUI("Labor bearbeiten") : translateUI("Neues Labor erstellen")}</h3>
         <button type="button" onClick={onCancel} aria-label={translateUI("Schließen")}
           className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-blue-50 transition-colors">
           <X size={16} />
@@ -71,7 +71,7 @@ export default function LabForm({ lab, onSave, onCancel }: Props) {
 
       {error && (
         <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-          <p className="text-sm text-red-700">{error}</p>
+          <p className="text-sm text-red-700">{translateUI(error)}</p>
         </div>
       )}
 

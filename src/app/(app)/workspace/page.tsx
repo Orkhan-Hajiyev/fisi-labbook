@@ -470,7 +470,7 @@ export default function WorkspacePage() {
           notif.type === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700" : "bg-red-500/10 border-red-500/20 text-red-700"
         }`}>
           {notif.type === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
-          {notif.message}
+          {translateUI(notif.message)}
         </div>
       )}
 
@@ -502,7 +502,7 @@ export default function WorkspacePage() {
 
       {/* Print header */}
       <div className="hidden print:block mb-6">
-        <h1 className="text-2xl font-bold">FISI LabBook – Workspace</h1>
+        <h1 className="text-2xl font-bold"><T>FISI LabBook – Workspace</T></h1>
         <p className="text-sm text-gray-500">
           {user ? ((user.user_metadata?.name as string | undefined) || user.email) : ""}
           {" · "}
@@ -535,7 +535,7 @@ export default function WorkspacePage() {
         <div className="text-center">
           <ErrorState message="Der Workspace konnte nicht vollständig geladen werden. Ein unvollständiger Export wurde verhindert." />
           <button onClick={loadData} className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white">
-            Erneut versuchen
+            <T>Erneut versuchen</T>
           </button>
         </div>
       )}
@@ -545,19 +545,19 @@ export default function WorkspacePage() {
           <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mx-auto mb-4">
             <LayoutGrid size={20} className="text-blue-700" />
           </div>
-          <h3 className="text-sm font-semibold text-slate-900 mb-2">Noch keine persönlichen Inhalte vorhanden</h3>
+          <h3 className="text-sm font-semibold text-slate-900 mb-2"><T>Noch keine persönlichen Inhalte vorhanden</T></h3>
           <p className="text-xs text-slate-600 max-w-sm mx-auto mb-6">
-            Starten Sie mit einem Labor, einem System oder einer Praxisnotiz.
+            <T>Starten Sie mit einem Labor, einem System oder einer Praxisnotiz.</T>
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link href="/labore" className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors">
-              <Plus size={14} />Neues Labor erstellen
+              <Plus size={14} /><T>Neues Labor erstellen</T>
             </Link>
             <Link href="/praxisnotizen" className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
-              <Plus size={14} />Neue Praxisnotiz erstellen
+              <Plus size={14} /><T>Neue Praxisnotiz erstellen</T>
             </Link>
             <Link href="/befehle" className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-700 transition-colors">
-              Zur Befehlsbibliothek →
+              <T>Zur Befehlsbibliothek →</T>
             </Link>
           </div>
         </div>

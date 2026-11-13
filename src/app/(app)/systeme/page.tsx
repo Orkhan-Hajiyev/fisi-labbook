@@ -171,7 +171,7 @@ function UserSystemCard({
       )}
 
       {system.notes && <p className="text-xs text-slate-600 leading-relaxed">{system.notes}</p>}
-      {lab && <p className="text-[11px] text-slate-500">Labor: {lab.title}</p>}
+      {lab && <p className="text-[11px] text-slate-500" ><T>Labor</T>: {lab.title}</p>}
 
       <div className="flex items-center justify-end pt-2 border-t border-slate-200 mt-auto">
         {confirmDelete ? (

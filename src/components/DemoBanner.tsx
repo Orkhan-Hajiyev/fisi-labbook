@@ -17,7 +17,8 @@ export default function DemoBanner() {
         <span className="font-bold text-blue-700">{language === "de" ? "Eingeschränkte Demo" : "Məhdud demo"}</span>
         {" "}{language === "de" ? "— Öffentliche Beispiele ansehen; eigene Daten erst nach kostenloser Registrierung speichern." : "— Açıq nümunələrə bax; şəxsi məlumatlarını yalnız pulsuz qeydiyyatdan sonra saxlaya bilərsən."}
       </p>
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="flex items-center gap-3 shrink-0 flex-wrap">
+        <Link href="/" className="text-sm font-semibold text-blue-700 hover:underline">{language === "de" ? "Zur Startseite" : "Ana səhifəyə qayıt"}</Link>
         <Link href="/beispiele" className="text-sm font-semibold text-blue-700 hover:underline">{language === "de" ? "Beispiel-Workspace" : "Nümunə iş mühiti"}</Link>
       </div>
     </div>

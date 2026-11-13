@@ -95,7 +95,7 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-900">
-          {note ? "Notiz bearbeiten" : "Neue Notiz erstellen"}
+          {note ? translateUI("Notiz bearbeiten") : translateUI("Neue Notiz erstellen")}
         </h3>
         <button
           type="button"
@@ -109,7 +109,7 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
 
       {error && (
         <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-          <p className="text-sm text-red-700">{error}</p>
+          <p className="text-sm text-red-700">{translateUI(error)}</p>
         </div>
       )}
 
@@ -150,7 +150,7 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
             >
               <option value=""><T>Keine</T></option>
               {CATEGORIES.map((c) => (
-                <option key={c} value={c}>{c}</option>
+                <option key={c} value={c}>{translateUI(c)}</option>
               ))}
             </select>
           </div>
@@ -191,7 +191,7 @@ export default function NoteForm({ note, onSave, onCancel }: Props) {
             >
               <option value=""><T>Keiner</T></option>
               {RELATED_AREAS.map((a) => (
-                <option key={a} value={a}>{a}</option>
+                <option key={a} value={a}>{translateUI(a)}</option>
               ))}
             </select>
           </div>

@@ -134,7 +134,7 @@ export default function Navigation() {
           <p className="text-[11px] text-slate-500 mt-3">{de ? "Dein Workspace für Systemintegration" : "Sistem inteqrasiyası üçün iş sahən"}</p>
         </div>
 
-        <nav aria-label="Hauptnavigation" className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <nav aria-label={de ? "Hauptnavigation" : "Əsas naviqasiya"} className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map(({ href, label, icon: Icon }, index) => {
             const active = pathname === href;
             return (
@@ -173,6 +173,7 @@ export default function Navigation() {
               <circle cx="114" cy="9" r="6" fill="#1e80cc"/><circle cx="114" cy="77" r="6" fill="#1e80cc"/>
             </svg>
             <p className="mt-1 text-[11px] font-bold text-[#225c92]">{de ? "IT-Labor im Überblick" : "IT laboratoriyasına baxış"}</p>
+            <Link href="/" className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-[#0e6bc0] hover:underline">{de ? "Zur Startseite" : "Ana səhifəyə qayıt"}</Link>
             <Link href="/beispiele" className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-[#0e6bc0] hover:underline"><LayoutGrid size={13}/>{localizedLabels["/beispiele"]}</Link>
           </div>
         </div>
@@ -224,6 +225,7 @@ export default function Navigation() {
               })}
             </div>
             <div className="px-4 py-2 flex gap-2"><button type="button" onClick={() => setLanguage("de")} aria-pressed={de} className="text-xs rounded-lg border border-blue-200 p-2">Deutsch</button><button type="button" onClick={() => setLanguage("az")} aria-pressed={!de} className="text-xs rounded-lg border border-blue-200 p-2">Azərbaycanca</button></div>
+            <Link href="/" onClick={() => setMobileOpen(false)} className="px-6 py-2 text-xs font-semibold text-blue-700">{de ? "Zur Startseite" : "Ana səhifəyə qayıt"}</Link>
             <Link href="/beispiele" onClick={() => setMobileOpen(false)} className="px-6 py-2 text-xs font-semibold text-blue-700">{localizedLabels["/beispiele"]}</Link>
             <AuthSection onAction={() => setMobileOpen(false)} />
           </nav>

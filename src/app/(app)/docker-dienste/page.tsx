@@ -25,7 +25,7 @@ import type { FisiDockerService, FisiUserDockerService } from "@/lib/types";
 function MetaField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="rounded-lg bg-blue-50 border border-slate-200 px-3 py-2">
-      <p className="text-[10px] text-slate-500 mb-0.5">{label}</p>
+      <p className="text-[10px] text-slate-500 mb-0.5"><T>{label}</T></p>
       {children}
     </div>
   );

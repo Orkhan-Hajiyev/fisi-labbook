@@ -594,7 +594,7 @@ export default function BefehlePageContent() {
       {/* Hilfen & Vorlagen */}
       {user && (
         <div className="mb-10">
-          <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4">Hilfen &amp; Vorlagen</h2>
+          <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-4"><T>Hilfen & Vorlagen</T></h2>
           <CommandHelper onSelect={(s) => {
             setHelperPrefill({ command: s.command, platform: s.platform, category: s.category, purpose: s.purpose, example: s.example, typical_use_case: s.typical_use_case });
             setShowCreateForm(true);
