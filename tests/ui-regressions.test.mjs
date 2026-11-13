@@ -39,3 +39,15 @@ test("troubleshooting has full 11-topic Azerbaijani checklist", () => {
   assert.ok(source.includes('language === "az" ? CHECKLISTS_AZ[selected]'));
   assert.ok(source.includes("IP konfiqurasiyasını ipconfig /all ilə yoxla"));
 });
+
+test("unconfirmed account can request another confirmation email", () => {
+  const login = read("src/app/(public)/login/page.tsx");
+  const signup = read("src/app/(public)/registrieren/page.tsx");
+  for (const source of [login, signup]) {
+    assert.ok(source.includes('auth.resend({'), "resend endpoint");
+    assert.ok(source.includes('emailRedirectTo:'), "resend must retain FISI redirect");
+    assert.ok(source.includes('type:"signup"') || source.includes('type: "signup"'));
+    assert.ok(source.includes("Təsdiq məktubunu yenidən göndər"));
+  }
+  assert.ok(login.includes("email_not_confirmed"));
+});

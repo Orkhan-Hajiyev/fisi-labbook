@@ -33,6 +33,7 @@ export default function RegistrationPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<"confirmation" | "signedin" | null>(null);
   const [loading, setLoading] = useState(false);
+  const [resendState, setResendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   if (supabaseConfigMissing) return <div className="max-w-md mx-auto px-6 py-20"><SupabaseMissingBanner /></div>;
 
@@ -60,6 +61,20 @@ export default function RegistrationPage() {
     } finally { setLoading(false); }
   }
 
+  async function resendConfirmation() {
+    if (resendState === "sending" || resendState === "sent" || !email.trim()) return;
+    setResendState("sending");
+    try {
+      const { error: resendError } = await supabase!.auth.resend({
+        type: "signup",
+        email: email.trim().toLowerCase(),
+        options: { emailRedirectTo: `${window.location.origin}/login?confirmed=1` }
+      });
+      setResendState(resendError ? "error" : "sent");
+    } catch {
+      setResendState("error");
+    }
+  }
   return <section className="flex-1 min-h-0 flex items-center justify-center bg-gradient-to-b from-[#f1f7ff] to-white px-4 py-2.5 sm:py-4">
     <div className="w-full max-w-[510px]">
       <Link href="/" className="inline-flex items-center gap-2 mb-2 text-sm font-semibold text-blue-700 hover:underline">← FISI LabBook</Link>
@@ -68,6 +83,13 @@ export default function RegistrationPage() {
           <div className="text-4xl text-blue-700 mb-3" aria-hidden="true">✓</div>
           <h1 className="text-2xl font-extrabold text-[#153b68]">{de ? (success === "signedin" ? "Registrierung abgeschlossen" : "Bestätige deine E-Mail-Adresse") : (success === "signedin" ? "Qeydiyyat tamamlandı" : "E-poçt ünvanını təsdiqlə")}</h1>
           <p className="mt-4 text-sm leading-6 text-slate-600">{success === "signedin" ? (de ? "Dein Konto ist aktiv. Du kannst deinen persönlichen Bereich öffnen." : "Hesabın aktivdir. Şəxsi iş mühitinə keçə bilərsən.") : (de ? "Die Registrierung wurde angenommen. Bitte öffne den Bestätigungslink in deiner E-Mail (auch im Spam-Ordner). Danach kommst du zur FISI-LabBook-Anmeldung." : "Qeydiyyat sorğusu qəbul edildi. E-poçtundakı təsdiq keçidini aç (spam qovluğunu da yoxla). Sonra FISI LabBook-un giriş səhifəsinə qayıdacaqsan.")}</p>
+          {success === "confirmation" && <div className="mt-3">
+            <button type="button" onClick={resendConfirmation} disabled={resendState==="sending" || resendState==="sent"} className="text-sm font-semibold text-blue-700 hover:underline disabled:opacity-60">
+              {resendState==="sending" ? (de?"Wird erneut gesendet…":"Yenidən göndərilir…") : (de?"Bestätigungs-E-Mail erneut senden":"Təsdiq məktubunu yenidən göndər")}
+            </button>
+            {resendState==="sent"&&<p role="status" className="mt-2 text-sm text-emerald-700">{de?"Falls eine Bestätigung aussteht, wurde ein neuer Link angefordert. Prüfe dein Postfach und Spam.":"Təsdiqlənmə gözlənilirsə, yeni keçid istənildi. E-poçtunu və spam qovluğunu yoxla."}</p>}
+            {resendState==="error"&&<p role="alert" className="mt-2 text-sm text-red-700">{de?"Erneuter Versand nicht möglich. Bitte später erneut versuchen.":"Yenidən göndərmək alınmadı. Bir qədər sonra təkrar yoxla."}</p>}
+          </div>}
           <Link href={success === "signedin" ? "/dashboard" : "/login"} className="mt-4 inline-flex rounded-xl bg-blue-700 px-6 py-3 text-sm font-bold text-white">{success === "signedin" ? (de ? "Zum Workspace" : "İş mühitinə keç") : (de ? "Zur Anmeldung" : "Daxil ol")}</Link>
         </> : <>
           <p className="text-xs font-extrabold tracking-widest text-blue-700">{de ? "KOSTENLOS STARTEN" : "PULSUZ BAŞLA"}</p>

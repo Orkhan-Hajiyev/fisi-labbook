@@ -17,6 +17,8 @@ export default function LoginPage() {
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState<string|null>(null);
   const [confirmed,setConfirmed]=useState(false);
+  const [needsConfirmation,setNeedsConfirmation]=useState(false);
+  const [resendState,setResendState]=useState<"idle"|"sending"|"sent"|"error">("idle");
   useEffect(()=>{
     const frame=window.requestAnimationFrame(()=>setConfirmed(new URLSearchParams(window.location.search).get("confirmed")==="1"));
     return ()=>window.cancelAnimationFrame(frame);
@@ -25,11 +27,14 @@ export default function LoginPage() {
   async function submit(e:FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if(loading)return;
-    setError(null);setLoading(true);
+    setError(null);setNeedsConfirmation(false);setResendState("idle");setLoading(true);
     try {
       const {error:authError}=await supabase!.auth.signInWithPassword({email:email.trim().toLowerCase(),password});
       if(authError) {
-        if(authError.message.toLowerCase().includes("email not confirmed")) setError(de?"Bitte bestätige zuerst deine E-Mail-Adresse.":"Əvvəlcə e-poçt ünvanını təsdiqlə.");
+        if(authError.code === "email_not_confirmed" || authError.message.toLowerCase().includes("email not confirmed")) {
+          setNeedsConfirmation(true);
+          setError(de?"Bitte bestätige zuerst deine E-Mail-Adresse.":"Əvvəlcə e-poçt ünvanını təsdiqlə.");
+        }
         else if(authError.message.toLowerCase().includes("rate limit"))setError(de?"Zu viele Versuche. Bitte später erneut probieren.":"Həddindən artıq cəhd edilib. Bir qədər sonra yenidən yoxla.");
         else setError(de?"E-Mail oder Passwort ist falsch.":"E-poçt ünvanı və ya şifrə yanlışdır.");
         return;
@@ -37,6 +42,18 @@ export default function LoginPage() {
       router.replace("/dashboard");router.refresh();
     } catch {setError(de?"Anmeldung nicht möglich. Prüfe deine Verbindung.":"Bağlantı alınmadı. İnternetini yoxla.");}
     finally {setLoading(false);}
+  }
+  async function resendConfirmation() {
+    if(resendState==="sending" || resendState==="sent" || !email.trim()) return;
+    setResendState("sending");
+    try {
+      const {error:resendError}=await supabase!.auth.resend({
+        type:"signup",
+        email:email.trim().toLowerCase(),
+        options:{emailRedirectTo:`${window.location.origin}/login?confirmed=1`}
+      });
+      setResendState(resendError ? "error" : "sent");
+    } catch {setResendState("error");}
   }
   return <section className="flex-1 min-h-0 flex items-center justify-center bg-gradient-to-b from-[#f1f7ff] to-white px-4 py-2.5 sm:py-4">
     <div className="w-full max-w-[480px]">
@@ -53,6 +70,14 @@ export default function LoginPage() {
           <div className="flex items-center justify-between gap-3 text-xs"><label className="flex items-center gap-2 text-[#59738f]"><input type="checkbox" checked={visible} onChange={e=>setVisible(e.target.checked)}/>{de?"Passwort anzeigen":"Şifrəni göstər"}</label><Link href="/passwort-vergessen" className="font-semibold text-blue-700 hover:underline">{de?"Passwort vergessen?":"Şifrəni unutmusan?"}</Link></div>
           <button disabled={loading} className="w-full rounded-xl bg-blue-700 px-5 py-3 font-bold text-white disabled:opacity-60">{loading?(de?"Anmeldung läuft…":"Giriş yoxlanılır…"):(de?"Anmelden":"Daxil ol")}</button>
         </form>
+        {needsConfirmation&&<div className="mt-3 rounded-xl border border-blue-200 bg-blue-50 p-3 text-sm text-slate-700">
+          <p>{de?"Kein gültiger Bestätigungslink mehr? Fordere eine neue E-Mail an.":"Təsdiq keçidi etibarsızdır? Yeni təsdiq məktubu istə."}</p>
+          <button type="button" onClick={resendConfirmation} disabled={resendState==="sending"||resendState==="sent"} className="mt-2 font-semibold text-blue-700 hover:underline disabled:opacity-60">
+            {resendState==="sending"?(de?"E-Mail wird gesendet…":"Məktub göndərilir…"):(de?"Bestätigungs-E-Mail erneut senden":"Təsdiq məktubunu yenidən göndər")}
+          </button>
+          {resendState==="sent"&&<p role="status" className="mt-2 text-emerald-700">{de?"Falls eine Bestätigung aussteht, wurde ein neuer Link angefordert. Prüfe dein Postfach und Spam.":"Təsdiqlənmə gözlənilirsə, yeni keçid istənildi. E-poçtunu və spam qovluğunu yoxla."}</p>}
+          {resendState==="error"&&<p role="alert" className="mt-2 text-red-700">{de?"Erneuter Versand nicht möglich. Bitte warte etwas und versuche es erneut.":"Yenidən göndərmək alınmadı. Bir qədər sonra təkrar yoxla."}</p>}
+        </div>}
         <p className="mt-4 text-center text-sm text-[#59738f]">{de?"Noch kein Konto?":"Hesabın yoxdur?"} <Link className="font-bold text-blue-700" href="/registrieren">{de?"Kostenlos registrieren":"Pulsuz qeydiyyat"}</Link></p>
       </div>
     </div>
