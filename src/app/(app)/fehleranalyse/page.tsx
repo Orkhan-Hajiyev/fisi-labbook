@@ -3,7 +3,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { demoText } from "@/lib/demo-i18n";
 
-import { T, useT } from "@/components/TranslatedText";
+import { T, useT, translate } from "@/components/TranslatedText";
 
 import { useEffect, useState, useMemo } from "react";
 import {
@@ -179,7 +179,7 @@ function DemoCaseCard({ c, user, onCopied }: {
         <div className="flex items-center gap-2 shrink-0">
           {c.difficulty && (
             <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full border ${diff.className}`}>
-              {demoText(diff.label, language)}
+              {translate(diff.label, language)}
             </span>
           )}
         </div>
@@ -328,13 +328,127 @@ const CHECKLISTS: Record<string, string[]> = {
   ],
 };
 
+const CHECKLISTS_AZ: Record<string, string[]> = {
+  "DNS-Problem": [
+    "1. IP konfiqurasiyasını ipconfig /all ilə yoxla",
+    "2. DNS serverinin domen kontrollerinə (DC) yönləndiyini yoxla",
+    "3. Domen kontrollerinə ping göndər",
+    "4. Domen adını nslookup ilə yoxla",
+    "5. DNS zonalarını və qeydlərini yoxla",
+    "6. Event Viewer-də DNS xətalarını yoxla (DNS Server, System)",
+    "7. DNS xidmətini yenidən başlat: net stop dns && net start dns",
+    "8. DNS keşini təmizlə: ipconfig /flushdns"
+  ],
+  "Domänenbeitritt": [
+    "1. Şəbəkə əlaqəsini yoxla (DC-yə ping)",
+    "2. DNS serverini domen kontrollerinə yönləndir",
+    "3. Klient və DC arasında tarix/saat fərqini yoxla (maksimum 5 dəqiqə)",
+    "4. Domen adını nslookup ilə yoxla",
+    "5. DC-nin əlçatanlığını yoxla: nltest /dsgetdc:<domäne>",
+    "6. Firewall portlarını yoxla (TCP 88, 135, 389, 445)",
+    "7. AD-də kompüter hesabını yoxla (lazımdırsa sıfırla)",
+    "8. Domenə yenidən qoşul və hadisə jurnalını yoxla"
+  ],
+  "DHCP-Problem": [
+    "1. IP konfiqurasiyasını ipconfig /all ilə yoxla (APIPA 169.254.x.x varmı?)",
+    "2. Serverdə DHCP xidmətini yoxla (sc query dhcpserver)",
+    "3. DHCP icarələrini (leases) və ünvan diapazonunu yoxla",
+    "4. Şəbəkə kabelini və switch portunu yoxla",
+    "5. DHCP üçün firewall qaydalarını yoxla (UDP 67/68)",
+    "6. ipconfig /release && ipconfig /renew əmrlərini icra et",
+    "7. DHCP konfliktini yoxla (təkrarlanan IP?)",
+    "8. DHCP hadisə jurnalını yoxla: Event Viewer → System"
+  ],
+  "Active Directory Replikation": [
+    "1. Replikasiya vəziyyətini yoxla: repadmin /replsummary",
+    "2. Replikasiya xətalarını göstər: repadmin /showrepl",
+    "3. DC bağlantısını yoxla: dcdiag /test:connectivity",
+    "4. Netlogon xidmətini yoxla: sc query netlogon",
+    "5. Bütün domen kontrollerlərində DNS konfiqurasiyasını yoxla",
+    "6. Saat sinxronizasiyasını yoxla: w32tm /query /status",
+    "7. DC-lər arasındakı firewall qaydalarını yoxla (TCP/UDP 389, 636, 3268, 49152–65535)",
+    "8. AD replikasiyasını məcburi başlat: repadmin /syncall /AdeP"
+  ],
+  "Gruppenrichtlinie / GPO": [
+    "1. GPO tətbiqini yoxla: gpresult /r",
+    "2. Ətraflı HTML hesabatı yarat: gpresult /h C:\\gp.html",
+    "3. GPO yenilənməsini məcburi başlat: gpupdate /force",
+    "4. Domen kontrollerinə şəbəkə bağlantısını yoxla",
+    "5. Kompüter və istifadəçi siyasətlərini ayrılıqda yoxla",
+    "6. GPO təhlükəsizlik filtrlərini yoxla (istifadəçi/kompüter qrupdadırmı?)",
+    "7. GPO-nun WMI filtrini yoxla",
+    "8. Hadisə jurnalını yoxla: Application → Group Policy"
+  ],
+  "Windows-Dienst startet nicht": [
+    "1. Xidmətin vəziyyətini yoxla: sc query <dienstname>",
+    "2. Hadisə jurnalındakı xətaları yoxla: Event Viewer → System",
+    "3. Xidmətin asılılıqlarını yoxla: sc qc <dienstname>",
+    "4. Asılı xidmətləri başlat və yenidən cəhd et",
+    "5. Xidmət hesabını yoxla (şifrəsinin vaxtı bitibmi?)",
+    "6. Proqram qovluğuna giriş hüquqlarını yoxla",
+    "7. Xidməti əl ilə başlat: net start <dienstname>",
+    "8. Sistem fayllarının bütövlüyünü yoxla: sfc /scannow"
+  ],
+  "Linux-Dienst startet nicht": [
+    "1. Xidmət vəziyyətini yoxla: systemctl status <dienst>",
+    "2. Jurnal qeydlərini oxu: journalctl -u <dienst> -n 50 --no-pager",
+    "3. Konfiqurasiya faylında sintaksis xətalarını yoxla",
+    "4. Port konfliktini yoxla: ss -tulpen | grep <port>",
+    "5. Konfiqurasiya və jurnal fayllarının icazələrini yoxla",
+    "6. Asılı xidmətləri yoxla (məsələn, verilənlər bazası və şəbəkə)",
+    "7. Xidməti diaqnostik çıxışla əl ilə başlat: <dienstpfad> --debug",
+    "8. SELinux/AppArmor jurnalını yoxla: ausearch -m avc -ts today"
+  ],
+  "Webserver nicht erreichbar": [
+    "1. Veb-server xidmətinin vəziyyətini yoxla: systemctl status nginx / apache2",
+    "2. Portları yoxla: ss -tulpen | grep -E '80|443'",
+    "3. Firewall qaydalarını yoxla: ufw status / iptables -L",
+    "4. Jurnalları yoxla: /var/log/nginx/error.log və ya /var/log/apache2/error.log",
+    "5. Konfiqurasiyanı yoxla: nginx -t / apachectl configtest",
+    "6. TLS sertifikatının etibarlılıq müddətini yoxla: openssl s_client -connect host:443",
+    "7. Domenin DNS həllini yoxla: nslookup <domain>",
+    "8. Upstream/backend bağlantısını yoxla (proxy, tətbiq serveri)"
+  ],
+  "Docker-Problem": [
+    "1. docker ps -a ilə konteynerin vəziyyətini yoxla",
+    "2. docker logs <container> ilə xəta jurnalını oxu",
+    "3. docker inspect <container> ilə şəbəkəni və mount-ları yoxla",
+    "4. netstat / ss ilə portların istifadəsini yoxla",
+    "5. docker compose config ilə Compose faylını yoxla",
+    "6. Docker daemonunun vəziyyətini yoxla: systemctl status docker",
+    "7. Volume-ları və giriş icazələrini yoxla",
+    "8. Image-i yenidən qur və konteyneri yenidən başlat"
+  ],
+  "SSH-Problem": [
+    "1. Serverdə SSH xidmətini yoxla: systemctl status ssh",
+    "2. Port 22 üçün firewall qaydalarını yoxla",
+    "3. Ətraflı çıxışla bağlantını yoxla: ssh -vvv user@host",
+    "4. authorized_keys faylını və icazələri yoxla (chmod 600)",
+    "5. /var/log/auth.log faylında xətaları yoxla",
+    "6. SSH daemon konfiqurasiyasını yoxla: sshd -T",
+    "7. Serverə şəbəkə bağlantısını yoxla",
+    "8. Zədələnibsə SSH açar cütünü yenidən yarat"
+  ],
+  "Netzwerk allgemein": [
+    "1. Fiziki bağlantını yoxla (kabel, switch, WLAN)",
+    "2. IP konfiqurasiyasını yoxla: ipconfig /all və ya ip a",
+    "3. Standart gateway-ə ping göndər",
+    "4. DNS həllini yoxla: nslookup <domain> / Resolve-DnsName <domain>",
+    "5. Marşrutu izlə: tracert / traceroute",
+    "6. Klient və serverdə firewall qaydalarını yoxla",
+    "7. ARP keşini yoxla: arp -a",
+    "8. Şəbəkə kartının (NIC) xətalarını yoxla: ifconfig / ip -s link"
+  ]
+};
+
 function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }) {
   const translateUI = useT();
+  const { language } = useLanguage();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
 
   const types = Object.keys(CHECKLISTS);
-  const activeCL = selected ? CHECKLISTS[selected] : null;
+  const activeCL = selected ? (language === "az" ? CHECKLISTS_AZ[selected] : CHECKLISTS[selected]) : null;
 
   return (
     <div className="mb-5">
