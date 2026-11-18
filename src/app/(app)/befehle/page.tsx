@@ -74,11 +74,11 @@ function UserCommandCard({
             </div>
           ) : (
             <>
-              <button onClick={() => onEdit(cmd)} aria-label="Bearbeiten"
+              <button onClick={() => onEdit(cmd)} aria-label={translateUI("Bearbeiten")}
                 className="p-1.5 rounded-lg text-slate-600 hover:text-blue-700 hover:bg-blue-500/10 transition-colors">
                 <Pencil size={13} />
               </button>
-              <button onClick={() => setConfirmDelete(true)} aria-label="Löschen"
+              <button onClick={() => setConfirmDelete(true)} aria-label={translateUI("Löschen")}
                 className="p-1.5 rounded-lg text-slate-600 hover:text-red-700 hover:bg-red-500/10 transition-colors">
                 <Trash2 size={13} />
               </button>
