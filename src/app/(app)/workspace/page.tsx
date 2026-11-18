@@ -1,6 +1,7 @@
 "use client";
 
-import { T, useT } from "@/components/TranslatedText";
+import { T, useT, translate } from "@/components/TranslatedText";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import { useEffect, useState, useCallback } from "react";
 import {
@@ -39,95 +40,96 @@ type Notif = { type: "success" | "error"; message: string };
 
 // ── Markdown generation ────────────────────────────────────────────────────
 
-function generateMarkdown(data: WorkspaceData, displayName: string): string {
+function generateMarkdown(data: WorkspaceData, displayName: string, language: "de" | "az"): string {
+  const tr = (key: string) => translate(key, language);
   const lines: string[] = [];
-  const now = new Date().toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+  const now = new Date().toLocaleDateString(language === "az" ? "az-AZ" : "de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
 
-  lines.push(`# FISI LabBook – Workspace Export`);
-  lines.push(`\nExportiert am: ${now}  `);
-  lines.push(`Benutzer: ${displayName}\n`);
+  lines.push(`# FISI LabBook – ${tr("Workspace")} ${tr("Export")}`);
+  lines.push(`\n${tr("Exportiert am")}: ${now}  `);
+  lines.push(`${tr("Benutzer")}: ${displayName}\n`);
 
   lines.push(`---\n`);
 
   if (data.labs.length > 0) {
-    lines.push(`## Labore (${data.labs.length})\n`);
+    lines.push(`## ${tr("Labore")} (${data.labs.length})\n`);
     data.labs.forEach((lab) => {
       lines.push(`### ${lab.title}`);
-      if (lab.status) lines.push(`**Status:** ${lab.status}`);
-      if (lab.topic) lines.push(`**Thema:** ${lab.topic}`);
-      if (lab.environment) lines.push(`**Umgebung:** ${lab.environment}`);
-      if (lab.goal) lines.push(`**Ziel:** ${lab.goal}`);
+      if (lab.status) lines.push(`**${tr("Status")}:** ${lab.status}`);
+      if (lab.topic) lines.push(`**${tr("Thema")}:** ${lab.topic}`);
+      if (lab.environment) lines.push(`**${tr("Umgebung")}:** ${lab.environment}`);
+      if (lab.goal) lines.push(`**${tr("Ziel")}:** ${lab.goal}`);
       if (lab.description) lines.push(`\n${lab.description}`);
       lines.push(``);
     });
   }
 
   if (data.systems.length > 0) {
-    lines.push(`## Systeme (${data.systems.length})\n`);
+    lines.push(`## ${tr("Systeme")} (${data.systems.length})\n`);
     data.systems.forEach((s) => {
       lines.push(`### ${s.hostname}`);
-      if (s.os) lines.push(`**OS:** ${s.os}`);
-      if (s.role) lines.push(`**Rolle:** ${s.role}`);
-      if (s.ip_address) lines.push(`**IP:** ${s.ip_address}`);
-      if (s.gateway) lines.push(`**Gateway:** ${s.gateway}`);
-      if (s.dns) lines.push(`**DNS:** ${s.dns}`);
-      if (s.domain_name) lines.push(`**Domäne:** ${s.domain_name}`);
+      if (s.os) lines.push(`**${tr("OS")}:** ${s.os}`);
+      if (s.role) lines.push(`**${tr("Rolle")}:** ${s.role}`);
+      if (s.ip_address) lines.push(`**${tr("IP")}:** ${s.ip_address}`);
+      if (s.gateway) lines.push(`**${tr("Gateway")}:** ${s.gateway}`);
+      if (s.dns) lines.push(`**${tr("DNS")}:** ${s.dns}`);
+      if (s.domain_name) lines.push(`**${tr("Domäne")}:** ${s.domain_name}`);
       if (s.notes) lines.push(`\n${s.notes}`);
       lines.push(``);
     });
   }
 
   if (data.commands.length > 0) {
-    lines.push(`## Befehle (${data.commands.length})\n`);
+    lines.push(`## ${tr("Befehle")} (${data.commands.length})\n`);
     data.commands.forEach((c) => {
       lines.push(`### \`${c.command}\``);
-      if (c.platform) lines.push(`**Plattform:** ${c.platform}`);
-      if (c.category) lines.push(`**Kategorie:** ${c.category}`);
-      if (c.purpose) lines.push(`**Zweck:** ${c.purpose}`);
-      if (c.example) lines.push(`\n**Beispiel:**\n\`\`\`\n${c.example}\n\`\`\``);
-      if (c.typical_use_case) lines.push(`\n**Typischer Anwendungsfall:** ${c.typical_use_case}`);
+      if (c.platform) lines.push(`**${tr("Plattform")}:** ${c.platform}`);
+      if (c.category) lines.push(`**${tr("Kategorie")}:** ${c.category}`);
+      if (c.purpose) lines.push(`**${tr("Zweck")}:** ${c.purpose}`);
+      if (c.example) lines.push(`\n**${tr("Beispiel")}:**\n\`\`\`\n${c.example}\n\`\`\``);
+      if (c.typical_use_case) lines.push(`\n**${tr("Typischer Anwendungsfall")}:** ${c.typical_use_case}`);
       lines.push(``);
     });
   }
 
   if (data.troubleshooting.length > 0) {
-    lines.push(`## Fehleranalysen (${data.troubleshooting.length})\n`);
+    lines.push(`## ${tr("Fehleranalysen")} (${data.troubleshooting.length})\n`);
     data.troubleshooting.forEach((t) => {
       lines.push(`### ${t.title}`);
-      if (t.category) lines.push(`**Kategorie:** ${t.category}`);
-      if (t.difficulty) lines.push(`**Schwierigkeit:** ${t.difficulty}`);
-      if (t.symptoms) lines.push(`\n**Symptome:**\n${t.symptoms}`);
-      if (t.checks) lines.push(`\n**Prüfschritte:**\n${t.checks}`);
-      if (t.root_cause) lines.push(`\n**Ursache:**\n${t.root_cause}`);
-      if (t.solution) lines.push(`\n**Lösung:**\n${t.solution}`);
-      if (t.result) lines.push(`\n**Ergebnis:**\n${t.result}`);
+      if (t.category) lines.push(`**${tr("Kategorie")}:** ${t.category}`);
+      if (t.difficulty) lines.push(`**${tr("Schwierigkeit")}:** ${t.difficulty}`);
+      if (t.symptoms) lines.push(`\n**${tr("Symptome")}:**\n${t.symptoms}`);
+      if (t.checks) lines.push(`\n**${tr("Prüfschritte")}:**\n${t.checks}`);
+      if (t.root_cause) lines.push(`\n**${tr("Ursache")}:**\n${t.root_cause}`);
+      if (t.solution) lines.push(`\n**${tr("Lösung")}:**\n${t.solution}`);
+      if (t.result) lines.push(`\n**${tr("Ergebnis")}:**\n${t.result}`);
       lines.push(``);
     });
   }
 
   if (data.docker.length > 0) {
-    lines.push(`## Docker-Dienste (${data.docker.length})\n`);
+    lines.push(`## ${tr("Docker-Dienste")} (${data.docker.length})\n`);
     data.docker.forEach((d) => {
       lines.push(`### ${d.name}`);
-      if (d.image) lines.push(`**Image:** ${d.image}`);
-      if (d.port) lines.push(`**Port:** ${d.port}`);
-      if (d.service_type) lines.push(`**Typ:** ${d.service_type}`);
-      if (d.status) lines.push(`**Status:** ${d.status}`);
-      if (d.purpose) lines.push(`**Zweck:** ${d.purpose}`);
-      if (d.compose_snippet) lines.push(`\n**Compose:**\n\`\`\`yaml\n${d.compose_snippet}\n\`\`\``);
+      if (d.image) lines.push(`**${tr("Image")}:** ${d.image}`);
+      if (d.port) lines.push(`**${tr("Port")}:** ${d.port}`);
+      if (d.service_type) lines.push(`**${tr("Typ")}:** ${d.service_type}`);
+      if (d.status) lines.push(`**${tr("Status")}:** ${d.status}`);
+      if (d.purpose) lines.push(`**${tr("Zweck")}:** ${d.purpose}`);
+      if (d.compose_snippet) lines.push(`\n**${tr("Compose")}:**\n\`\`\`yaml\n${d.compose_snippet}\n\`\`\``);
       if (d.notes) lines.push(`\n${d.notes}`);
       lines.push(``);
     });
   }
 
   if (data.notes.length > 0) {
-    lines.push(`## Praxisnotizen (${data.notes.length})\n`);
+    lines.push(`## ${tr("Praxisnotizen")} (${data.notes.length})\n`);
     data.notes.forEach((n) => {
       lines.push(`### ${n.title}`);
-      if (n.category) lines.push(`**Kategorie:** ${n.category}`);
-      if (n.priority) lines.push(`**Priorität:** ${n.priority}`);
-      if (n.status) lines.push(`**Status:** ${n.status}`);
-      if (n.tags?.length) lines.push(`**Tags:** ${n.tags.join(", ")}`);
+      if (n.category) lines.push(`**${tr("Kategorie")}:** ${n.category}`);
+      if (n.priority) lines.push(`**${tr("Priorität")}:** ${n.priority}`);
+      if (n.status) lines.push(`**${tr("Status")}:** ${n.status}`);
+      if (n.tags?.length) lines.push(`**${tr("Tags")}:** ${n.tags.join(", ")}`);
       if (n.content) lines.push(`\n${n.content}`);
       lines.push(``);
     });
@@ -145,68 +147,70 @@ function generateLabMarkdown(
     docker: FisiUserDockerService[];
     notes: FisiUserNote[];
   },
+  language: "de" | "az",
 ): string {
+  const tr = (key: string) => translate(key, language);
   const lines: string[] = [];
-  const now = new Date().toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+  const now = new Date().toLocaleDateString(language === "az" ? "az-AZ" : "de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
 
-  lines.push(`# Labor: ${lab.title}`);
+  lines.push(`# ${tr("Labor")}: ${lab.title}`);
   lines.push(`\nExportiert am: ${now}\n`);
   lines.push(`---\n`);
 
-  if (lab.status) lines.push(`**Status:** ${lab.status}`);
-  if (lab.topic) lines.push(`**Thema:** ${lab.topic}`);
-  if (lab.environment) lines.push(`**Umgebung:** ${lab.environment}`);
-  if (lab.goal) lines.push(`**Ziel:** ${lab.goal}`);
+  if (lab.status) lines.push(`**${tr("Status")}:** ${lab.status}`);
+  if (lab.topic) lines.push(`**${tr("Thema")}:** ${lab.topic}`);
+  if (lab.environment) lines.push(`**${tr("Umgebung")}:** ${lab.environment}`);
+  if (lab.goal) lines.push(`**${tr("Ziel")}:** ${lab.goal}`);
   if (lab.description) lines.push(`\n${lab.description}`);
   lines.push(``);
 
   if (linked.systems.length > 0) {
-    lines.push(`## Systeme\n`);
+    lines.push(`## ${tr("Systeme")}\n`);
     linked.systems.forEach((s) => {
       lines.push(`### ${s.hostname}`);
-      if (s.os) lines.push(`**OS:** ${s.os}`);
-      if (s.role) lines.push(`**Rolle:** ${s.role}`);
-      if (s.ip_address) lines.push(`**IP:** ${s.ip_address}`);
-      if (s.gateway) lines.push(`**Gateway:** ${s.gateway}`);
-      if (s.dns) lines.push(`**DNS:** ${s.dns}`);
+      if (s.os) lines.push(`**${tr("OS")}:** ${s.os}`);
+      if (s.role) lines.push(`**${tr("Rolle")}:** ${s.role}`);
+      if (s.ip_address) lines.push(`**${tr("IP")}:** ${s.ip_address}`);
+      if (s.gateway) lines.push(`**${tr("Gateway")}:** ${s.gateway}`);
+      if (s.dns) lines.push(`**${tr("DNS")}:** ${s.dns}`);
       if (s.notes) lines.push(`\n${s.notes}`);
       lines.push(``);
     });
   }
 
   if (linked.commands.length > 0) {
-    lines.push(`## Befehle\n`);
+    lines.push(`## ${tr("Befehle")}\n`);
     linked.commands.forEach((c) => {
       lines.push(`### \`${c.command}\``);
-      if (c.platform) lines.push(`**Plattform:** ${c.platform}`);
-      if (c.purpose) lines.push(`**Zweck:** ${c.purpose}`);
+      if (c.platform) lines.push(`**${tr("Plattform")}:** ${c.platform}`);
+      if (c.purpose) lines.push(`**${tr("Zweck")}:** ${c.purpose}`);
       if (c.example) lines.push(`\n\`\`\`\n${c.example}\n\`\`\``);
       lines.push(``);
     });
   }
 
   if (linked.troubleshooting.length > 0) {
-    lines.push(`## Fehleranalysen\n`);
+    lines.push(`## ${tr("Fehleranalysen")}\n`);
     linked.troubleshooting.forEach((t) => {
       lines.push(`### ${t.title}`);
-      if (t.symptoms) lines.push(`\n**Symptome:** ${t.symptoms}`);
-      if (t.solution) lines.push(`**Lösung:** ${t.solution}`);
+      if (t.symptoms) lines.push(`\n**${tr("Symptome")}:** ${t.symptoms}`);
+      if (t.solution) lines.push(`**${tr("Lösung")}:** ${t.solution}`);
       lines.push(``);
     });
   }
 
   if (linked.docker.length > 0) {
-    lines.push(`## Docker-Dienste\n`);
+    lines.push(`## ${tr("Docker-Dienste")}\n`);
     linked.docker.forEach((d) => {
       lines.push(`### ${d.name}`);
-      if (d.image) lines.push(`**Image:** ${d.image}`);
+      if (d.image) lines.push(`**${tr("Image")}:** ${d.image}`);
       if (d.compose_snippet) lines.push(`\n\`\`\`yaml\n${d.compose_snippet}\n\`\`\``);
       lines.push(``);
     });
   }
 
   if (linked.notes.length > 0) {
-    lines.push(`## Praxisnotizen\n`);
+    lines.push(`## ${tr("Praxisnotizen")}\n`);
     linked.notes.forEach((n) => {
       lines.push(`### ${n.title}`);
       if (n.content) lines.push(`\n${n.content}`);
@@ -257,6 +261,7 @@ function LabGroup({
   notes: FisiUserNote[];
 }) {
   const [expanded, setExpanded] = useState(true);
+  const { language } = useLanguage();
 
   const linked = {
     systems: systems.filter((s) => s.lab_id === lab.id),
@@ -279,7 +284,7 @@ function LabGroup({
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-slate-900">{lab.title}</p>
-          <p className="text-[11px] text-slate-600">{total} verknüpfte Einträge</p>
+          <p className="text-[11px] text-slate-600">{total} <T>verknüpfte Einträge</T></p>
         </div>
         {expanded ? <ChevronDown size={15} className="text-slate-600 shrink-0" /> : <ChevronRight size={15} className="text-slate-600 shrink-0" />}
       </button>
@@ -359,7 +364,7 @@ function LabGroup({
           <div className="pt-3 border-t border-slate-200 flex flex-wrap items-center gap-2">
             <button
               onClick={() => {
-                const md = generateLabMarkdown(lab, linked);
+                const md = generateLabMarkdown(lab, linked, language);
                 const url = URL.createObjectURL(new Blob([md], { type: "text/markdown" }));
                 const a = document.createElement("a");
                 a.href = url;
@@ -370,7 +375,7 @@ function LabGroup({
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 hover:border-slate-200 text-xs text-slate-600 hover:text-slate-800 transition-all"
             >
               <Download size={11} />
-              Markdown exportieren
+              <T>Markdown exportieren</T>
             </button>
           </div>
         </div>
@@ -383,6 +388,7 @@ function LabGroup({
 
 export default function WorkspacePage() {
   const translateUI = useT();
+  const { language } = useLanguage();
   const { user } = useAuth();
   const [data, setData] = useState<WorkspaceData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -441,7 +447,7 @@ export default function WorkspacePage() {
   function handleExportMarkdown() {
     if (!data || !user) return;
     const displayName = (user.user_metadata?.name as string | undefined) || user.email || "Benutzer";
-    const md = generateMarkdown(data, displayName);
+    const md = generateMarkdown(data, displayName, language);
     const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -487,14 +493,14 @@ export default function WorkspacePage() {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-blue-50 hover:bg-blue-50 text-xs text-slate-600 hover:text-slate-800 transition-all"
             >
               <Download size={13} />
-              Als Markdown exportieren
+              <T>Als Markdown exportieren</T>
             </button>
             <button
               onClick={handlePrint}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-blue-50 hover:bg-blue-50 text-xs text-slate-600 hover:text-slate-800 transition-all"
             >
               <Printer size={13} />
-              Als PDF drucken
+              <T>Als PDF drucken</T>
             </button>
           </div>
         )}
@@ -696,11 +702,11 @@ export default function WorkspacePage() {
             <div className="flex flex-wrap gap-3">
               <Link href="/labore"
                 className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition-colors">
-                <Plus size={14} />Neues Labor erstellen
+                <Plus size={14} /><T>Neues Labor erstellen</T>
               </Link>
               <Link href="/praxisnotizen"
                 className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
-                <Plus size={14} />Neue Praxisnotiz erstellen
+                <Plus size={14} /><T>Neue Praxisnotiz erstellen</T>
               </Link>
               <Link href="/befehle"
                 className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-700 transition-colors">

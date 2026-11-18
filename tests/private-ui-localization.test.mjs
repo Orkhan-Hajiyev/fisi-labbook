@@ -23,3 +23,26 @@ test("Personal data and database records are not rewritten or machine-translated
   const src=read(p);assert.match(src,/useLanguage|useT/);
  }
 });
+
+test("Authenticated workspace actions and lab counters are localized",()=>{
+ const src=read("src/app/(app)/workspace/page.tsx");
+ for(const k of ["Als Markdown exportieren","Als PDF drucken","Markdown exportieren","verknüpfte Einträge"])
+  assert.ok(src.includes("<T>"+k+"</T>"),k);
+ assert.ok(src.includes("generateMarkdown(data, displayName, language)"));
+ assert.ok(src.includes("generateLabMarkdown(lab, linked, language)"));
+ assert.ok(!src.includes("<T><T>"));
+});
+test("Personal command and checklist buttons are translated",()=>{
+ const cmds=read("src/app/(app)/befehle/page.tsx");
+ const cases=read("src/app/(app)/fehleranalyse/page.tsx");
+ assert.match(cmds,/<T>Befehl hinzufügen<\/T>/);
+ assert.match(cmds,/buttonLabel=\{translateUI\("Befehl hinzufügen"\)\}/);
+ assert.match(cases,/<T>In Prüfschritte einfügen<\/T>/);
+});
+test("Personal system taxonomy labels are localized without modifying stored prose",()=>{
+ const note=read("src/components/NoteCard.tsx");
+ const docker=read("src/app/(app)/docker-dienste/page.tsx");
+ assert.match(note,/<T>\{note.category\}<\/T>/);
+ assert.match(docker,/<T>\{svc.service_type\}<\/T>/);
+ assert.match(note,/>\{note.content\}<\/p>/);
+});

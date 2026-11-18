@@ -365,6 +365,17 @@ const azTranslations: Readonly<Record<string, string>> = {
   "Keine Daten vorhanden": "Məlumat yoxdur",
   "Das Kopieren hat nicht funktioniert.": "Kopyalama alınmadı.",
   "Hier beginnt deine IT-Dokumentation.": "IT sənədləşmən burada başlayır.",
+  "Befehl hinzufügen": "Əmr əlavə et",
+  "Markdown exportieren": "Markdown kimi ixrac et",
+  "verknüpfte Einträge": "əlaqəli qeydlər",
+  "Kein Befehl gefunden für": "Bu sorğu üzrə əmr tapılmadı:",
+  "Kein Fall gefunden für": "Bu sorğu üzrə xəta təhlili tapılmadı:",
+  "Kein Dienst gefunden für": "Bu sorğu üzrə xidmət tapılmadı:",
+  "Noch keine eigenen Labore vorhanden": "Hələ şəxsi laboratoriya yoxdur",
+  "Exportiert am": "İxrac tarixi",
+  "Tags": "Etiketlər",
+  "Image": "Image",
+  "Export": "İxrac",
 };
 
 export function translate(de: string, language: "de" | "az"): string {

@@ -338,7 +338,7 @@ export default function SystemePage() {
           )}
           {!userSystemsLoading && !userSystemsError && userSystems !== null && userSystems.length === 0 && !showCreateForm && (
             <EmptyPersonalState
-              title="Noch keine eigenen Systeme vorhanden"
+              title={translateUI("Noch keine eigenen Systeme vorhanden")}
               description={translateUI("Dokumentieren Sie Ihre Laborumgebung, Hostnames, IP-Adressen und Dienste.")}
               buttonLabel="Erstes System erstellen"
               onAction={() => setShowCreateForm(true)}

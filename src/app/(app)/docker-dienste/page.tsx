@@ -88,6 +88,7 @@ function UserDockerCard({
   onEdit: (s: FisiUserDockerService) => void;
   onDelete: (id: string) => void;
 }) {
+  const translateUI = useT();
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
@@ -99,7 +100,7 @@ function UserDockerCard({
           </div>
           <div>
             <h3 className="text-sm font-bold text-slate-900">{svc.name}</h3>
-            {svc.service_type && <p className="text-[11px] text-slate-600">{svc.service_type}</p>}
+            {svc.service_type && <p className="text-[11px] text-slate-600"><T>{svc.service_type}</T></p>}
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -114,11 +115,11 @@ function UserDockerCard({
             </div>
           ) : (
             <>
-              <button onClick={() => onEdit(svc)} aria-label="Bearbeiten"
+              <button onClick={() => onEdit(svc)} aria-label={translateUI("Bearbeiten")}
                 className="p-1.5 rounded-lg text-slate-600 hover:text-blue-700 hover:bg-blue-500/10 transition-colors">
                 <Pencil size={13} />
               </button>
-              <button onClick={() => setConfirmDelete(true)} aria-label="Löschen"
+              <button onClick={() => setConfirmDelete(true)} aria-label={translateUI("Löschen")}
                 className="p-1.5 rounded-lg text-slate-600 hover:text-red-700 hover:bg-red-500/10 transition-colors">
                 <Trash2 size={13} />
               </button>
@@ -393,7 +394,7 @@ export default function DockerDienstePage() {
                 />
               )}
               {userServices.length > 0 && filteredUserServices.length === 0 && (
-                <EmptyState title={translateUI("Keine Treffer")} description={`Kein Dienst gefunden für "${userQuery}".`} />
+                <EmptyState title={translateUI("Keine Treffer")} description={`${translateUI("Kein Dienst gefunden für")} "${userQuery}".`} />
               )}
               {filteredUserServices.length > 0 && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

@@ -1,6 +1,6 @@
 "use client";
 
-import { T } from "@/components/TranslatedText";
+import { T, useT } from "@/components/TranslatedText";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import { Edit2, Trash2, Tag, Calendar, MapPin, AlertCircle } from "lucide-react";
@@ -35,6 +35,7 @@ interface Props {
 
 export default function NoteCard({ note, onEdit, onDelete }: Props) {
   const { language } = useLanguage();
+  const translateUI = useT();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -65,7 +66,7 @@ export default function NoteCard({ note, onEdit, onDelete }: Props) {
         <h3 className="text-sm font-semibold text-slate-900 leading-snug">{note.title}</h3>
         {note.category && (
           <span className="inline-block mt-1 text-[11px] bg-blue-500/10 text-blue-800 border border-blue-500/15 px-2 py-0.5 rounded-md">
-            {note.category}
+            <T>{note.category}</T>
           </span>
         )}
       </div>
