@@ -88,6 +88,7 @@ function UserDockerCard({
   onEdit: (s: FisiUserDockerService) => void;
   onDelete: (id: string) => void;
 }) {
+  const translateUI = useT();
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
