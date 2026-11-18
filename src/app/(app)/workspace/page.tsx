@@ -560,7 +560,7 @@ export default function WorkspacePage() {
               <Plus size={14} /><T>Neues Labor erstellen</T>
             </Link>
             <Link href="/praxisnotizen" className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
-              <Plus size={14} /><T><T>Neue Praxisnotiz erstellen</T></T>
+              <Plus size={14} /><T>Neue Praxisnotiz erstellen</T>
             </Link>
             <Link href="/befehle" className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-700 transition-colors">
               <T>Zur Befehlsbibliothek →</T>
@@ -706,7 +706,7 @@ export default function WorkspacePage() {
               </Link>
               <Link href="/praxisnotizen"
                 className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-50 border border-slate-200 text-sm text-slate-700 transition-colors">
-                <Plus size={14} />Neue Praxisnotiz erstellen
+                <Plus size={14} /><T>Neue Praxisnotiz erstellen</T>
               </Link>
               <Link href="/befehle"
                 className="px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-700 transition-colors">
