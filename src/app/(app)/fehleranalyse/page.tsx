@@ -458,7 +458,7 @@ function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }
           className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 text-xs font-medium text-amber-700 hover:text-amber-800 transition-all"
         >
           <SearchIcon size={13} />
-          Checkliste verwenden
+          <T>Checkliste verwenden</T>
         </button>
       ) : (
         <div className="rounded-xl border border-amber-500/15 bg-[#fff7ed] p-5 space-y-4">
@@ -634,7 +634,7 @@ export default function FehleranalysePage() {
             {!showCreateForm && (
               <button onClick={() => setShowCreateForm(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors">
-                <Plus size={13} />Fehleranalyse hinzufügen
+                <Plus size={13} /><T>Fehleranalyse hinzufügen</T>
               </button>
             )}
           </div>
@@ -670,7 +670,7 @@ export default function FehleranalysePage() {
                 <EmptyPersonalState
                   title={translateUI("Noch keine Fehleranalysen")}
                   description={translateUI("Dokumentieren Sie Troubleshooting-Fälle strukturiert mit Symptomen, Prüfschritten, Ursache und Lösung.")}
-                  buttonLabel="Fehleranalyse hinzufügen"
+                  buttonLabel={translateUI("Fehleranalyse hinzufügen")}
                   onAction={() => setShowCreateForm(true)}
                 />
               )}
