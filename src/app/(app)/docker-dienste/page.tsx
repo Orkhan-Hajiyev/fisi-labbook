@@ -99,7 +99,7 @@ function UserDockerCard({
           </div>
           <div>
             <h3 className="text-sm font-bold text-slate-900">{svc.name}</h3>
-            {svc.service_type && <p className="text-[11px] text-slate-600">{svc.service_type}</p>}
+            {svc.service_type && <p className="text-[11px] text-slate-600"><T>{svc.service_type}</T></p>}
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -393,7 +393,7 @@ export default function DockerDienstePage() {
                 />
               )}
               {userServices.length > 0 && filteredUserServices.length === 0 && (
-                <EmptyState title={translateUI("Keine Treffer")} description={`Kein Dienst gefunden für "${userQuery}".`} />
+                <EmptyState title={translateUI("Keine Treffer")} description={`${translateUI("Kein Dienst gefunden für")} "${userQuery}".`} />
               )}
               {filteredUserServices.length > 0 && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

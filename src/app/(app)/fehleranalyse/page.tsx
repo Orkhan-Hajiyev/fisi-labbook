@@ -87,7 +87,7 @@ function UserTroubleshootingCard({
           <h3 className="text-sm font-semibold text-slate-900">{item.title}</h3>
           {item.category && (
             <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 mt-1">
-              <Tag size={10} />{item.category}
+              <Tag size={10} /><T>{item.category}</T>
             </span>
           )}
         </div>
@@ -496,7 +496,7 @@ function ChecklistHelper({ onInsert }: { onInsert: (checklist: string) => void }
                 onClick={() => { onInsert(activeCL.join("\n")); setOpen(false); setSelected(null); }}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-600/80 hover:bg-amber-500/80 text-xs font-semibold text-slate-900 transition-colors"
               >
-                In Prüfschritte einfügen
+                <T>In Prüfschritte einfügen</T>
               </button>
             </div>
           )}
@@ -675,7 +675,7 @@ export default function FehleranalysePage() {
                 />
               )}
               {userCases.length > 0 && filteredUserCases.length === 0 && (
-                <EmptyState title={translateUI("Keine Treffer")} description={`Kein Fall gefunden für "${userQuery}".`} />
+                <EmptyState title={translateUI("Keine Treffer")} description={`${translateUI("Kein Fall gefunden für")} "${userQuery}".`} />
               )}
               {filteredUserCases.length > 0 && (
                 <div className="space-y-5">

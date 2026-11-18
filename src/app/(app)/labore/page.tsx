@@ -334,7 +334,7 @@ export default function LaborePage() {
           )}
           {!userLabsLoading && !userLabsError && userLabs !== null && userLabs.length === 0 && !showCreateForm && (
             <EmptyPersonalState
-              title="Noch keine eigenen Labore vorhanden"
+              title={translateUI("Noch keine eigenen Labore vorhanden")}
               description={translateUI("Erstellen Sie Ihr erstes Labor, um Ihre Systemintegration-Praxis zu dokumentieren.")}
               buttonLabel="Erstes Labor erstellen"
               onAction={() => setShowCreateForm(true)}

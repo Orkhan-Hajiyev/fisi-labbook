@@ -58,7 +58,7 @@ function UserCommandCard({
           )}
           {cmd.category && (
             <span className="flex items-center gap-1 text-[11px] bg-violet-500/10 text-violet-800 border border-violet-500/15 px-2.5 py-1 rounded-lg">
-              <Tag size={10} />{cmd.category}
+              <Tag size={10} /><T>{cmd.category}</T>
             </span>
           )}
         </div>
@@ -536,7 +536,7 @@ export default function BefehlePageContent() {
             {!showCreateForm && (
               <button onClick={() => setShowCreateForm(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors">
-                <Plus size={13} />Befehl hinzufügen
+                <Plus size={13} /><T>Befehl hinzufügen</T>
               </button>
             )}
           </div>
@@ -572,12 +572,12 @@ export default function BefehlePageContent() {
                 <EmptyPersonalState
                   title={translateUI("Noch keine Befehle")}
                   description={translateUI("Fügen Sie Ihren ersten Befehl hinzu – mit Plattform, Beispiel und Anwendungsfall.")}
-                  buttonLabel="Befehl hinzufügen"
+                  buttonLabel={translateUI("Befehl hinzufügen")}
                   onAction={() => setShowCreateForm(true)}
                 />
               )}
               {userCommands.length > 0 && filteredUserCommands.length === 0 && (
-                <EmptyState title={translateUI("Keine Treffer")} description={`Kein Befehl gefunden für "${userQuery}".`} />
+                <EmptyState title={translateUI("Keine Treffer")} description={`${translateUI("Kein Befehl gefunden für")} "${userQuery}".`} />
               )}
               {filteredUserCommands.length > 0 && (
                 <div className="space-y-4">
@@ -627,7 +627,7 @@ export default function BefehlePageContent() {
           <EmptyState title={translateUI("Keine Befehle vorhanden")} description={translateUI("Es wurden noch keine Befehle angelegt.")} />
         )}
         {!demoLoading && !demoError && commands.length > 0 && filteredDemo.length === 0 && (
-          <EmptyState title={translateUI("Keine Treffer")} description={`Kein Befehl gefunden für "${demoQuery}".`} />
+          <EmptyState title={translateUI("Keine Treffer")} description={`${translateUI("Kein Befehl gefunden für")} "${demoQuery}".`} />
         )}
         {!demoLoading && !demoError && filteredDemo.length > 0 && (
           <div className="space-y-4">

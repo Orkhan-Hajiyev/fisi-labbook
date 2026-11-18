@@ -65,7 +65,7 @@ export default function NoteCard({ note, onEdit, onDelete }: Props) {
         <h3 className="text-sm font-semibold text-slate-900 leading-snug">{note.title}</h3>
         {note.category && (
           <span className="inline-block mt-1 text-[11px] bg-blue-500/10 text-blue-800 border border-blue-500/15 px-2 py-0.5 rounded-md">
-            {note.category}
+            <T>{note.category}</T>
           </span>
         )}
       </div>
