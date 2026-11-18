@@ -375,6 +375,7 @@ const azTranslations: Readonly<Record<string, string>> = {
   "Exportiert am": "İxrac tarixi",
   "Tags": "Etiketlər",
   "Image": "Image",
+  "Export": "İxrac",
 };
 
 export function translate(de: string, language: "de" | "az"): string {
