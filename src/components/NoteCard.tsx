@@ -1,6 +1,6 @@
 "use client";
 
-import { T } from "@/components/TranslatedText";
+import { T, useT } from "@/components/TranslatedText";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import { Edit2, Trash2, Tag, Calendar, MapPin, AlertCircle } from "lucide-react";
@@ -35,6 +35,7 @@ interface Props {
 
 export default function NoteCard({ note, onEdit, onDelete }: Props) {
   const { language } = useLanguage();
+  const translateUI = useT();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
