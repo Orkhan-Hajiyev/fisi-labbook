@@ -357,7 +357,7 @@ export default function DockerDienstePage() {
             {!showCreateForm && (
               <button onClick={() => setShowCreateForm(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors">
-                <Plus size={13} />Dienst hinzufügen
+                <Plus size={13} /><T>Dienst hinzufügen</T>
               </button>
             )}
           </div>
@@ -388,7 +388,7 @@ export default function DockerDienstePage() {
                 <EmptyPersonalState
                   title={translateUI("Noch keine Docker-Dienste")}
                   description={translateUI("Dokumentieren Sie Ihre Container-Dienste mit Images, Ports und Compose-Snippets.")}
-                  buttonLabel="Dienst hinzufügen"
+                  buttonLabel={translateUI("Dienst hinzufügen")}
                   onAction={() => setShowCreateForm(true)}
                 />
               )}
